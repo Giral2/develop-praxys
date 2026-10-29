@@ -1,0 +1,445 @@
+    <!-- ==================== CONTAINER 2: ESPACIOS DE TRABAJO POR ROL ==================== -->
+    <section id="roleWorkspaceContainer" class="flex-1 flex flex-col overflow-hidden hidden">
+
+      <!-- ==================== WORKSPACE R01: REPORTANTE / COMUNIDAD ==================== -->
+      <div id="workspace-R01" class="role-workspace flex-1 flex flex-col overflow-hidden hidden">
+        <!-- R01 Header & Sub-Tabs -->
+        <div class="flex items-center justify-between pb-3 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">R01 · Portal Comunidad</span>
+              <h2 class="text-base font-display font-bold text-slate-900 dark:text-white">Portal de Solicitudes de Infraestructura</h2>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Radica nuevas incidencias con geolocalización 4L y gestiona tus aclaraciones o confirmaciones de cierre.</p>
+          </div>
+          <div class="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg text-xs font-semibold">
+            <button id="r01TabBtnMyTickets" onclick="app.setR01SubTab('myTickets')" class="px-3 py-1.5 rounded-md transition bg-white dark:bg-brand-navy text-brand-navy dark:text-white shadow-xs flex items-center space-x-1.5">
+              <svg class="w-3.5 h-3.5 text-brand-royalBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              <span>Mis Solicitudes (<span id="r01MyTicketsCount">0</span>)</span>
+            </button>
+            <button id="r01TabBtnNew" onclick="app.setR01SubTab('newTicket')" class="px-3 py-1.5 rounded-md transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center space-x-1.5">
+              <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+              <span>+ Radicar Incidencia (4L)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- R01 Sub-Tab 1: Mis Solicitudes -->
+        <div id="r01ContentMyTickets" class="flex-1 flex flex-col overflow-hidden pt-3">
+          <!-- Filter bar -->
+          <div class="flex items-center justify-between pb-2 shrink-0 text-xs">
+            <div class="flex items-center space-x-2">
+              <span class="text-slate-400 font-medium">Filtrar:</span>
+              <button onclick="app.setR01Filter('ALL')" id="r01Filter-ALL" class="r01-filter px-2.5 py-0.5 rounded-full font-medium bg-brand-navy dark:bg-brand-royalBlue text-white">Todas</button>
+              <button onclick="app.setR01Filter('ACTION_REQUIRED')" id="r01Filter-ACTION_REQUIRED" class="r01-filter px-2.5 py-0.5 rounded-full font-medium bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">Requiere mi Acción (E02/E14)</button>
+              <button onclick="app.setR01Filter('IN_PROGRESS')" id="r01Filter-IN_PROGRESS" class="r01-filter px-2.5 py-0.5 rounded-full font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">En Atención</button>
+              <button onclick="app.setR01Filter('RESOLVED')" id="r01Filter-RESOLVED" class="r01-filter px-2.5 py-0.5 rounded-full font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Cerradas</button>
+            </div>
+            <span class="text-slate-400 font-mono text-[11px]">Reportante activo: Prof. Laura Gómez / Daniel Gómez</span>
+          </div>
+          <!-- Tickets List -->
+          <div id="r01TicketsList" class="flex-1 overflow-y-auto space-y-3 pr-1 pb-4">
+            <!-- Dynamic ticket cards -->
+          </div>
+        </div>
+
+        <!-- R01 Sub-Tab 2: Radicar Incidencia 4L -->
+        <div id="r01ContentNewTicket" class="flex-1 overflow-y-auto pt-3 pr-1 pb-6 hidden">
+          <div class="max-w-3xl mx-auto bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl p-5 shadow-elevation-1">
+            <div class="pb-3 border-b border-slate-100 dark:border-slate-800">
+              <h3 class="font-display font-bold text-base text-slate-900 dark:text-white">Formulario Oficial de Radicación de Incidencia (RN-001)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Diligencia la topología física de 4 niveles para georreferenciar el daño con precisión institucional.</p>
+            </div>
+
+            <form id="formR01NewIncident" onsubmit="app.handleR01SubmitIncident(event)" class="mt-4 space-y-4 text-xs">
+              
+              <!-- Topología 4L: Sede -> Edificio -> Piso -> Espacio -->
+              <div>
+                <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider text-[11px]">
+                  1. Localización Jerárquica Institucional 4L *
+                </label>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
+                  <div>
+                    <label class="block text-[11px] text-slate-500 mb-1">Nivel 1: Sede</label>
+                    <select id="r01Sede" onchange="app.onR01SedeChange()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+                      <option value="">Seleccionar Sede...</option>
+                      <option value="Campus Meléndez">Campus Meléndez</option>
+                      <option value="Campus San Fernando">Campus San Fernando</option>
+                      <option value="Sede Yumbo">Sede Yumbo</option>
+                      <option value="Sede Palmira">Sede Palmira</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] text-slate-500 mb-1">Nivel 2: Edificio / Bloque</label>
+                    <select id="r01Edificio" onchange="app.onR01EdificioChange()" required disabled class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium disabled:opacity-50">
+                      <option value="">Seleccionar...</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] text-slate-500 mb-1">Nivel 3: Piso / Nivel</label>
+                    <select id="r01Piso" onchange="app.onR01PisoChange()" required disabled class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium disabled:opacity-50">
+                      <option value="">Seleccionar...</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] text-slate-500 mb-1">Nivel 4: Espacio / Aula</label>
+                    <select id="r01Espacio" onchange="app.onR01EspacioChange()" required disabled class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium disabled:opacity-50">
+                      <option value="">Seleccionar...</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Duplicate Detector Warning Banner -->
+              <div id="r01DuplicateDetectorAlert" class="hidden p-3 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-900/60 text-amber-900 dark:text-amber-200 transition-all">
+                <div class="flex items-start space-x-2.5">
+                  <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                  <div>
+                    <h5 class="font-bold text-xs">⚠️ Alerta de Posible Duplicidad (RN-011)</h5>
+                    <p id="r01DuplicateDetectorText" class="mt-0.5 text-[11px] leading-relaxed">
+                      Se detectó una incidencia abierta en esta misma aula. Por favor verifica si tu novedad ya fue reportada para evitar duplicar órdenes de trabajo.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Asunto & Categoría -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="sm:col-span-2">
+                  <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Asunto de la Falla *</label>
+                  <input type="text" id="r01Title" required placeholder="Ej. Filtración de agua en ducto de aire acondicionado" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Categoría Técnica *</label>
+                  <select id="r01Category" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+                    <option value="Eléctrica">Eléctrica</option>
+                    <option value="HVAC/Climatización">HVAC/Climatización</option>
+                    <option value="Hidráulica">Hidráulica</option>
+                    <option value="Redes">Redes / TI</option>
+                    <option value="Estructural">Estructural / Civil</option>
+                    <option value="Cerrajería">Cerrajería / Seguridad</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Riesgo Inminente Flag -->
+              <div class="flex items-center space-x-2 bg-red-50 dark:bg-red-950/30 p-2.5 rounded-lg border border-red-200 dark:border-red-900/50">
+                <input type="checkbox" id="r01RiskFlag" class="rounded text-red-600 focus:ring-red-600 h-4 w-4">
+                <label for="r01RiskFlag" class="font-semibold text-red-900 dark:text-red-200 cursor-pointer">
+                  Marcar como Riesgo Inminente (Peligro eléctrico, riesgo de colapso, inundación severa. Escala automáticamente a Prioridad Crítica).
+                </label>
+              </div>
+
+              <!-- Descripción con Contador 20-500 Caracteres -->
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="font-semibold text-slate-700 dark:text-slate-300">Descripción Detallada del Hallazgo (RN-002) *</label>
+                  <span id="r01DescCounter" class="font-mono text-[11px] text-slate-400">0 / 500 caracteres</span>
+                </div>
+                <textarea id="r01Description" required rows="3" oninput="app.onR01DescriptionInput(this.value)" placeholder="Describa el problema con mínimo 20 caracteres: ubicación exacta dentro del espacio, síntomas visibles, olor a quemado, ruidos extraños o equipos comprometidos..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium leading-relaxed"></textarea>
+                <p id="r01DescValidation" class="text-[11px] text-slate-400 mt-0.5">Mínimo 20 caracteres requeridos.</p>
+              </div>
+
+              <!-- Evidencia Fotográfica con Compresión Canvas -->
+              <div>
+                <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  Evidencia Fotográfica (Compresión Canvas en Navegador)
+                </label>
+                <div class="flex items-center space-x-3">
+                  <label class="cursor-pointer flex items-center space-x-2 px-3 py-2 border border-dashed border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                    <svg class="w-4 h-4 text-brand-royalBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span class="font-medium text-slate-700 dark:text-slate-300">Seleccionar Foto...</span>
+                    <input type="file" id="r01PhotoInput" accept="image/*" onchange="app.handleR01PhotoUpload(event)" class="hidden">
+                  </label>
+                  <span class="text-[11px] text-slate-400">Optimiza automáticamente peso y resolución mediante HTML5 Canvas.</span>
+                </div>
+                <div id="r01PhotoPreviewCont"></div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="flex justify-end pt-3 border-t border-slate-100 dark:border-slate-800 space-x-2">
+                <button type="button" onclick="app.setR01SubTab('myTickets')" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                  Cancelar
+                </button>
+                <button type="submit" id="r01SubmitBtn" class="px-5 py-2 rounded-lg bg-brand-emerald hover:bg-emerald-600 text-white font-semibold shadow-xs transition transform active:scale-95 flex items-center space-x-1.5">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  <span>Radicar Incidencia Oficial (E01)</span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== WORKSPACE R02: GESTOR DE TRIAJE ==================== -->
+      <div id="workspace-R02" class="role-workspace flex-1 flex flex-col overflow-hidden hidden">
+        <!-- R02 Header with Metrics -->
+        <div class="flex items-center justify-between pb-3 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300">R02 · Mesa de Triaje</span>
+              <h2 class="text-base font-display font-bold text-slate-900 dark:text-white">Bandeja de Validación y Priorización Preliminar</h2>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Verifica procedencia de infraestructura (RN-001..RN-010), duplicados (RN-011..RN-015) y aplica Matriz ITIL de Severidad.</p>
+          </div>
+          <!-- Stats badges -->
+          <div class="flex items-center space-x-2 text-xs">
+            <div class="px-3 py-1 rounded-lg bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900/50">
+              <span class="text-slate-400 font-medium">Por Triar (E01):</span>
+              <span id="r02CountE01" class="font-mono font-bold text-sky-700 dark:text-sky-300 ml-1">0</span>
+            </div>
+            <div class="px-3 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/50">
+              <span class="text-slate-400 font-medium">Aclaradas (E03):</span>
+              <span id="r02CountE03" class="font-mono font-bold text-indigo-700 dark:text-indigo-300 ml-1">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- R02 Queue List -->
+        <div class="flex-1 overflow-y-auto pt-3 space-y-3 pr-1 pb-4" id="r02QueueList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- ==================== WORKSPACE R03: COORDINADOR DE MANTENIMIENTO ==================== -->
+      <div id="workspace-R03" class="role-workspace flex-1 flex flex-col overflow-hidden hidden">
+        <!-- R03 Header with Metrics -->
+        <div class="flex items-center justify-between pb-3 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-blue-100 dark:bg-blue-950/60 text-brand-royalBlue dark:text-sky-300">R03 · Despacho y Cuadrillas</span>
+              <h2 class="text-base font-display font-bold text-slate-900 dark:text-white">Bandeja de Planificación y Asignación de Cuadrillas</h2>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Balancea órdenes de trabajo respetando WIP Limits por especialidad técnica (RN-024) y gestiona requisiciones.</p>
+          </div>
+          <!-- Stats badges -->
+          <div class="flex items-center space-x-2 text-xs">
+            <div class="px-3 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50">
+              <span class="text-slate-400 font-medium">Por Asignar (E05):</span>
+              <span id="r03CountE05" class="font-mono font-bold text-amber-700 dark:text-amber-300 ml-1">0</span>
+            </div>
+            <div class="px-3 py-1 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50">
+              <span class="text-slate-400 font-medium">Retrabajo (E13):</span>
+              <span id="r03CountE13" class="font-mono font-bold text-red-700 dark:text-red-300 ml-1">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cuadrillas Load Balancing Bar (WIP Limits) -->
+        <div class="mt-3 p-3 bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl shadow-xs shrink-0">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold font-display text-slate-800 dark:text-slate-200 uppercase tracking-wider">Balanceo de Carga de Cuadrillas (WIP Limits RN-024)</span>
+            <span class="text-[11px] font-mono text-slate-400">Capacidad máxima: 3-4 órdenes activas por técnico</span>
+          </div>
+          <div id="r03TechniciansWipBar" class="grid grid-cols-2 md:grid-cols-5 gap-2.5">
+            <!-- Populated dynamically with technician cards and WIP bars -->
+          </div>
+        </div>
+
+        <!-- R03 Actionable Queue -->
+        <div class="flex-1 overflow-y-auto pt-3 space-y-3 pr-1 pb-4" id="r03QueueList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- ==================== WORKSPACE R04: TÉCNICO DE CAMPO ==================== -->
+      <div id="workspace-R04" class="role-workspace flex-1 flex flex-col overflow-hidden hidden">
+        <!-- R04 Header with Technician Switcher -->
+        <div class="flex items-center justify-between pb-3 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">R04 · Cuadrilla de Campo</span>
+              <h2 class="text-base font-display font-bold text-slate-900 dark:text-white">Consola de Ejecución Técnica en Sitio</h2>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Gestiona tus órdenes de inspección, inicia atención en sitio, registra bitácoras y solicita verificación de calidad.</p>
+          </div>
+          <!-- Technician Selector -->
+          <div class="flex items-center space-x-2 text-xs">
+            <label class="font-semibold text-slate-500 dark:text-slate-400">Técnico:</label>
+            <select id="r04TechnicianFilter" onchange="app.renderR04Workspace()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-800 dark:text-slate-200 font-semibold focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+              <option value="Ing. Carlos Méndez">Ing. Carlos Méndez (Eléctrico)</option>
+              <option value="Tec. Jorge Ospina">Tec. Jorge Ospina (HVAC)</option>
+              <option value="Tec. Andrés Caicedo">Tec. Andrés Caicedo (Hidráulico)</option>
+              <option value="Ing. Diana Rivas">Ing. Diana Rivas (Redes/Cerrajería)</option>
+              <option value="Maestro Luis Arana">Maestro Luis Arana (Estructural)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- R04 Orders Queue -->
+        <div class="flex-1 overflow-y-auto pt-3 space-y-3 pr-1 pb-4" id="r04QueueList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- ==================== WORKSPACE R05: RESPONSABLE DE AUTORIZACIONES ==================== -->
+      <div id="workspace-R05" class="role-workspace flex-1 flex flex-col overflow-hidden hidden">
+        <!-- R05 Header with Budget Stats -->
+        <div class="flex items-center justify-between pb-3 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300">R05 · Autorizaciones Financieras</span>
+              <h2 class="text-base font-display font-bold text-slate-900 dark:text-white">Panel de Aprobación de Requisiciones Extraordinarias</h2>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Evalúa justificaciones técnicas, presupuesto estimado y autoriza la adquisición de insumos especiales (RN-029).</p>
+          </div>
+          <!-- Budget Stats -->
+          <div class="flex items-center space-x-2 text-xs">
+            <div class="px-3 py-1 rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900/50">
+              <span class="text-slate-400 font-medium">En Trámite (E08):</span>
+              <span id="r05CountE08" class="font-mono font-bold text-purple-700 dark:text-purple-300 ml-1">0</span>
+            </div>
+            <div class="px-3 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50">
+              <span class="text-slate-400 font-medium">Fondo Contingente:</span>
+              <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300 ml-1">$48,500,000 COP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- R05 Requisitions Queue -->
+        <div class="flex-1 overflow-y-auto pt-3 space-y-3 pr-1 pb-4" id="r05QueueList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- ==================== WORKSPACE R06: VERIFICADOR DE CALIDAD ==================== -->
+      <div id="workspace-R06" class="role-workspace flex-1 flex flex-col overflow-hidden hidden">
+        <!-- R06 Header with Audit Stats -->
+        <div class="flex items-center justify-between pb-3 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300">R06 · Interventoría y Calidad</span>
+              <h2 class="text-base font-display font-bold text-slate-900 dark:text-white">Mesa de Peritaje Técnico y Cierre Conforme</h2>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Audita trabajos finalizados mediante checklist de 4 puntos de inspección y emite dictámenes de conformidad o no conformidad.</p>
+          </div>
+          <!-- Stats -->
+          <div class="flex items-center space-x-2 text-xs">
+            <div class="px-3 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/50">
+              <span class="text-slate-400 font-medium">Por Auditar (E12):</span>
+              <span id="r06CountE12" class="font-mono font-bold text-indigo-700 dark:text-indigo-300 ml-1">0</span>
+            </div>
+            <div class="px-3 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50">
+              <span class="text-slate-400 font-medium">Conformidad:</span>
+              <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300 ml-1">94.2%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- R06 Audits Queue -->
+        <div class="flex-1 overflow-y-auto pt-3 space-y-3 pr-1 pb-4" id="r06QueueList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- ==================== WORKSPACE R07: ADMINISTRADOR DE PLATAFORMA ==================== -->
+      <div id="workspace-R07" class="role-workspace flex-1 flex flex-col overflow-hidden hidden">
+        <!-- R07 Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300">R07 · Gobernanza TI</span>
+              <h2 class="text-base font-display font-bold text-slate-900 dark:text-white">Consola de Parámetros, Topología y Reglas Institucionales</h2>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Configuración global de sedes 4L, tipologías de daño, matrices SLA y reglas de negocio RN-001 a RN-042.</p>
+          </div>
+          <!-- Reset tools -->
+          <div class="flex items-center space-x-2">
+            <button onclick="app.resetStorageToDefault()" class="px-3 py-1.5 rounded-lg border border-red-300 dark:border-red-900/80 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 hover:bg-red-100 font-semibold text-xs transition shadow-xs">
+              Restablecer Datos Demo (23 Incidencias)
+            </button>
+          </div>
+        </div>
+
+        <!-- R07 Governance Sub-Tabs -->
+        <div class="mt-3 flex-1 overflow-y-auto pr-1 pb-6 space-y-4">
+          
+          <!-- Section 1: Topología Universitaria 4L -->
+          <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl p-4 shadow-xs">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">1. Topología Institucional de Espacios (4 Niveles)</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Estructura jerárquica de Sede > Edificio > Piso > Aula para Meléndez, San Fernando, Yumbo y Palmira.</p>
+              </div>
+              <button onclick="app.openAddSpaceModal()" class="px-2.5 py-1 rounded-lg bg-brand-royalBlue hover:bg-blue-600 text-white font-semibold text-xs shadow-xs transition">
+                + Agregar Espacio
+              </button>
+            </div>
+            <div id="r07TopologyViewer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Section 2: Parámetros SLA Institucional -->
+          <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl p-4 shadow-xs">
+            <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white mb-1">2. Tiempos de Compromiso de Nivel de Servicio (SLA)</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Umbrales normativos máximos de respuesta y resolución en horas calendario.</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+              <div class="p-3 rounded-lg border border-red-200 dark:border-red-900/40 bg-red-50/50 dark:bg-red-950/20">
+                <span class="font-bold text-red-700 dark:text-red-400 uppercase text-[10px]">Severidad Crítica</span>
+                <div class="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-1">4 Horas</div>
+                <p class="text-[10px] text-slate-500 mt-1">Amenaza de daño físico o parálisis total de campus.</p>
+              </div>
+              <div class="p-3 rounded-lg border border-amber-200 dark:border-amber-900/40 bg-amber-50/50 dark:bg-amber-950/20">
+                <span class="font-bold text-amber-700 dark:text-amber-400 uppercase text-[10px]">Severidad Alta</span>
+                <div class="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-1">12 Horas</div>
+                <p class="text-[10px] text-slate-500 mt-1">Afectación de servicios críticos de laboratorio o red.</p>
+              </div>
+              <div class="p-3 rounded-lg border border-blue-200 dark:border-blue-900/40 bg-blue-50/50 dark:bg-blue-950/20">
+                <span class="font-bold text-blue-700 dark:text-blue-400 uppercase text-[10px]">Severidad Media</span>
+                <div class="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-1">48 Horas</div>
+                <p class="text-[10px] text-slate-500 mt-1">Fallas funcionales con alternativa provisional.</p>
+              </div>
+              <div class="p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40">
+                <span class="font-bold text-slate-600 dark:text-slate-400 uppercase text-[10px]">Severidad Baja</span>
+                <div class="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-1">96 Horas</div>
+                <p class="text-[10px] text-slate-500 mt-1">Mantenimiento menor o estético programable.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Reglas de Negocio PRAXIS (RN-001 a RN-042) -->
+          <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl p-4 shadow-xs">
+            <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white mb-1">3. Reglas de Negocio Activas (RN-001 a RN-042)</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Políticas de validación, límites de cuadrilla y candados transaccionales implementados.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
+              <div class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between">
+                <div>
+                  <span class="font-mono font-bold text-brand-royalBlue text-[11px]">RN-001</span>
+                  <span class="font-semibold text-slate-800 dark:text-slate-200 ml-1.5">Radicación obligatoria 4L</span>
+                  <p class="text-[10px] text-slate-400">Exige Sede > Edificio > Piso > Espacio antes de crear ticket.</p>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">Activa</span>
+              </div>
+              <div class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between">
+                <div>
+                  <span class="font-mono font-bold text-brand-royalBlue text-[11px]">RN-011</span>
+                  <span class="font-semibold text-slate-800 dark:text-slate-200 ml-1.5">Detección y Enlace de Duplicados</span>
+                  <p class="text-[10px] text-slate-400">Alerta de duplicados en tiempo real y vinculación a ticket maestro.</p>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">Activa</span>
+              </div>
+              <div class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between">
+                <div>
+                  <span class="font-mono font-bold text-brand-royalBlue text-[11px]">RN-024</span>
+                  <span class="font-semibold text-slate-800 dark:text-slate-200 ml-1.5">Límites WIP de Cuadrilla</span>
+                  <p class="text-[10px] text-slate-400">Máximo 3 a 4 órdenes activas por técnico para evitar sobrecarga.</p>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">Activa</span>
+              </div>
+              <div class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between">
+                <div>
+                  <span class="font-mono font-bold text-brand-royalBlue text-[11px]">RN-035</span>
+                  <span class="font-semibold text-slate-800 dark:text-slate-200 ml-1.5">Doble Verificación de Calidad y Cierre</span>
+                  <p class="text-[10px] text-slate-400">Inspección de R06 (E12) previa a la confirmación de R01 (E14) y cierre (E15).</p>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">Activa</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>

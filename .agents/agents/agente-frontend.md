@@ -10,16 +10,11 @@ subagent: true
 permissionMode: acceptEdits
 commandExecutionPolicy: auto
 tools:
-  - view_file
-  - replace_file_content
-  - multi_replace_file_content
-  - write_to_file
-  - list_dir
-  - grep_search
+  - read_file
+  - edit_file
+  - write_file
   - run_command
   - manage_task
-  - browser_subagent
-  - generate_image
 skills:
   - skills/building-data-apps
 ---

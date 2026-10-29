@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRAXIS | Consola Operativa y Espacios de Rol de Infraestructura Universitaria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#1E293B',
+              deepNavy: '#0A192F',
+              royalBlue: '#3B82F6',
+              electricCyan: '#00A3FF',
+              clementine: '#F59E0B',
+              emerald: '#00C97B',
+              chalkWhite: '#FFFFFF',
+              alabaster: '#F8FAFC',
+              borderSubtle: '#E2E8F0',
+              borderDark: '#334155',
+              darkBg: '#0B132B',
+              darkCard: '#131E3A',
+              darkCardHover: '#1B2A4E'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', '"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          boxShadow: {
+            'elevation-1': '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+            'elevation-2': '0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04)',
+            'elevation-modal': '0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.1)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbars and transitions */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    .kanban-col-scroll {
+      max-height: calc(100vh - 355px);
+      min-height: 460px;
+    }
+    .drag-ghost {
+      opacity: 0.4;
+      transform: scale(0.98);
+    }
+    .drag-over-col {
+      background-color: rgba(59, 130, 246, 0.08) !important;
+      border-color: #3B82F6 !important;
+    }
+    .dark .drag-over-col {
+      background-color: rgba(0, 163, 255, 0.1) !important;
+      border-color: #00A3FF !important;
+    }
+    .col-resizer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 7px;
+      cursor: col-resize;
+      user-select: none;
+      z-index: 20;
+    }
+    .col-resizer:hover, .col-resizer.resizing {
+      background-color: #3B82F6;
+    }
+    .role-active-tab {
+      background-color: #3B82F6 !important;
+      color: #FFFFFF !important;
+    }
+    .dark .role-active-tab {
+      background-color: #2563EB !important;
+      color: #FFFFFF !important;
+    }
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .animate-pulse-subtle {
+      animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="h-full bg-brand-alabaster text-brand-navy antialiased font-sans transition-colors duration-200 dark:bg-brand-deepNavy dark:text-slate-100 flex flex-col overflow-hidden">

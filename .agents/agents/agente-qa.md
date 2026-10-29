@@ -11,13 +11,11 @@ subagent: true
 permissionMode: acceptEdits
 commandExecutionPolicy: auto
 tools:
-  - view_file
-  - list_dir
-  - grep_search
+  - read_file
+  - edit_file
+  - write_file
   - run_command
   - manage_task
-  - browser_subagent
-  - write_to_file
 skills:
   - skills/metodologia-gauntlet
 ---

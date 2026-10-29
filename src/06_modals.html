@@ -1,0 +1,764 @@
+  <!-- ==================== MODALS REPOSITORY ==================== -->
+
+  <!-- MODAL 1: NUEVA INCIDENCIA GENERAL (RÁPIDA) -->
+  <div id="modalNewIncident" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-2xl w-full p-6 shadow-elevation-modal transform transition-all">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-700">
+        <div class="flex items-center space-x-2">
+          <div class="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-brand-emerald">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">Registrar Nueva Incidencia de Infraestructura</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Genera una nueva orden de trabajo con radicado correlativo oficial.</p>
+          </div>
+        </div>
+        <button onclick="app.closeModal('modalNewIncident')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="formNewIncident" onsubmit="app.handleCreateIncident(event)" class="mt-4 space-y-4 text-xs">
+        <!-- Cascading Location Selector: Sede -> Bloque -> Aula -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Sede Universitaria *</label>
+            <select id="newSede" onchange="app.onCascadeSedeChange()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+              <option value="">Seleccionar Sede...</option>
+              <option value="Campus Meléndez">Campus Meléndez</option>
+              <option value="Campus San Fernando">Campus San Fernando</option>
+              <option value="Sede Yumbo">Sede Yumbo</option>
+              <option value="Sede Palmira">Sede Palmira</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Bloque / Edificio *</label>
+            <select id="newBloque" onchange="app.onCascadeBloqueChange()" required disabled class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium disabled:opacity-50">
+              <option value="">Seleccionar Bloque...</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Aula / Espacio *</label>
+            <select id="newAula" required disabled class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium disabled:opacity-50">
+              <option value="">Seleccionar Aula/Espacio...</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Subject -->
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Asunto de la Falla *</label>
+          <input type="text" id="newTitle" required placeholder="Ej. Fuga en válvula de condensado en equipo HVAC central" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+        </div>
+
+        <!-- Category & Severity -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Categoría Técnica *</label>
+            <select id="newCategory" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+              <option value="Eléctrica">Eléctrica</option>
+              <option value="HVAC/Climatización">HVAC/Climatización</option>
+              <option value="Hidráulica">Hidráulica</option>
+              <option value="Redes">Redes</option>
+              <option value="Estructural">Estructural</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Nivel de Severidad *</label>
+            <select id="newSeverity" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+              <option value="BAJA">Baja (SLA: 96 horas)</option>
+              <option value="MEDIA" selected>Media (SLA: 48 horas)</option>
+              <option value="ALTA">Alta (SLA: 12 horas)</option>
+              <option value="CRITICA">Crítica (SLA: 4 horas)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Reporter & Technician -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Reportante (Rol R01) *</label>
+            <input type="text" id="newReporter" required placeholder="Nombre de docente o funcionario" value="Prof. Laura Gómez (Dpto. Física)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Cuadrilla / Técnico Asignado (Opcional)</label>
+            <select id="newTechnician" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+              <option value="">Sin Asignar (Ingresa a Triaje E01)</option>
+              <option value="Ing. Carlos Méndez">Ing. Carlos Méndez (Eléctrico)</option>
+              <option value="Tec. Jorge Ospina">Tec. Jorge Ospina (HVAC)</option>
+              <option value="Tec. Andrés Caicedo">Tec. Andrés Caicedo (Hidráulico)</option>
+              <option value="Ing. Diana Rivas">Ing. Diana Rivas (Telecomunicaciones)</option>
+              <option value="Maestro Luis Arana">Maestro Luis Arana (Estructural)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Description Details -->
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Descripción Detallada del Hallazgo *</label>
+          <textarea id="newDescription" required rows="2" placeholder="Describa síntomas visibles, equipos afectados o implicaciones de seguridad..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium"></textarea>
+        </div>
+
+        <!-- Risk Checkbox -->
+        <div class="flex items-center space-x-2 bg-amber-50 dark:bg-amber-950/30 p-2.5 rounded-lg border border-amber-200 dark:border-amber-900/50">
+          <input type="checkbox" id="newHighRisk" class="rounded text-brand-clementine focus:ring-brand-clementine h-4 w-4">
+          <label for="newHighRisk" class="font-semibold text-amber-900 dark:text-amber-200 cursor-pointer">
+            Marcar como Riesgo Inminente para la Comunidad Universitaria (Escala automáticamente a Severidad Crítica)
+          </label>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="flex items-center justify-end space-x-2.5 pt-3 border-t border-slate-200 dark:border-slate-700">
+          <button type="button" onclick="app.closeModal('modalNewIncident')" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            Cancelar
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-brand-emerald hover:bg-emerald-600 text-white font-semibold shadow-xs transition">
+            Crear Orden de Trabajo
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: DETALLE / EDICIÓN TRANSACCIONAL Y BITÁCORA -->
+  <div id="modalDetailIncident" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-3xl w-full p-6 shadow-elevation-modal transform transition-all max-h-[92vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex items-start justify-between pb-3.5 border-b border-slate-200 dark:border-slate-700 shrink-0">
+        <div>
+          <div class="flex items-center space-x-2.5">
+            <span id="detailCode" class="font-mono font-bold text-sm bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-brand-royalBlue border border-slate-200 dark:border-slate-700">#TKT-2026-000000</span>
+            <span id="detailSeverityBadge" class="text-xs"></span>
+            <span id="detailStatusBadge" class="text-xs px-2 py-0.5 rounded font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Estado</span>
+          </div>
+          <h2 id="detailTitle" class="text-lg font-display font-bold text-slate-900 dark:text-white mt-1.5">Título del Hallazgo</h2>
+          <p id="detailHierarchy" class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5">Sede > Bloque > Espacio</p>
+        </div>
+        <button onclick="app.closeModal('modalDetailIncident')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="py-4 space-y-4 overflow-y-auto flex-1 text-xs pr-1">
+        <!-- Description block -->
+        <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+          <h4 class="font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider text-[10px]">Descripción del Hallazgo</h4>
+          <p id="detailDescription" class="text-slate-700 dark:text-slate-300 font-sans leading-relaxed">Detalles de la falla...</p>
+        </div>
+
+        <!-- Workflow Lifecycle Transition & Technician Reassignment -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-brand-alabaster dark:bg-slate-800/40 rounded-lg border border-slate-200 dark:border-slate-700">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Mover de Estado (Ciclo de Vida)</label>
+            <select id="editStatusSelect" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-semibold focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+              <option value="E01">E01 · Registrada (Triaje)</option>
+              <option value="E02">E02 · Pendiente de Información</option>
+              <option value="E03">E03 · En Revisión</option>
+              <option value="E04">E04 · En Clasificación ITIL</option>
+              <option value="E05">E05 · Pendiente de Asignación</option>
+              <option value="E06">E06 · Pendiente de Inspección</option>
+              <option value="E07">E07 · En Diagnóstico Técnico</option>
+              <option value="E08">E08 · Pendiente de Autorización</option>
+              <option value="E09">E09 · Pendiente de Recursos</option>
+              <option value="E10">E10 · Programada</option>
+              <option value="E11">E11 · En Atención (Campo)</option>
+              <option value="E12">E12 · Pendiente de Verificación Calidad</option>
+              <option value="E13">E13 · En Corrección (Retrabajo)</option>
+              <option value="E14">E14 · Pendiente Confirmación Reportante</option>
+              <option value="E15">E15 · Cerrada & Conforme</option>
+              <option value="E16">E16 · No Procedente (Desestimada)</option>
+              <option value="E17">E17 · Cancelada (Duplicado)</option>
+              <option value="E18">E18 · Suspendida por Fuerza Mayor</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Reasignar Cuadrilla / Técnico</label>
+            <select id="editTechnicianSelect" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-semibold focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+              <option value="">Sin Asignar</option>
+              <option value="Ing. Carlos Méndez">Ing. Carlos Méndez (Eléctrico)</option>
+              <option value="Tec. Jorge Ospina">Tec. Jorge Ospina (HVAC)</option>
+              <option value="Tec. Andrés Caicedo">Tec. Andrés Caicedo (Hidráulico)</option>
+              <option value="Ing. Diana Rivas">Ing. Diana Rivas (Telecomunicaciones)</option>
+              <option value="Maestro Luis Arana">Maestro Luis Arana (Estructural)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SLA Progress Bar & Timers -->
+        <div class="border border-slate-200 dark:border-slate-700 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="font-semibold text-slate-600 dark:text-slate-300">Seguimiento de SLA Institucional</span>
+            <span id="detailSlaCountdown" class="font-mono font-bold text-brand-royalBlue">Restan 12 horas</span>
+          </div>
+          <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+            <div id="detailSlaBar" class="bg-brand-emerald h-2 transition-all duration-300" style="width: 45%;"></div>
+          </div>
+          <div class="flex justify-between items-center text-[10px] text-slate-400 font-mono mt-1">
+            <span id="detailCreatedDate">Antigüedad: 2 horas</span>
+            <span id="detailReporterName">Reportante: Laura Gómez</span>
+          </div>
+        </div>
+
+        <!-- Historical Bitácora & New Note Entry -->
+        <div>
+          <h4 class="font-semibold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider text-[10px]">Bitácora Operativa y Trazabilidad (RN-042)</h4>
+          <div id="detailBitacoraList" class="space-y-2 mb-3 max-h-36 overflow-y-auto">
+            <!-- Dynamic bitácora entries -->
+          </div>
+
+          <!-- Add Note Form -->
+          <div class="flex gap-2">
+            <input type="text" id="newBitacoraNote" placeholder="Añadir nota técnica o reporte de intervención..." class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 text-slate-800 dark:text-slate-200 placeholder-slate-400 outline-hidden focus:ring-1 focus:ring-brand-royalBlue">
+            <button onclick="app.handleAddBitacoraNote()" class="px-3 py-1.5 bg-brand-navy dark:bg-brand-royalBlue hover:bg-slate-800 text-white rounded-lg font-semibold shrink-0">
+              + Registrar Nota
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between shrink-0">
+        <button onclick="app.handleDismissIncident()" class="text-red-500 hover:text-red-700 font-semibold text-xs flex items-center space-x-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          <span>Desestimar (E16)</span>
+        </button>
+
+        <div class="flex space-x-2">
+          <button onclick="app.closeModal('modalDetailIncident')" class="px-4 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">
+            Cerrar
+          </button>
+          <button onclick="app.handleSaveDetailChanges()" class="px-4 py-1.5 bg-brand-royalBlue hover:bg-blue-600 text-white rounded-lg font-semibold shadow-xs">
+            Guardar Cambios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: KEYBOARD SHORTCUTS / OMNIBOX -->
+  <div id="modalOmnibox" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-start justify-center pt-20 p-4" onclick="if(event.target === this) app.closeModal('modalOmnibox')">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-xl w-full p-4 shadow-elevation-modal transform transition-all">
+      <div class="relative">
+        <input type="text" id="omniboxModalInput" oninput="app.onOmniboxSearch(this.value)" placeholder="Buscar por #TKT, aula, técnico, categoría o palabras clave..." class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-brand-royalBlue outline-hidden font-medium">
+        <svg class="w-5 h-5 text-slate-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+
+      <!-- Quick results -->
+      <div id="omniboxResults" class="mt-3 divide-y divide-slate-100 dark:divide-slate-800 max-h-80 overflow-y-auto text-xs"></div>
+      
+      <div class="mt-3 pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center text-[11px] text-slate-400">
+        <span>Presiona <kbd class="font-mono bg-slate-100 dark:bg-slate-800 px-1 rounded">ESC</kbd> para salir</span>
+        <span>Atajos: ⌘K (Buscar), N (Nueva incidencia)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R01: RESPONDER ACLARACIÓN (E02 -> E03) -->
+  <div id="modalR01Clarification" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <div class="flex items-center space-x-2">
+          <div class="p-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          </div>
+          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">Responder Solicitud de Información (E02)</h4>
+        </div>
+        <button onclick="app.closeModal('modalR01Clarification')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="mt-3 text-xs space-y-3">
+        <div class="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40">
+          <span class="font-bold text-amber-800 dark:text-amber-300 uppercase text-[10px]">Aclaración requerida por el Gestor de Triaje:</span>
+          <p id="r01ClarificationPrompt" class="text-amber-900 dark:text-amber-200 mt-1 italic">"Favor indicar número de aula exacto o piso donde ocurre la falla."</p>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Tu Respuesta / Información Aportada *</label>
+          <textarea id="r01ClarificationResponse" rows="3" required placeholder="Escribe aquí los datos adicionales, referencias o detalles solicitados..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue"></textarea>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR01Clarification')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50">Cancelar</button>
+        <button onclick="app.submitR01Clarification()" class="px-4 py-1.5 bg-brand-royalBlue hover:bg-blue-600 text-white rounded-lg text-xs font-semibold shadow-xs">Enviar y Reanudar Revisión (E03)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R01: REPORTAR NO CONFORMIDAD EN CIERRE (E14 -> E13) -->
+  <div id="modalR01Reopen" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-red-600 dark:text-red-400">Rechazar Solución y Solicitar Retrabajo (E13)</h4>
+        <button onclick="app.closeModal('modalR01Reopen')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <p class="text-slate-600 dark:text-slate-300">Indica detalladamente por qué el problema continúa o por qué el área no quedó en condiciones operativas óptimas.</p>
+        <textarea id="r01ReopenReason" rows="3" required placeholder="Ej. El aire acondicionado aún gotea sobre el escritorio del profesor y genera ruido..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-red-500"></textarea>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR01Reopen')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR01Reopen()" class="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold shadow-xs">Devolver a Corrección (E13)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R02: SOLICITAR ACLARACIÓN A REPORTANTE (E01/E03 -> E02) -->
+  <div id="modalR02Clarification" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">Devolver para Aclaración de Información (RN-003)</h4>
+        <button onclick="app.closeModal('modalR02Clarification')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <p class="text-slate-500">El ticket pasará al estado <strong class="text-amber-600 font-mono">E02 Pendiente de información</strong>. El reportante recibirá una notificación para complementar el reporte.</p>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Motivo / Preguntas para el Reportante *</label>
+          <textarea id="r02ClarificationReason" rows="3" required placeholder="Ej. Por favor indicar número de salón exacto, fotografías del tablero o placa del equipo averiado..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR02Clarification')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR02Clarification()" class="px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold shadow-xs">Solicitar Aclaración (E02)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R02: VINCULAR A DUPLICADO MAESTRO (RN-011..RN-015) -->
+  <div id="modalR02Duplicate" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">Vincular a Duplicado Maestro (RN-011)</h4>
+        <button onclick="app.closeModal('modalR02Duplicate')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <p class="text-slate-500">Selecciona el ticket maestro al cual se anexará este reporte. La incidencia actual quedará en estado <strong class="text-slate-700 font-mono">E17 Cancelada por duplicidad</strong> vinculada al radicado principal.</p>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Ticket Maestro Principal *</label>
+          <select id="r02MasterTicketSelect" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-mono font-medium outline-hidden focus:ring-1 focus:ring-brand-royalBlue">
+            <!-- Dynamic master options -->
+          </select>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR02Duplicate')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR02Duplicate()" class="px-4 py-1.5 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs">Vincular y Cancelar Hijo (E17)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R02: DESESTIMAR INCIDENCIA (E16 NO PROCEDENTE) -->
+  <div id="modalR02Dismiss" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-red-600 dark:text-red-400">Desestimar Incidencia (E16 No procedente)</h4>
+        <button onclick="app.closeModal('modalR02Dismiss')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <p class="text-slate-500">Aplica cuando la solicitud no corresponde a infraestructura física universitaria (mobiliario personal, bienes no institucionales o dolo comprobado).</p>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Causal de No Procedencia *</label>
+          <select id="r02DismissReasonType" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-medium outline-hidden focus:ring-1 focus:ring-red-500">
+            <option value="No corresponde a competencia de Infraestructura">No corresponde a competencia de Infraestructura (TI administrativo / Bienestar)</option>
+            <option value="Bien o equipo no institucional (propiedad privada)">Bien o equipo no institucional (propiedad privada de docente/estudiante)</option>
+            <option value="Reporte inválido o información inconsistente">Reporte inválido o información inconsistente sin respuesta</option>
+            <option value="Evento fortuito sin daño físico atribuible">Evento fortuito sin daño físico atribuible</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Justificación Técnica Obligatoria *</label>
+          <textarea id="r02DismissNotes" rows="2" required placeholder="Explicación para el radicado oficial..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-red-500"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR02Dismiss')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR02Dismiss()" class="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold shadow-xs">Desestimar Orden (E16)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R02: MATRIZ ITIL PRIORIZACIÓN (E01/E03 -> E05) -->
+  <div id="modalR02ItilMatrix" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-xl w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <div class="flex items-center space-x-2">
+          <div class="p-1.5 rounded-lg bg-sky-50 dark:bg-sky-950/40 text-sky-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+          </div>
+          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">Matriz ITIL de Clasificación y Prioridad (RN-004)</h4>
+        </div>
+        <button onclick="app.closeModal('modalR02ItilMatrix')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="mt-3 text-xs space-y-4">
+        <p class="text-slate-500">Calcula la prioridad institucional y el tiempo máximo de SLA combinando el Impacto físico con la Urgencia del servicio académico.</p>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Impacto Físico / Alcance *</label>
+            <select id="itilImpactSelect" onchange="app.calculateItilPriority()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-semibold focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+              <option value="ALTO">Alto (Afecta edificio, subestación o campus)</option>
+              <option value="MEDIO" selected>Medio (Afecta aula completa o laboratorio)</option>
+              <option value="BAJO">Bajo (Afecta puesto individual o componente menor)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Urgencia del Servicio *</label>
+            <select id="itilUrgencySelect" onchange="app.calculateItilPriority()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-semibold focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+              <option value="ALTA">Alta (Parálisis de clases o peligro inminente)</option>
+              <option value="MEDIA" selected>Media (Afectación funcional con alternativa)</option>
+              <option value="BAJA">Baja (Mantenimiento menor programable)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Calculated Outcome Box -->
+        <div class="p-3.5 rounded-lg border border-brand-royalBlue/30 bg-blue-50/60 dark:bg-blue-950/40 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] uppercase font-bold text-slate-400">Prioridad Resultante ITIL:</span>
+            <div id="itilResultBadge" class="text-base font-extrabold font-display text-brand-royalBlue mt-0.5">MEDIA (SLA: 48 Horas)</div>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] font-mono text-slate-400">Transición Automática:</span>
+            <div class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">➔ E05 Pendiente Asignación</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR02ItilMatrix')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR02ItilMatrix()" class="px-4 py-1.5 bg-brand-royalBlue hover:bg-blue-600 text-white rounded-lg text-xs font-semibold shadow-xs">Aprobar y Enviar a Asignación (E05)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R03: ASIGNACIÓN DE CUADRILLA CON WIP LIMIT (E05/E13 -> E06 o E10) -->
+  <div id="modalR03AssignCrew" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-xl w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <div class="flex items-center space-x-2">
+          <div class="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-brand-royalBlue">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          </div>
+          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">Asignación de Cuadrilla & Control WIP (RN-024)</h4>
+        </div>
+        <button onclick="app.closeModal('modalR03AssignCrew')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="mt-3 text-xs space-y-3">
+        <div id="r03AssignTicketSummary" class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs">
+          <!-- Dynamic ticket preview -->
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Seleccionar Técnico / Cuadrilla Especializada *</label>
+          <div id="r03CrewOptionsList" class="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+            <!-- Dynamic radio/cards of technicians with WIP counts -->
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-1">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Tipo de Despacho *</label>
+            <select id="r03AssignTargetState" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-medium">
+              <option value="E10">E10 · Programada (Atención Directa)</option>
+              <option value="E06">E06 · Pendiente de Inspección Preliminar</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Fecha / Turno de Atención *</label>
+            <input type="text" id="r03AssignSchedule" value="Turno Inmediato (Mañana 08:00 AM)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-medium">
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR03AssignCrew')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR03AssignCrew()" class="px-4 py-1.5 bg-brand-royalBlue hover:bg-blue-600 text-white rounded-lg text-xs font-semibold shadow-xs">Confirmar Despacho Oficial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R03: REQUISICIÓN DE COMPRAS / ALMACÉN (E05/E13 -> E08/E09) -->
+  <div id="modalR03Requisition" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">Generar Requisición de Insumos (RN-029)</h4>
+        <button onclick="app.closeModal('modalR03Requisition')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Destino de la Requisición *</label>
+          <select id="r03ReqType" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-medium">
+            <option value="E08">E08 · Compra Extraordinaria (Requiere Autorización R05)</option>
+            <option value="E09">E09 · Almacén Central de Repuestos (Reserva Interna)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Insumos y Repuestos Solicitados *</label>
+          <input type="text" id="r03ReqItems" placeholder="Ej. 1x Contactor trifásico 250A, 4x fusibles NH-00 63A" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Presupuesto Estimado (COP)</label>
+            <input type="text" id="r03ReqBudget" placeholder="$1,450,000" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Tiempo Estimado Entrega</label>
+            <input type="text" id="r03ReqLeadTime" placeholder="24 horas hábiles" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Justificación Técnica *</label>
+          <textarea id="r03ReqJustification" rows="2" placeholder="Explique por qué no es posible solucionar con stock existente..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR03Requisition')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR03Requisition()" class="px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold shadow-xs">Radicar Requisición</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R04: BITÁCORA TÉCNICA DE CAMPO (EN E11) -->
+  <div id="modalR04FieldLog" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">Registrar Bitácora de Campo en Sitio (RN-031)</h4>
+        <button onclick="app.closeModal('modalR04FieldLog')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Horas-Hombre Invertidas *</label>
+            <input type="number" step="0.5" id="r04LogHours" value="2.5" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-mono">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Causa Raíz Identificada *</label>
+            <select id="r04LogRootCause" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+              <option value="Desgaste por uso y fatiga de material">Desgaste por fatiga de material</option>
+              <option value="Sobrecarga o pico eléctrico">Sobrecarga o pico eléctrico</option>
+              <option value="Falta de mantenimiento preventivo">Falta de preventivo</option>
+              <option value="Manipulación indebida / vandalismo">Manipulación indebida</option>
+              <option value="Fenómeno ambiental / humedad">Fenómeno ambiental / humedad</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Materiales e Insumos Consumidos</label>
+          <input type="text" id="r04LogMaterials" placeholder="Ej. 1 válvula 1/2 pulgada, 2 rollos teflón, soldadura blanda" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Notas de Intervención Técnica *</label>
+          <textarea id="r04LogNotes" rows="2" placeholder="Procedimientos ejecutados, pruebas de funcionamiento preliminares..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR04FieldLog')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR04FieldLog()" class="px-4 py-1.5 bg-brand-royalBlue hover:bg-blue-600 text-white rounded-lg text-xs font-semibold shadow-xs">Guardar en Bitácora</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R04: FINALIZAR Y SOLICITAR VERIFICACIÓN (E11 -> E12) -->
+  <div id="modalR04FinishWork" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-emerald-600 dark:text-emerald-400">Finalizar Intervención y Pedir Verificación (E12)</h4>
+        <button onclick="app.closeModal('modalR04FinishWork')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <p class="text-slate-600 dark:text-slate-300">Certifica que el trabajo en campo concluyó y solicita la inspección de calidad a Interventoría (Rol R06).</p>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Resumen del Trabajo Concluido *</label>
+          <textarea id="r04FinishSummary" rows="2" required placeholder="Ej. Se reparó fuga, se reemplazó empaque y se presurizó la línea a 45 PSI sin novedades..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200"></textarea>
+        </div>
+        <div class="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/40 text-emerald-800 dark:text-emerald-300">
+          ✓ Se adjuntará automáticamente constancia fotográfica de trabajo terminado a la bitácora.
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR04FinishWork')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR04FinishWork()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs">Entregar a Control de Calidad (E12)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R05: APROBAR COMPRA (E08 -> E09 o E10) -->
+  <div id="modalR05Approve" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-emerald-600 dark:text-emerald-400">Aprobar Requisición Presupuestal (RN-029)</h4>
+        <button onclick="app.closeModal('modalR05Approve')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <div id="r05ApproveSummary" class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
+          <!-- Populated dynamically -->
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Destino Tras Aprobación *</label>
+          <select id="r05TargetStateSelect" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+            <option value="E09">E09 · Pendiente de Recursos (Espera orden de compra / almacén)</option>
+            <option value="E10">E10 · Programada (Despacho inmediato de insumos)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Centro de Costo / Rubro Presupuestal *</label>
+          <input type="text" id="r05BudgetCode" value="RUBRO-INFRA-2026-B04 (Mantenimiento Correctivo Sedes)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR05Approve')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR05Approve()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs">Emitir Autorización Formal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R05: RECHAZAR REQUISICIÓN (E08 -> E05/E07) -->
+  <div id="modalR05Reject" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-red-600 dark:text-red-400">Rechazar Requisición Extraordinaria</h4>
+        <button onclick="app.closeModal('modalR05Reject')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <p class="text-slate-500">La orden retornará a <strong class="text-amber-600 font-mono">E05 Pendiente de asignación</strong> para que el Coordinador reevalúe alternativas con inventario existente.</p>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Motivo Obligatorio del Rechazo Financiero *</label>
+          <textarea id="r05RejectReason" rows="3" required placeholder="Ej. Excede el techo de caja menor; utilizar repuesto equivalente disponible en taller de Palmira..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR05Reject')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR05Reject()" class="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold shadow-xs">Rechazar Solicitud</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R06: DICTAMEN CONFORME (E12 -> E14 o E15) -->
+  <div id="modalR06Conformity" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-emerald-600 dark:text-emerald-400">Emitir Dictamen de Calidad Conforme (RN-035)</h4>
+        <button onclick="app.closeModal('modalR06Conformity')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <p class="text-slate-600 dark:text-slate-300">Has verificado los 4 puntos de inspección física. Selecciona el siguiente paso del ciclo:</p>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Destino de la Orden *</label>
+          <select id="r06TargetStateSelect" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-medium">
+            <option value="E14">E14 · Pendiente Confirmación del Reportante (Recomendado)</option>
+            <option value="E15">E15 · Cierre Directo Conforme y Definitivo</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Observaciones del Inspector de Calidad</label>
+          <textarea id="r06ConformityNotes" rows="2" placeholder="Ej. Instalación probada bajo carga eléctrica completa. Aceptación total..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR06Conformity')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR06Conformity()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs">Firmar Dictamen Conforme</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R06: ACTA DE NO CONFORMIDAD (E12 -> E13) -->
+  <div id="modalR06NonConformity" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-lg w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-red-600 dark:text-red-400">Emitir Acta de No Conformidad / Retrabajo (E13)</h4>
+        <button onclick="app.closeModal('modalR06NonConformity')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <p class="text-slate-500">La orden retornará al estado <strong class="text-red-600 font-mono">E13 En corrección</strong> asignada al Coordinador y Técnico para su subsanación inmediata.</p>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Defectos Encontrados *</label>
+          <select id="r06DefectType" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+            <option value="Acabado deficiente o residuos de obra en sitio">Acabado deficiente o residuos de obra en sitio</option>
+            <option value="Falla en prueba de estanqueidad o presión">Falla en prueba de estanqueidad o presión</option>
+            <option value="Parámetro eléctrico fuera de norma RETIE">Parámetro eléctrico fuera de norma RETIE</option>
+            <option value="Materiales no coincidentes con especificación">Materiales no coincidentes con especificación</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Acción Correctiva Requerida *</label>
+          <textarea id="r06ReworkInstructions" rows="3" required placeholder="Instrucciones precisas para la cuadrilla técnica..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200"></textarea>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalR06NonConformity')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitR06NonConformity()" class="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold shadow-xs">Emitir Acta y Devolver a E13</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL R07: AGREGAR ESPACIO EN TOPOLOGÍA 4L -->
+  <div id="modalAddSpace" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-md w-full p-5 shadow-elevation-modal">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-700">
+        <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">Agregar Nuevo Espacio a Topología 4L</h4>
+        <button onclick="app.closeModal('modalAddSpace')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="mt-3 text-xs space-y-3">
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Sede *</label>
+          <select id="addSpaceSede" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+            <option value="Campus Meléndez">Campus Meléndez</option>
+            <option value="Campus San Fernando">Campus San Fernando</option>
+            <option value="Sede Yumbo">Sede Yumbo</option>
+            <option value="Sede Palmira">Sede Palmira</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Edificio / Bloque *</label>
+          <input type="text" id="addSpaceBloque" placeholder="Ej. Bloque F (Idiomas)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Piso / Nivel *</label>
+          <input type="text" id="addSpacePiso" placeholder="Ej. Piso 2" value="Piso 1" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Nombre del Aula / Laboratorio *</label>
+          <input type="text" id="addSpaceAula" placeholder="Ej. Laboratorio Multimedia 204" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200">
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-end space-x-2">
+        <button onclick="app.closeModal('modalAddSpace')" class="px-3 py-1.5 border rounded-lg text-xs font-semibold text-slate-600">Cancelar</button>
+        <button onclick="app.submitAddSpace()" class="px-4 py-1.5 bg-brand-royalBlue hover:bg-blue-600 text-white rounded-lg text-xs font-semibold shadow-xs">Guardar Espacio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>

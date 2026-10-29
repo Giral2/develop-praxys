@@ -11,13 +11,12 @@ subagent: false
 permissionMode: acceptEdits
 commandExecutionPolicy: auto
 tools:
-  - view_file
-  - list_dir
-  - grep_search
+  - read_file
+  - edit_file
+  - write_file
   - run_command
   - manage_task
   - schedule
-  - write_to_file
 skills:
   - skills/agentes-personalizados
 ---

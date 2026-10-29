@@ -1,0 +1,143 @@
+  <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+  <header class="bg-white dark:bg-brand-navy border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0 px-6 py-2.5 z-30 shadow-elevation-1 transition-colors">
+    <div class="max-w-[1720px] mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo + Wordmark + Campus Indicator -->
+      <div class="flex items-center space-x-6">
+        <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="app.resetFilters(); app.switchContextView('global')" title="PRAXIS Plataforma Universitaria">
+          <!-- Geometric Axonometric Isometric SVG Logo -->
+          <div class="w-10 h-10 shrink-0">
+            <svg viewBox="0 0 160 160" class="w-full h-full drop-shadow-sm" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Top Diamond / Rhombus in Cyan/Royal Blue -->
+              <path d="M80 18 L126 44 L80 70 L34 44 Z" fill="#00A3FF" />
+              <path d="M80 32 L108 48 L80 64 L52 48 Z" fill="#0A192F" fill-opacity="0.2" />
+              <!-- Left Cube Face - Deep Navy tracing the 'P' vertical body -->
+              <path d="M34 48 L76 72 V122 L34 98 Z" fill="#1E293B" class="dark:fill-slate-900" />
+              <!-- P internal loop cutout/bar -->
+              <path d="M48 60 L66 70 L66 90 L48 80 Z" fill="#3B82F6" />
+              <!-- Right Face / Emerald Mint ribbon tracing the checkmark '✓' -->
+              <path d="M84 72 L126 48 V98 L84 122 Z" fill="#00C97B" />
+              <!-- Inner Isometric Checkmark Accent in Emerald Light -->
+              <path d="M84 122 L105 134 L142 82 L128 74 L102 110 L92 104 Z" fill="#10B981" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-display font-extrabold text-2xl tracking-wider text-brand-navy dark:text-white leading-none">PRAXIS</span>
+              <span class="text-[10px] uppercase font-mono font-bold tracking-widest px-1.5 py-0.5 rounded bg-brand-royalBlue/10 text-brand-royalBlue dark:bg-brand-royalBlue/20 dark:text-sky-300">v2.4 OPS</span>
+            </div>
+            <p class="text-[11px] font-sans text-slate-500 dark:text-slate-400 font-medium tracking-tight">Gestión y Trazabilidad de Infraestructura Física</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header Global Controls -->
+      <div class="flex items-center space-x-2.5">
+        <!-- Quick Keyboard Omnibox Trigger Button -->
+        <button onclick="app.openOmniboxModal()" class="flex items-center space-x-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 transition">
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span class="hidden md:inline">Búsqueda global...</span>
+          <kbd class="font-mono bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-600 text-[10px] text-slate-500 dark:text-slate-400">⌘K</kbd>
+        </button>
+
+        <!-- View Mode Switcher: Kanban vs Dense Table (Active when in Global Console) -->
+        <div id="headerViewSwitcher" class="bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg flex items-center border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+          <button id="viewBtnKanban" onclick="app.setViewMode('kanban')" class="flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white" title="Vista Pipeline Kanban de 6 Fases">
+            <svg class="w-3.5 h-3.5 text-brand-royalBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+            <span>Pipeline</span>
+          </button>
+          <button id="viewBtnTable" onclick="app.setViewMode('table')" class="flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white" title="Vista Tabla Operativa Compacta">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <span>Tabla</span>
+          </button>
+        </div>
+
+        <!-- Dark/Light Mode Toggle -->
+        <button id="themeToggleBtn" onclick="app.toggleTheme()" title="Alternar Modo Oscuro Ejecutivo / Modo Claro" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <svg id="sunIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg id="moonIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+
+        <!-- User Profile & Role Management Menu -->
+        <div class="relative">
+          <button id="btnProfileMenu" onclick="app.toggleProfileMenu(event)" class="flex items-center space-x-2 pl-1.5 pr-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition shadow-xs select-none">
+            <div class="relative">
+              <div id="navAvatarInitials" class="w-7 h-7 rounded-full bg-gradient-to-tr from-brand-royalBlue to-sky-400 text-white font-bold text-xs flex items-center justify-center font-display shadow-xs">
+                DG
+              </div>
+              <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-slate-800 rounded-full"></span>
+            </div>
+            <div class="hidden md:block text-left leading-tight">
+              <span id="navUserName" class="block text-xs font-semibold text-slate-800 dark:text-slate-200">Ing. Daniel Gómez</span>
+              <span id="navRoleBadge" class="block text-[10px] font-mono text-brand-royalBlue dark:text-sky-300 font-medium">Coordinador · R03</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+
+          <!-- Profile Dropdown Floating Panel -->
+          <div id="profileDropdownMenu" class="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl shadow-elevation-modal p-3.5 z-50 hidden space-y-3 select-none">
+            
+            <!-- User Header -->
+            <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-700/80">
+              <div id="profileDropdownAvatar" class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-royalBlue to-sky-400 text-white font-bold text-sm flex items-center justify-center font-display shadow-sm">
+                DG
+              </div>
+              <div class="flex-1 min-w-0">
+                <h4 id="profileDropdownName" class="text-xs font-bold text-slate-900 dark:text-white truncate">Ing. Daniel Gómez</h4>
+                <p id="profileDropdownEmail" class="text-[11px] text-slate-500 dark:text-slate-400 truncate font-mono">dgomez@univalle.edu.co</p>
+                <div class="mt-1">
+                  <span id="profileActiveRoleTag" class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-brand-royalBlue dark:text-sky-300 border border-blue-200 dark:border-blue-900/60">
+                    R03 · Coordinador Infraestructura
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Primary Action: + Nueva Incidencia -->
+            <div>
+              <button onclick="app.closeProfileMenu(); app.openNewIncidentModal()" class="w-full flex items-center justify-center space-x-2 bg-brand-emerald hover:bg-emerald-600 text-white font-semibold text-xs py-2 px-3 rounded-lg shadow-sm transition transform active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                <span>+ Radicar Nueva Incidencia</span>
+              </button>
+            </div>
+
+            <!-- Network Status Panel -->
+            <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Estado de Conectividad</span>
+                <span class="flex items-center space-x-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                  <span>En Línea</span>
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-300 font-medium">Red Universitaria Activa: Campus Central & Sedes Regionales</p>
+              <div class="grid grid-cols-3 gap-1 mt-1.5 pt-1.5 border-t border-slate-200/60 dark:border-slate-700/60 text-[10px] font-mono text-slate-500">
+                <span>Meléndez: <strong class="text-emerald-600 dark:text-emerald-400">99.8%</strong></span>
+                <span>San Fernando: <strong class="text-emerald-600 dark:text-emerald-400">99.4%</strong></span>
+                <span>Yumbo: <strong class="text-emerald-600 dark:text-emerald-400">99.1%</strong></span>
+              </div>
+            </div>
+
+            <!-- Role Management Section -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5 px-0.5">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Gestión de Roles (PRAXIS RACI)</span>
+                <span class="text-[10px] text-brand-royalBlue dark:text-sky-400 font-mono font-medium">Cambiar Rol</span>
+              </div>
+              <div id="rolesListContainer" class="space-y-1 max-h-48 overflow-y-auto pr-0.5">
+                <!-- Populated dynamically with R01-R07 -->
+              </div>
+            </div>
+
+            <!-- Footer / System Info -->
+            <div class="pt-2 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+              <span>PRAXIS v2.4 OPS</span>
+              <button onclick="app.resetRoleToDefault()" class="hover:text-brand-royalBlue hover:underline">Restablecer R03</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
