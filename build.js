@@ -7,7 +7,6 @@ console.log('--- Construyendo PRAXIS index.html con Espacios de Rol R01 a R07 --
 const parts = [
   '01_head.html',
   '02_nav.html',
-  '03_role_bar.html',
   'OPEN_MAIN',
   '04_global_console.html',
   '05_workspaces.html',

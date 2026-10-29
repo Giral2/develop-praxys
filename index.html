@@ -154,6 +154,12 @@
           <kbd class="font-mono bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-600 text-[10px] text-slate-500 dark:text-slate-400">⌘K</kbd>
         </button>
 
+        <!-- Mode Switch: Espacio de Rol vs Consola Global OPS -->
+        <button id="btnToggleContextView" onclick="app.toggleContextView()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-brand-royalBlue/40 bg-brand-royalBlue/10 dark:bg-brand-royalBlue/20 text-brand-royalBlue dark:text-sky-300 hover:bg-brand-royalBlue/20 font-semibold text-xs transition shadow-xs" title="Alternar entre Espacio de Trabajo del Rol y Consola Global OPS">
+          <svg id="iconToggleWorkspace" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          <span id="btnToggleContextText">Consola Global OPS</span>
+        </button>
+
         <!-- View Mode Switcher: Kanban vs Dense Table (Active when in Global Console) -->
         <div id="headerViewSwitcher" class="bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg flex items-center border border-slate-200 dark:border-slate-700 text-xs font-semibold">
           <button id="viewBtnKanban" onclick="app.setViewMode('kanban')" class="flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white" title="Vista Pipeline Kanban de 6 Fases">
@@ -255,74 +261,6 @@
 
     </div>
   </header>
-
-  <!-- ==================== ROLE CONTEXT BAR & SWITCHER ==================== -->
-  <section class="bg-white dark:bg-brand-navy border-b border-brand-borderSubtle dark:border-brand-borderDark px-6 py-2 shrink-0 transition-colors shadow-xs z-20">
-    <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
-      
-      <!-- Active Role Information & Attribution -->
-      <div class="flex items-center space-x-3.5">
-        <div id="roleActiveBadgeIcon" class="w-9 h-9 rounded-lg flex items-center justify-center font-display font-bold text-sm bg-blue-100 dark:bg-blue-950/70 text-brand-royalBlue dark:text-sky-300 border border-blue-200 dark:border-blue-900/50 shadow-xs shrink-0">
-          R03
-        </div>
-        <div class="min-w-0">
-          <div class="flex items-center space-x-2 flex-wrap">
-            <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Rol Operativo Activo:</span>
-            <span id="roleActiveTitle" class="text-xs font-bold font-display text-slate-900 dark:text-white truncate">Coordinador de Infraestructura y Mantenimiento</span>
-            <span id="roleScopeBadge" class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/50 text-brand-royalBlue dark:text-sky-300 border border-blue-200 dark:border-blue-900/50">R03</span>
-          </div>
-          <p id="roleActiveDesc" class="text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-xl">
-            Despacho técnico, balance de cuadrillas con WIP limits, diagnóstico y control de tiempos SLA.
-          </p>
-        </div>
-      </div>
-
-      <!-- Quick Role Switcher Pills Bar + Context View Mode Switcher -->
-      <div class="flex items-center flex-wrap gap-2">
-        <!-- Horizontal Fast Pills -->
-        <div class="flex items-center space-x-1 p-0.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-medium overflow-x-auto">
-          <button onclick="app.selectRole('R01')" id="pill-R01" class="role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white whitespace-nowrap">
-            <span class="font-mono font-bold text-[10px] text-emerald-600 dark:text-emerald-400">R01</span>
-            <span>Reportante</span>
-          </button>
-          <button onclick="app.selectRole('R02')" id="pill-R02" class="role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white whitespace-nowrap">
-            <span class="font-mono font-bold text-[10px] text-sky-600 dark:text-sky-400">R02</span>
-            <span>Triaje</span>
-          </button>
-          <button onclick="app.selectRole('R03')" id="pill-R03" class="role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition bg-white dark:bg-brand-navy text-brand-royalBlue dark:text-sky-300 font-bold shadow-xs whitespace-nowrap">
-            <span class="font-mono font-bold text-[10px] text-brand-royalBlue dark:text-sky-300">R03</span>
-            <span>Coordinador</span>
-          </button>
-          <button onclick="app.selectRole('R04')" id="pill-R04" class="role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white whitespace-nowrap">
-            <span class="font-mono font-bold text-[10px] text-amber-600 dark:text-amber-400">R04</span>
-            <span>Técnico</span>
-          </button>
-          <button onclick="app.selectRole('R05')" id="pill-R05" class="role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white whitespace-nowrap">
-            <span class="font-mono font-bold text-[10px] text-purple-600 dark:text-purple-400">R05</span>
-            <span>Autorizaciones</span>
-          </button>
-          <button onclick="app.selectRole('R06')" id="pill-R06" class="role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white whitespace-nowrap">
-            <span class="font-mono font-bold text-[10px] text-indigo-600 dark:text-indigo-400">R06</span>
-            <span>Calidad</span>
-          </button>
-          <button onclick="app.selectRole('R07')" id="pill-R07" class="role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white whitespace-nowrap">
-            <span class="font-mono font-bold text-[10px] text-rose-600 dark:text-rose-400">R07</span>
-            <span>Admin</span>
-          </button>
-        </div>
-
-        <!-- Mode Switch: Espacio de Rol vs Consola Global OPS -->
-        <div class="flex items-center space-x-1">
-          <button id="btnToggleContextView" onclick="app.toggleContextView()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-brand-royalBlue/40 bg-brand-royalBlue/10 dark:bg-brand-royalBlue/20 text-brand-royalBlue dark:text-sky-300 hover:bg-brand-royalBlue/20 font-semibold text-xs transition shadow-xs">
-            <svg id="iconToggleWorkspace" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-            <span id="btnToggleContextText">Espacio del Rol</span>
-          </button>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
 
 
   <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
@@ -2426,17 +2364,20 @@
         const globalCont = document.getElementById('globalConsoleContainer');
         const workspaceCont = document.getElementById('roleWorkspaceContainer');
         const btnText = document.getElementById('btnToggleContextText');
+        const headerSwitcher = document.getElementById('headerViewSwitcher');
         const role = this.rolesDef.find(r => r.code === this.currentRole) || this.rolesDef[2];
 
         if (this.contextView === 'workspace') {
-          globalCont.classList.add('hidden');
-          workspaceCont.classList.remove('hidden');
-          btnText.innerText = 'Consola Global OPS';
+          if (globalCont) globalCont.classList.add('hidden');
+          if (workspaceCont) workspaceCont.classList.remove('hidden');
+          if (btnText) btnText.innerText = 'Consola Global OPS';
+          if (headerSwitcher) headerSwitcher.classList.add('hidden');
           this.renderRoleWorkspace();
         } else {
-          workspaceCont.classList.add('hidden');
-          globalCont.classList.remove('hidden');
-          btnText.innerText = `Espacio ${role.code}`;
+          if (workspaceCont) workspaceCont.classList.add('hidden');
+          if (globalCont) globalCont.classList.remove('hidden');
+          if (btnText) btnText.innerText = `Espacio ${role.code}`;
+          if (headerSwitcher) headerSwitcher.classList.remove('hidden');
           this.render();
         }
       }
@@ -2755,28 +2696,6 @@
         if (dropEmail) dropEmail.innerText = role.email;
         const profileActiveRoleTag = document.getElementById('profileActiveRoleTag');
         if (profileActiveRoleTag) profileActiveRoleTag.innerText = `${role.code} · ${role.name}`;
-
-        // Active Role Context Bar
-        const badgeIcon = document.getElementById('roleActiveBadgeIcon');
-        if (badgeIcon) {
-          badgeIcon.innerText = role.code;
-          badgeIcon.className = `w-9 h-9 rounded-lg flex items-center justify-center font-display font-bold text-sm border shadow-xs shrink-0 ${role.badgeClass}`;
-        }
-        const activeTitle = document.getElementById('roleActiveTitle');
-        if (activeTitle) activeTitle.innerText = role.name;
-        const activeDesc = document.getElementById('roleActiveDesc');
-        if (activeDesc) activeDesc.innerText = role.desc;
-        const scopeBadge = document.getElementById('roleScopeBadge');
-        if (scopeBadge) scopeBadge.innerText = role.code;
-
-        // Pills highlight
-        document.querySelectorAll('.role-pill').forEach(btn => {
-          btn.className = 'role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white whitespace-nowrap';
-        });
-        const activePill = document.getElementById(`pill-${role.code}`);
-        if (activePill) {
-          activePill.className = 'role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition bg-white dark:bg-brand-navy text-brand-royalBlue dark:text-sky-300 font-bold shadow-xs whitespace-nowrap';
-        }
       }
 
       // ==================== SLA CALCULATION ====================

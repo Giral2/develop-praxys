@@ -47,12 +47,6 @@ roles.forEach(roleCode => {
   // Verify UI headers and badges
   const navBadge = doc.getElementById('navRoleBadge').innerText;
   assert(navBadge.includes(roleCode), `Header navigation badge includes ${roleCode} (Got: "${navBadge}")`);
-  
-  const roleScopeBadge = doc.getElementById('roleScopeBadge').innerText;
-  assert(roleScopeBadge === roleCode, `Role bar scope badge equals ${roleCode}`);
-  
-  const activePill = doc.getElementById(`pill-${roleCode}`);
-  assert(activePill.className.includes('bg-white') || activePill.className.includes('brand-navy'), `Active pill for ${roleCode} has active styling`);
 });
 
 // -------------------------------------------------------------

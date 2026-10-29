@@ -622,17 +622,20 @@
         const globalCont = document.getElementById('globalConsoleContainer');
         const workspaceCont = document.getElementById('roleWorkspaceContainer');
         const btnText = document.getElementById('btnToggleContextText');
+        const headerSwitcher = document.getElementById('headerViewSwitcher');
         const role = this.rolesDef.find(r => r.code === this.currentRole) || this.rolesDef[2];
 
         if (this.contextView === 'workspace') {
-          globalCont.classList.add('hidden');
-          workspaceCont.classList.remove('hidden');
-          btnText.innerText = 'Consola Global OPS';
+          if (globalCont) globalCont.classList.add('hidden');
+          if (workspaceCont) workspaceCont.classList.remove('hidden');
+          if (btnText) btnText.innerText = 'Consola Global OPS';
+          if (headerSwitcher) headerSwitcher.classList.add('hidden');
           this.renderRoleWorkspace();
         } else {
-          workspaceCont.classList.add('hidden');
-          globalCont.classList.remove('hidden');
-          btnText.innerText = `Espacio ${role.code}`;
+          if (workspaceCont) workspaceCont.classList.add('hidden');
+          if (globalCont) globalCont.classList.remove('hidden');
+          if (btnText) btnText.innerText = `Espacio ${role.code}`;
+          if (headerSwitcher) headerSwitcher.classList.remove('hidden');
           this.render();
         }
       }
@@ -951,28 +954,6 @@
         if (dropEmail) dropEmail.innerText = role.email;
         const profileActiveRoleTag = document.getElementById('profileActiveRoleTag');
         if (profileActiveRoleTag) profileActiveRoleTag.innerText = `${role.code} · ${role.name}`;
-
-        // Active Role Context Bar
-        const badgeIcon = document.getElementById('roleActiveBadgeIcon');
-        if (badgeIcon) {
-          badgeIcon.innerText = role.code;
-          badgeIcon.className = `w-9 h-9 rounded-lg flex items-center justify-center font-display font-bold text-sm border shadow-xs shrink-0 ${role.badgeClass}`;
-        }
-        const activeTitle = document.getElementById('roleActiveTitle');
-        if (activeTitle) activeTitle.innerText = role.name;
-        const activeDesc = document.getElementById('roleActiveDesc');
-        if (activeDesc) activeDesc.innerText = role.desc;
-        const scopeBadge = document.getElementById('roleScopeBadge');
-        if (scopeBadge) scopeBadge.innerText = role.code;
-
-        // Pills highlight
-        document.querySelectorAll('.role-pill').forEach(btn => {
-          btn.className = 'role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white whitespace-nowrap';
-        });
-        const activePill = document.getElementById(`pill-${role.code}`);
-        if (activePill) {
-          activePill.className = 'role-pill flex items-center space-x-1 px-2.5 py-1 rounded-md transition bg-white dark:bg-brand-navy text-brand-royalBlue dark:text-sky-300 font-bold shadow-xs whitespace-nowrap';
-        }
       }
 
       // ==================== SLA CALCULATION ====================
