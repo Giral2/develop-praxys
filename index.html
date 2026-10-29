@@ -1,0 +1,3040 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRAXIS | Plataforma de Infraestructura Universitaria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#1E293B',
+              deepNavy: '#0A192F',
+              royalBlue: '#3B82F6',
+              electricCyan: '#00A3FF',
+              clementine: '#F59E0B',
+              emerald: '#00C97B',
+              emeraldDark: '#00A865',
+              chalkWhite: '#FFFFFF',
+              alabaster: '#F8FAFC',
+              borderSubtle: '#E2E8F0',
+              borderDark: '#334155',
+              darkBg: '#0B132B',
+              darkCard: '#131E3A',
+              darkCardHover: '#1B2A4E'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Space Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          boxShadow: {
+            'elevation-1': '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+            'elevation-2': '0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04)',
+            'elevation-modal': '0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.1)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbars and transitions */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    .kanban-col-scroll {
+      max-height: calc(100vh - 305px);
+      min-height: 480px;
+    }
+    .drag-ghost {
+      opacity: 0.4;
+      transform: scale(0.98);
+    }
+    .drag-over-col {
+      background-color: rgba(59, 130, 246, 0.08) !important;
+      border-color: #3B82F6 !important;
+    }
+    .dark .drag-over-col {
+      background-color: rgba(0, 163, 255, 0.1) !important;
+      border-color: #00A3FF !important;
+    }
+    .col-resizer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 7px;
+      cursor: col-resize;
+      user-select: none;
+      z-index: 20;
+    }
+    .col-resizer:hover, .col-resizer.resizing {
+      background-color: #3B82F6;
+    }
+  </style>
+</head>
+<body class="h-full bg-brand-alabaster text-brand-navy antialiased font-sans transition-colors duration-200 dark:bg-brand-deepNavy dark:text-slate-100 flex flex-col overflow-hidden">
+
+  <!-- ==================== TOP NAVIGATION: DUAL LAYOUT - HEADER 1 (DEEP NAVY) ==================== -->
+  <header class="bg-[#0B1B3D] border-b border-[#1E293B] shrink-0 px-6 py-2.5 z-30 shadow-elevation-1 transition-colors text-white">
+    <div class="max-w-[1720px] mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo + Wordmark + Indicator -->
+      <div class="flex items-center space-x-6">
+        <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="app.onBrandClick()" title="PRAXIS Plataforma Universitaria">
+          <!-- Geometric Axonometric Isometric SVG Logo -->
+          <div class="w-10 h-10 shrink-0">
+            <svg viewBox="0 0 160 160" class="w-full h-full drop-shadow-sm" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Top Diamond / Rhombus in Cyan/Royal Blue -->
+              <path d="M80 18 L126 44 L80 70 L34 44 Z" fill="#00A3FF" />
+              <path d="M80 32 L108 48 L80 64 L52 48 Z" fill="#0A192F" fill-opacity="0.2" />
+              <!-- Left Cube Face - Deep Navy tracing the 'P' vertical body -->
+              <path d="M34 48 L76 72 V122 L34 98 Z" fill="#1E293B" />
+              <!-- P internal loop cutout/bar -->
+              <path d="M48 60 L66 70 L66 90 L48 80 Z" fill="#3B82F6" />
+              <!-- Right Face / Emerald Mint ribbon tracing the checkmark '✓' -->
+              <path d="M84 72 L126 48 V98 L84 122 Z" fill="#00C97B" />
+              <!-- Inner Isometric Checkmark Accent in Emerald Light -->
+              <path d="M84 122 L105 134 L142 82 L128 74 L102 110 L92 104 Z" fill="#10B981" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-display font-extrabold text-2xl tracking-wider text-white leading-none">PRAXIS</span>
+              <span class="text-[10px] uppercase font-mono font-bold tracking-widest px-1.5 py-0.5 rounded bg-brand-royalBlue/30 text-sky-300 border border-sky-400/30">v2.4 OPS</span>
+            </div>
+            <p class="text-[11px] font-sans text-slate-300 font-medium tracking-tight">Gestión y Trazabilidad de Infraestructura Física</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header Global Controls -->
+      <div class="flex items-center space-x-2.5">
+        <!-- Quick Keyboard Omnibox Trigger Button -->
+        <button onclick="app.openOmniboxModal()" class="flex items-center space-x-2 bg-[#132247] hover:bg-[#1A2E5E] text-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-700/80 transition shadow-xs">
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span class="hidden md:inline">Búsqueda global...</span>
+          <kbd class="font-mono bg-[#0A192F] px-1.5 py-0.5 rounded border border-slate-600 text-[10px] text-slate-300">⌘K</kbd>
+        </button>
+
+        <!-- Dark/Light Mode Toggle -->
+        <button id="themeToggleBtn" onclick="app.toggleTheme()" title="Alternar Modo Oscuro Ejecutivo / Modo Claro" class="p-1.5 rounded-lg border border-slate-700 bg-[#132247] text-slate-300 hover:bg-[#1A2E5E] transition">
+          <svg id="sunIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg id="moonIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+
+        <!-- User Profile & Role Management Menu -->
+        <div class="relative">
+          <button id="btnProfileMenu" onclick="app.toggleProfileMenu(event)" class="flex items-center space-x-2 pl-1.5 pr-2.5 py-1 rounded-lg border border-slate-700 bg-[#132247] hover:bg-[#1A2E5E] transition shadow-xs select-none">
+            <div class="relative">
+              <div id="navAvatarInitials" class="w-7 h-7 rounded-full bg-linear-to-tr from-brand-emerald to-teal-400 text-slate-900 font-extrabold text-xs flex items-center justify-center font-display shadow-xs">
+                LG
+              </div>
+              <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 border-2 border-[#0B1B3D] rounded-full"></span>
+            </div>
+            <div class="hidden md:block text-left leading-tight">
+              <span id="navUserName" class="block text-xs font-semibold text-white">Prof. Laura Gómez</span>
+              <span id="navRoleBadge" class="block text-[10px] font-mono text-emerald-400 font-bold">Reportante · R01</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+
+          <!-- Profile Dropdown Floating Panel -->
+          <div id="profileDropdownMenu" class="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl shadow-elevation-modal p-3.5 z-50 hidden space-y-3 select-none text-slate-800 dark:text-slate-100">
+            
+            <!-- User Header -->
+            <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-700/80">
+              <div id="profileDropdownAvatar" class="w-10 h-10 rounded-full bg-linear-to-tr from-brand-emerald to-teal-400 text-slate-900 font-bold text-sm flex items-center justify-center font-display shadow-sm">
+                LG
+              </div>
+              <div class="flex-1 min-w-0">
+                <h4 id="profileDropdownName" class="text-xs font-bold text-slate-900 dark:text-white truncate">Prof. Laura Gómez</h4>
+                <p id="profileDropdownEmail" class="text-[11px] text-slate-500 dark:text-slate-400 truncate font-mono">laura.gomez@univalle.edu.co</p>
+                <div class="mt-1">
+                  <span id="profileActiveRoleTag" class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/60">
+                    R01 · Solicitante / Reportante
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Role Management Section -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5 px-0.5">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Gestión de Roles (PRAXIS RACI)</span>
+                <span class="text-[10px] text-brand-royalBlue dark:text-sky-400 font-mono font-medium">Cambiar Rol</span>
+              </div>
+              <div id="rolesListContainer" class="space-y-1 max-h-56 overflow-y-auto pr-0.5"></div>
+            </div>
+
+            <!-- Network Status Panel -->
+            <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Infraestructura de Red</span>
+                <span class="flex items-center space-x-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                  <span>En Línea (99.8%)</span>
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-300 font-medium">Campus Meléndez, San Fernando &amp; Regionales activas</p>
+            </div>
+
+            <!-- Footer / System Info -->
+            <div class="pt-2 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+              <span>PRAXIS v2.4 OPS · ISO 29148</span>
+              <button onclick="app.selectRole('R01')" class="hover:text-brand-royalBlue hover:underline">Ir a R01</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== TOP NAVIGATION: DUAL LAYOUT - HEADER 2 (SUB-HEADER OPERATIVO) ==================== -->
+  <div id="topNavSubHeader" class="bg-white dark:bg-brand-navy border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0 px-6 py-2 z-20 shadow-xs transition-colors">
+    <div class="max-w-[1720px] mx-auto flex items-center justify-between">
+      
+      <!-- Sub-Header Left: Dynamic Tabs -->
+      <div id="subHeaderLeftTabs" class="flex items-center space-x-2">
+        
+        <!-- R01 Mode Navigation Tabs -->
+        <div id="r01SubNavTabs" class="flex items-center space-x-2 text-xs font-semibold">
+          <button id="btnTabR01List" onclick="app.setR01Tab('list')" class="flex items-center space-x-2 px-3.5 py-1.5 rounded-lg transition bg-brand-navy dark:bg-brand-royalBlue text-white shadow-xs">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <span>Mis Solicitudes</span>
+            <span id="badgeR01Total" class="font-mono text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 text-white font-bold">3</span>
+            <span id="badgeR01E02Alert" class="font-mono text-[10px] px-1.5 py-0.2 rounded-full bg-amber-400 text-slate-900 font-extrabold animate-pulse" title="Tienes solicitudes que requieren tu aclaración">1 Requerida</span>
+          </button>
+          
+          <button id="btnTabR01New" onclick="app.setR01Tab('new')" class="flex items-center space-x-2 px-3.5 py-1.5 rounded-lg transition bg-brand-emerald hover:bg-emerald-600 text-white shadow-xs font-semibold">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+            <span>+ Radicar Nueva Incidencia</span>
+          </button>
+
+          <button onclick="app.openCampusGuideModal()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Guía de Campus &amp; Riesgos</span>
+          </button>
+        </div>
+
+        <!-- Management Mode (R02-R07) Tabs -->
+        <div id="mgmtSubNavTabs" class="hidden flex items-center space-x-3 text-xs font-semibold">
+          <div class="bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg flex items-center border border-slate-200 dark:border-slate-700">
+            <button id="viewBtnKanban" onclick="app.setViewMode('kanban')" class="flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white">
+              <svg class="w-3.5 h-3.5 text-brand-royalBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+              <span>Pipeline Operativo</span>
+            </button>
+            <button id="viewBtnTable" onclick="app.setViewMode('table')" class="flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <span>Registro Tabular</span>
+            </button>
+          </div>
+          <button onclick="app.exportToCSV()" class="flex items-center space-x-1 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition text-[11px] font-medium shadow-xs">
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Exportar CSV</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Sub-Header Right: Contextual Info -->
+      <div class="flex items-center space-x-3 text-xs">
+        <div class="flex items-center space-x-2 bg-slate-50 dark:bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+          <span id="subHeaderUserText" class="font-medium text-slate-700 dark:text-slate-300">Prof. Laura Gómez · Dpto. Física</span>
+          <span class="font-mono text-[10px] text-slate-400">|</span>
+          <span class="font-mono text-[10px] text-red-500 dark:text-red-400 font-bold">Emergencias: Ext. 2222</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
+  <main class="flex-1 flex flex-col max-w-[1720px] w-full mx-auto px-6 py-4 overflow-hidden">
+
+    <!-- ============================================================== -->
+    <!-- VIEW CONTAINER 1: PORTAL DEL SOLICITANTE / REPORTANTE (R01)     -->
+    <!-- ============================================================== -->
+    <div id="r01PortalContainer" class="flex-1 flex flex-col overflow-hidden">
+      
+      <!-- SUB-VIEW 1.1: MIS SOLICITUDES (BANDEJA Y SEGUIMIENTO HU-4.1) -->
+      <div id="r01ViewList" class="flex-1 flex flex-col overflow-hidden">
+        
+        <!-- Filter & Search Bar for Reporter -->
+        <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl p-3.5 mb-4 shadow-elevation-1 shrink-0 flex flex-wrap items-center justify-between gap-3">
+          
+          <!-- State Filter Chips for R01 -->
+          <div class="flex items-center flex-wrap gap-2 text-xs">
+            <span class="text-slate-400 font-medium mr-1 text-[11px] uppercase tracking-wider">Filtrar:</span>
+            <button onclick="app.setR01Filter('ALL')" id="r01Chip-ALL" class="px-3 py-1 rounded-full font-semibold transition bg-brand-navy dark:bg-brand-royalBlue text-white shadow-xs">
+              Todas (<span id="r01CountAll">3</span>)
+            </button>
+            <button onclick="app.setR01Filter('E02')" id="r01Chip-E02" class="px-3 py-1 rounded-full font-semibold transition bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-800 hover:bg-amber-100 flex items-center space-x-1">
+              <span>⚠️ Requieren mi Atención</span>
+              <span id="r01CountE02" class="bg-amber-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">1</span>
+            </button>
+            <button onclick="app.setR01Filter('IN_PROGRESS')" id="r01Chip-IN_PROGRESS" class="px-3 py-1 rounded-full font-semibold transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200">
+              En Curso (<span id="r01CountInProgress">1</span>)
+            </button>
+            <button onclick="app.setR01Filter('CLOSED')" id="r01Chip-CLOSED" class="px-3 py-1 rounded-full font-semibold transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200">
+              Concluidas (<span id="r01CountClosed">1</span>)
+            </button>
+          </div>
+
+          <!-- Reporter Search Input -->
+          <div class="flex items-center space-x-3 text-xs">
+            <div class="relative w-56 sm:w-72">
+              <input type="text" id="r01SearchInput" oninput="app.onR01SearchInput(this.value)" placeholder="Buscar por #TKT, aula, falla..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-8 pr-2.5 py-1.5 text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:ring-1 focus:ring-brand-royalBlue outline-hidden font-medium">
+              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+            <button onclick="app.setR01Tab('new')" class="bg-brand-emerald hover:bg-emerald-600 text-white font-semibold px-3 py-1.5 rounded-lg flex items-center space-x-1.5 shadow-xs transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+              <span>+ Radicar Incidencia</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Cards Grid Container for Reporter -->
+        <div id="r01CardsContainer" class="flex-1 overflow-y-auto pr-1">
+          <div id="r01CardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
+            <!-- Populated dynamically with reporter's tickets -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUB-VIEW 1.2: RADICACIÓN EN CASCADA JERÁRQUICA (HU-3.1..3.3) -->
+      <div id="r01ViewNew" class="hidden flex-1 flex flex-col overflow-y-auto pr-1">
+        <div class="max-w-4xl mx-auto w-full bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl p-6 shadow-elevation-1 space-y-5 my-2">
+          
+          <!-- Header of Form -->
+          <div class="flex items-start justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center space-x-3">
+              <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-brand-emerald">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              </div>
+              <div>
+                <h2 class="font-display font-bold text-xl text-slate-900 dark:text-white leading-tight">Radicación Oficial de Incidencia de Infraestructura</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Captura asistida de requerimientos conforme a normas RN-001 a RN-005, RN-011 y RN-016.</p>
+              </div>
+            </div>
+            <button onclick="app.setR01Tab('list')" class="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-lg transition">
+              ← Volver a Mis Solicitudes
+            </button>
+          </div>
+
+          <form id="formR01NewIncident" onsubmit="app.handleR01SubmitIncident(event)" class="space-y-5 text-xs">
+            
+            <!-- PASO 1: LOCALIZACIÓN JERÁRQUICA 4 NIVELES (RN-003, HU-3.1) -->
+            <div class="bg-slate-50/80 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="font-display font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[11px] flex items-center space-x-1.5">
+                  <span class="w-4 h-4 rounded-full bg-brand-royalBlue text-white text-[10px] flex items-center justify-center font-bold">1</span>
+                  <span>Ubicación Jerárquica del Campus (4 Niveles Obligatorios · RN-003)</span>
+                </span>
+                <span class="text-[10px] text-slate-400 font-mono">Sede &gt; Edificio &gt; Piso &gt; Aula</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <!-- Nivel 1: Sede -->
+                <div>
+                  <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">1. Sede Universitaria *</label>
+                  <select id="r01Sede" onchange="app.onR01SedeChange()" required class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+                    <option value="">Seleccionar Sede...</option>
+                    <option value="Campus Meléndez">Campus Meléndez</option>
+                    <option value="Campus San Fernando">Campus San Fernando</option>
+                    <option value="Sede Yumbo">Sede Yumbo</option>
+                    <option value="Sede Palmira">Sede Palmira</option>
+                  </select>
+                </div>
+
+                <!-- Nivel 2: Edificio / Bloque -->
+                <div>
+                  <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">2. Edificio / Bloque *</label>
+                  <select id="r01Bloque" onchange="app.onR01BloqueChange()" required disabled class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium disabled:opacity-50">
+                    <option value="">Seleccionar Bloque...</option>
+                  </select>
+                </div>
+
+                <!-- Nivel 3: Piso / Nivel -->
+                <div>
+                  <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">3. Piso / Nivel *</label>
+                  <select id="r01Piso" onchange="app.onR01PisoChange()" required disabled class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium disabled:opacity-50">
+                    <option value="">Seleccionar Piso...</option>
+                  </select>
+                </div>
+
+                <!-- Nivel 4: Aula / Laboratorio / Espacio -->
+                <div>
+                  <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">4. Aula / Laboratorio / Espacio *</label>
+                  <select id="r01Aula" onchange="app.checkR01Duplicates()" required disabled class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium disabled:opacity-50">
+                    <option value="">Seleccionar Aula...</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Referencia Específica en el Aula -->
+              <div>
+                <label class="block font-medium text-slate-600 dark:text-slate-400 mb-1">Punto de referencia o detalle en el espacio (Opcional):</label>
+                <input type="text" id="r01LocationDetail" placeholder="Ej. Pared norte junto a la puerta de emergencia, mesa de laboratorio #4..." class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue">
+              </div>
+            </div>
+
+            <!-- PASO 2: ALERTA REACTIVA ANTI-DUPLICADOS (RN-011, HU-3.3) -->
+            <div id="r01DuplicateAlertPanel" class="hidden bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/80 rounded-xl p-3.5 space-y-2 transition-all">
+              <div class="flex items-start space-x-2.5">
+                <div class="p-1 rounded-full bg-amber-500 text-white mt-0.5 shrink-0">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-bold text-amber-900 dark:text-amber-200 text-xs">Posible Incidencia Duplicada Detectada (Regla RN-011)</h4>
+                  <p class="text-[11px] text-amber-800 dark:text-amber-300 mt-0.5 leading-relaxed">
+                    Ya existe una orden activa en esta ubicación: <strong id="r01DupId" class="font-mono">#TKT-2026-000142</strong>: "<span id="r01DupTitle"></span>" en estado <span id="r01DupStatus" class="font-semibold"></span>. Si tu reporte corresponde al mismo daño, no es necesario generar un nuevo radicado.
+                  </p>
+                  <div class="flex items-center space-x-2.5 mt-2">
+                    <button type="button" onclick="app.openDuplicatePreview()" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded font-semibold text-[11px] shadow-xs">
+                      Ver Incidencia Existente
+                    </button>
+                    <button type="button" onclick="app.dismissDuplicateWarning()" class="text-[11px] text-amber-800 dark:text-amber-300 hover:underline font-semibold">
+                      Mi falla es diferente (Continuar con este reporte)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PASO 3: CATEGORIZACIÓN Y ASUNTO -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Categoría Técnica *</label>
+                <select id="r01Category" onchange="app.checkR01Duplicates()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+                  <option value="Eléctrica">Eléctrica (Tomas, Iluminación, Tableros)</option>
+                  <option value="HVAC/Climatización">HVAC/Climatización (A/A, Ventilación)</option>
+                  <option value="Hidráulica">Hidráulica (Fugas, Sanitarios, Bombas)</option>
+                  <option value="Redes">Redes &amp; Conectividad (Cableado, Racks)</option>
+                  <option value="Estructural">Estructural (Paredes, Techos, Puertas)</option>
+                </select>
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Asunto Breve de la Falla *</label>
+                <input type="text" id="r01Title" required placeholder="Ej. Falla intermitente en circuito de tomacorrientes de mesa 4" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium">
+              </div>
+            </div>
+
+            <!-- PASO 4: DESCRIPCIÓN DETALLADA CON CONTADOR REACTIVO (RN-004) -->
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="block font-semibold text-slate-700 dark:text-slate-300">Descripción Detallada del Hallazgo (RN-004) *</label>
+                <span id="r01CharCounter" class="font-mono text-[11px] text-slate-400">0 / 500 caracteres</span>
+              </div>
+              <textarea id="r01Description" oninput="app.onR01DescriptionInput(this)" required rows="3" placeholder="Describa síntomas visibles, equipos afectados o implicaciones operativas (mínimo 20 caracteres requeridos)..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-brand-royalBlue font-medium"></textarea>
+              <div class="flex items-center justify-between text-[11px] mt-1">
+                <span id="r01CharWarning" class="text-red-500 font-semibold">Mínimo 20 caracteres requeridos (faltan 20).</span>
+                <span class="text-slate-400 font-mono">Máximo 500 caracteres</span>
+              </div>
+            </div>
+
+            <!-- PASO 5: BANDERA DE RIESGO INMINENTE (RN-016, HU-3.3) -->
+            <div class="bg-red-50/80 dark:bg-red-950/30 p-3 rounded-xl border border-red-200 dark:border-red-900/60 flex items-start space-x-3">
+              <input type="checkbox" id="r01HighRisk" onchange="app.onR01RiskChange()" class="mt-0.5 rounded text-red-600 focus:ring-red-500 h-4 w-4">
+              <label for="r01HighRisk" class="cursor-pointer text-xs">
+                <span class="font-bold text-red-900 dark:text-red-200 block">⚠️ Reportar como RIESGO INMINENTE a la Vida o Integridad Física (RN-016)</span>
+                <span class="text-red-700 dark:text-red-300 text-[11px] block mt-0.5">
+                  Aplica para cables energizados expuestos, conatos de incendio, fugas de gas o colapso estructural. <strong>Escala automáticamente a Severidad CRÍTICA con SLA de 4 horas</strong> y notificación a cuadrilla de emergencia.
+                </span>
+              </label>
+            </div>
+
+            <!-- PASO 6: EVIDENCIAS FOTOGRÁFICAS CON COMPRESIÓN CLIENT-SIDE (RN-005, HU-3.2) -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <label class="block font-semibold text-slate-700 dark:text-slate-300">
+                  Evidencias Fotográficas (Máximo 3 imágenes · RN-005)
+                </label>
+                <span class="text-[10px] text-slate-400 font-mono">Compresión client-side automática &lt; 2MB</span>
+              </div>
+
+              <!-- Upload Drag & Drop Zone -->
+              <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 text-center hover:border-brand-royalBlue dark:hover:border-brand-electricCyan transition cursor-pointer relative bg-slate-50/50 dark:bg-slate-800/30">
+                <input type="file" id="r01PhotoInput" accept="image/jpeg,image/png,image/webp" multiple onchange="app.handleR01PhotoUpload(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                <div class="flex flex-col items-center justify-center space-y-1.5 pointer-events-none">
+                  <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Haz clic o arrastra fotos aquí</p>
+                  <p class="text-[10px] text-slate-400 font-mono">Formatos: JPG, PNG, WebP (Se comprimen en el navegador)</p>
+                </div>
+              </div>
+
+              <!-- Thumbnails Container -->
+              <div id="r01PhotoThumbnails" class="grid grid-cols-3 gap-3 pt-2 empty:hidden"></div>
+            </div>
+
+            <!-- PASO 7: ACCIONES DEFENSIVAS DE ENVÍO -->
+            <div class="pt-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+              <button type="button" onclick="app.setR01Tab('list')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                Cancelar
+              </button>
+
+              <button type="submit" id="r01SubmitBtn" class="px-6 py-2.5 rounded-lg bg-brand-emerald hover:bg-emerald-600 text-white font-bold shadow-xs transition flex items-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span id="r01SubmitBtnText">Radicar Incidencia Oficial (E01)</span>
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW CONTAINER 2: CONSOLA DE GESTIÓN OPERATIVA (R02 - R07)     -->
+    <!-- ============================================================== -->
+    <div id="managementViewContainer" class="flex-1 flex flex-col overflow-hidden hidden">
+      
+      <!-- KPI Metrics Top Panel -->
+      <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4 shrink-0">
+        
+        <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-lg p-3.5 shadow-elevation-1 border-l-4 border-l-brand-royalBlue relative overflow-hidden transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Incidencias Activas</span>
+            <span class="text-[11px] font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded flex items-center space-x-1">
+              <span>↓ -4.2%</span>
+            </span>
+          </div>
+          <div class="mt-1.5 flex items-baseline justify-between">
+            <span id="kpiActiveCount" class="text-2xl font-extrabold font-display text-brand-navy dark:text-white">14</span>
+            <span class="text-xs text-slate-400 font-mono">En curso</span>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-lg p-3.5 shadow-elevation-1 border-l-4 border-l-brand-clementine relative overflow-hidden transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Triaje / Sin Asignar</span>
+            <span id="kpiUnassignedBadge" class="text-[11px] font-semibold text-amber-700 bg-amber-50 dark:bg-amber-950/50 px-1.5 py-0.5 rounded">
+              Pendiente
+            </span>
+          </div>
+          <div class="mt-1.5 flex items-baseline justify-between">
+            <span id="kpiTriageCount" class="text-2xl font-extrabold font-display text-brand-clementine">7</span>
+            <span class="text-xs text-slate-400 font-mono">Por despachar</span>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-lg p-3.5 shadow-elevation-1 border-l-4 border-l-sky-500 relative overflow-hidden transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">En Ejecución (Campo)</span>
+            <span class="text-[11px] font-semibold text-sky-700 bg-sky-50 dark:bg-sky-950/50 px-2 py-0.5 rounded">
+              Cuadrillas
+            </span>
+          </div>
+          <div class="mt-1.5 flex items-baseline justify-between">
+            <span id="kpiExecutionCount" class="text-2xl font-extrabold font-display text-sky-600 dark:text-sky-400">4</span>
+            <span class="text-xs text-slate-400 font-mono">En atención</span>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-lg p-3.5 shadow-elevation-1 border-l-4 border-l-brand-emerald relative overflow-hidden transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cumplimiento SLA</span>
+            <span class="text-[11px] font-mono text-slate-400">Meta: 95%</span>
+          </div>
+          <div class="mt-1.5 flex items-baseline justify-between">
+            <span id="kpiSlaPercentage" class="text-2xl font-extrabold font-display text-brand-emerald">94.8%</span>
+            <span id="kpiSlaBreachedCount" class="text-xs font-semibold text-red-500">1 en riesgo</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Operational Filter & Search Toolbar -->
+      <section class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-lg p-2.5 mb-3.5 shadow-elevation-1 shrink-0 flex flex-wrap items-center justify-between gap-2.5 transition-colors">
+        
+        <div class="flex items-center flex-wrap gap-1.5 text-xs">
+          <span class="text-slate-400 font-medium mr-1 text-[11px] uppercase tracking-wider">Filtros:</span>
+          <button onclick="app.setQuickFilter('ALL')" id="chip-ALL" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-brand-navy dark:bg-brand-royalBlue text-white shadow-xs">
+            Todas (<span id="count-all">20</span>)
+          </button>
+          <button onclick="app.setQuickFilter('CRITICAL')" id="chip-CRITICAL" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+            Críticas (<span id="count-critical">4</span>)
+          </button>
+          <button onclick="app.setQuickFilter('HIGH')" id="chip-HIGH" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+            Altas (<span id="count-high">6</span>)
+          </button>
+          <button onclick="app.setQuickFilter('SLA_RISK')" id="chip-SLA_RISK" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-950/50">
+            SLA &lt; 2h (<span id="count-sla-risk">2</span>)
+          </button>
+          <button onclick="app.setQuickFilter('UNASSIGNED')" id="chip-UNASSIGNED" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+            Sin Asignar (<span id="count-unassigned">5</span>)
+          </button>
+        </div>
+
+        <div class="flex items-center space-x-2 text-xs">
+          <select id="filterSede" onchange="app.renderBoard()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-700 dark:text-slate-200 font-medium focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+            <option value="ALL">Todas las Sedes</option>
+            <option value="Campus Meléndez">Campus Meléndez</option>
+            <option value="Campus San Fernando">Campus San Fernando</option>
+            <option value="Sede Yumbo">Sede Yumbo</option>
+            <option value="Sede Palmira">Sede Palmira</option>
+          </select>
+
+          <select id="filterCategory" onchange="app.renderBoard()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-700 dark:text-slate-200 font-medium focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+            <option value="ALL">Todas las Categorías</option>
+            <option value="Eléctrica">Eléctrica</option>
+            <option value="HVAC/Climatización">HVAC/Climatización</option>
+            <option value="Hidráulica">Hidráulica</option>
+            <option value="Redes">Redes</option>
+            <option value="Estructural">Estructural</option>
+          </select>
+
+          <div class="relative w-48 sm:w-64">
+            <input type="text" id="searchInput" oninput="app.onSearchInput(this.value)" placeholder="Buscar #TKT, aula, técnico..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-8 pr-2.5 py-1.5 text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:ring-1 focus:ring-brand-royalBlue outline-hidden font-medium">
+            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+
+          <button onclick="app.resetFilters()" title="Restablecer filtros" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- VIEW 1: KANBAN WORKFLOW PIPELINE -->
+      <div id="kanbanViewContainer" class="flex-1 flex gap-3.5 overflow-x-auto pb-2 select-none">
+        
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E01_E03')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Triaje &amp; Revisión Inicial</span>
+            <span id="colCount-E01_E03" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E01_E03" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E05')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Pendiente de Asignación</span>
+            <span id="colCount-E05" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E05" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E10')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Programada (Cuadrilla)</span>
+            <span id="colCount-E10" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E10" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E11')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Ejecución en Campo</span>
+            <span id="colCount-E11" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E11" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E12')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Verificación de Calidad</span>
+            <span id="colCount-E12" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E12" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E15')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Cerrada &amp; Conforme</span>
+            <span id="colCount-E15" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E15" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 2: DENSE ALTERNATIVE TABLE VIEW -->
+      <div id="tableViewContainer" class="flex-1 bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl overflow-hidden hidden flex-col shadow-elevation-1">
+        
+        <div class="px-4 py-2 border-b border-brand-borderSubtle dark:border-brand-borderDark flex items-center justify-between bg-slate-50/80 dark:bg-slate-800/50 text-xs shrink-0 select-none">
+          <div class="flex items-center space-x-2">
+            <span class="font-display font-bold text-slate-800 dark:text-slate-100">Registro Operativo de Incidencias</span>
+            <span id="tableBadgeCount" class="font-mono text-[11px] bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-700 dark:text-slate-300 font-semibold">20 órdenes</span>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <button onclick="app.exportToCSV()" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition font-medium text-xs shadow-xs">
+              <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>Exportar CSV</span>
+            </button>
+
+            <div class="relative">
+              <button id="btnColumnPicker" onclick="app.toggleColumnPicker(event)" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition font-medium text-xs shadow-xs">
+                <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span>Columnas</span>
+                <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+
+              <div id="columnPickerMenu" class="absolute right-0 top-full mt-1.5 w-60 bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl shadow-elevation-modal p-3 z-40 hidden space-y-2 select-none">
+                <div class="flex items-center justify-between pb-1.5 border-b border-slate-100 dark:border-slate-800">
+                  <span class="font-semibold text-slate-800 dark:text-slate-100 text-xs">Visibilidad de Columnas</span>
+                  <button onclick="app.resetColumnVisibility()" class="text-[10px] text-brand-royalBlue hover:underline font-semibold">Restablecer</button>
+                </div>
+                <div id="columnCheckboxesList" class="space-y-1 text-xs max-h-56 overflow-y-auto"></div>
+              </div>
+            </div>
+
+            <button onclick="app.resetColumnWidths()" title="Restablecer anchos originales" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto flex-1 select-none">
+          <table id="ticketsTable" class="text-left text-xs" style="table-layout: fixed; min-width: 900px; width: 100%;">
+            <thead id="ticketsTableHead" class="bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-200 dark:border-slate-700"></thead>
+            <tbody id="ticketsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium"></tbody>
+          </table>
+        </div>
+        
+        <div class="px-4 py-2 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between text-xs text-slate-500 shrink-0">
+          <span>Mostrando <span id="tableResultsCount">0</span> incidencias filtradas • <span class="italic text-[11px]">Arrastra los divisores para ajustar columnas</span></span>
+          <div class="flex items-center space-x-3">
+            <button onclick="app.exportToCSV()" class="text-brand-royalBlue dark:text-sky-400 hover:underline flex items-center space-x-1 font-semibold text-xs">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>Descargar CSV</span>
+            </button>
+            <span>PRAXIS Core Operations</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: FICHA DE DETALLE & LÍNEA DE TIEMPO DEL REPORTANTE (HU-4.2)-->
+  <!-- ============================================================== -->
+  <div id="modalR01DetailTimeline" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-3xl w-full p-6 shadow-elevation-modal transform transition-all max-h-[92vh] flex flex-col">
+      
+      <!-- Modal Header -->
+      <div class="flex items-start justify-between pb-3.5 border-b border-slate-200 dark:border-slate-700 shrink-0">
+        <div>
+          <div class="flex items-center space-x-2.5">
+            <span id="r01DetailCode" class="font-mono font-bold text-sm bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded text-brand-royalBlue border border-blue-200 dark:border-blue-900/60">#TKT-2026-000000</span>
+            <span id="r01DetailSeverityBadge" class="text-xs"></span>
+            <span id="r01DetailStatusBadge" class="text-xs px-2 py-0.5 rounded font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Estado</span>
+          </div>
+          <h2 id="r01DetailTitle" class="text-lg font-display font-bold text-slate-900 dark:text-white mt-1.5">Título del Hallazgo</h2>
+          <p id="r01DetailHierarchy" class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5">Sede &gt; Bloque &gt; Piso &gt; Aula</p>
+        </div>
+        <button onclick="app.closeModal('modalR01DetailTimeline')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="py-4 space-y-4 overflow-y-auto flex-1 text-xs pr-1">
+        
+        <!-- Description block -->
+        <div class="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-lg border border-slate-200 dark:border-slate-700">
+          <h4 class="font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider text-[10px]">Descripción Original del Reporte</h4>
+          <p id="r01DetailDescription" class="text-slate-700 dark:text-slate-300 font-sans leading-relaxed">Detalles de la falla...</p>
+        </div>
+
+        <!-- Evidences Gallery -->
+        <div id="r01DetailEvidenceSection" class="hidden border border-slate-200 dark:border-slate-700 rounded-lg p-3">
+          <h4 class="font-semibold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider text-[10px]">Evidencias Fotográficas Adjuntas</h4>
+          <div id="r01DetailEvidenceGallery" class="flex items-center space-x-3 overflow-x-auto pb-1"></div>
+        </div>
+
+        <!-- FORMULARIO DE ACLARACIÓN ACTIVA (HU-4.3, RN-007) - Solo visible en E02 -->
+        <div id="r01ClarificationFormBox" class="hidden bg-amber-50 dark:bg-amber-950/40 p-4 rounded-xl border-2 border-amber-400 dark:border-amber-800 space-y-3">
+          <div class="flex items-start space-x-2.5">
+            <span class="p-1 rounded-full bg-amber-500 text-white shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </span>
+            <div class="flex-1">
+              <h4 class="font-bold text-amber-900 dark:text-amber-200 text-xs uppercase tracking-wider">Requerimiento de Información Faltante (Regla RN-007)</h4>
+              <p class="text-[11px] text-amber-800 dark:text-amber-300 mt-0.5">El Gestor de Triaje ha solicitado la siguiente aclaración para poder clasificar la orden:</p>
+              <div class="mt-2 p-2.5 bg-white dark:bg-slate-900 rounded-lg border border-amber-300 dark:border-amber-700/80 font-medium text-slate-800 dark:text-slate-100 italic" id="r01ClarificationPrompt">
+                "Por favor indicar si salta el interruptor..."
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-1">
+            <label class="block font-bold text-amber-950 dark:text-amber-200">Tu Respuesta o Aclaración Técnica *</label>
+            <textarea id="r01ClarificationReplyText" rows="2" placeholder="Escribe tu aclaración aquí para reanudar el trámite..." class="w-full bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-700 rounded-lg p-2.5 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-amber-500 font-medium"></textarea>
+            
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-[10px] text-amber-700 dark:text-amber-400 font-mono">Al enviar, la incidencia transiciona automáticamente a estado: <strong>E03 En Revisión</strong></span>
+              <button onclick="app.submitR01Clarification()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-bold text-xs shadow-xs transition flex items-center space-x-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                <span>Enviar Aclaración y Reanudar Trámite</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LÍNEA DE TIEMPO VERTICAL DE 18 ESTADOS (HU-4.2) -->
+        <div class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+            <h4 class="font-display font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[11px] flex items-center space-x-1.5">
+              <svg class="w-4 h-4 text-brand-royalBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>Línea de Tiempo Operativa &amp; Bitácora Forense (D10 / HU-4.2)</span>
+            </h4>
+            <span class="font-mono text-[10px] text-slate-400">Trazabilidad Inmutable</span>
+          </div>
+
+          <div id="r01VerticalTimeline" class="space-y-4 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-700 pl-8 pr-1 py-1"></div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between shrink-0">
+        <div id="r01CancelActionBox">
+          <button onclick="app.openR01CancelModal()" class="text-red-600 dark:text-red-400 hover:underline font-semibold text-xs flex items-center space-x-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            <span>Cancelar esta Solicitud (HU-4.4)</span>
+          </button>
+        </div>
+
+        <button onclick="app.closeModal('modalR01DetailTimeline')" class="px-4 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">
+          Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: CANCELACIÓN VOLUNTARIA DE SOLICITUD (HU-4.4)            -->
+  <!-- ============================================================== -->
+  <div id="modalR01CancelConfirm" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-md w-full p-6 shadow-elevation-modal space-y-4">
+      <div class="flex items-center space-x-3 text-red-600">
+        <div class="p-2 rounded-full bg-red-100 dark:bg-red-950/60">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        </div>
+        <div>
+          <h3 class="font-display font-bold text-base text-slate-900 dark:text-white">Cancelar Solicitud de Infraestructura</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Transiciona a E17 Cancelada con motivo obligatorio.</p>
+        </div>
+      </div>
+
+      <div class="space-y-1.5 text-xs">
+        <label class="block font-semibold text-slate-700 dark:text-slate-300">Motivo Justificado de la Cancelación *</label>
+        <textarea id="r01CancelReason" rows="3" placeholder="Ej. El equipo fue reubicado, el problema fue subsanado internamente o se reportó por duplicado accidental..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 outline-hidden focus:ring-1 focus:ring-red-500 font-medium"></textarea>
+        <p class="text-[10px] text-slate-400 font-mono">El motivo quedará registrado inmutablemente en el ledger D10.</p>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+        <button onclick="app.closeModal('modalR01CancelConfirm')" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-100">
+          Volver
+        </button>
+        <button onclick="app.confirmR01CancelTicket()" class="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold shadow-xs transition">
+          Confirmar Cancelación (E17)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: RADICACIÓN EXITOSA (FEEDBACK CELEBRATION)                 -->
+  <!-- ============================================================== -->
+  <div id="modalR01Success" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-elevation-modal text-center space-y-4">
+      <div class="w-16 h-16 mx-auto rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-brand-emerald flex items-center justify-center">
+        <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <div>
+        <h3 class="font-display font-bold text-xl text-slate-900 dark:text-white">¡Incidencia Radicada con Éxito!</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Se ha generado un radicado oficial correlativo en estado inicial <strong>E01 Registrada</strong>.</p>
+      </div>
+
+      <div class="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700">
+        <span class="block text-[10px] uppercase font-mono font-bold tracking-wider text-slate-400">Código de Seguimiento</span>
+        <span id="r01SuccessCode" class="text-xl font-mono font-extrabold text-brand-royalBlue">#TKT-2026-000000</span>
+      </div>
+
+      <div class="flex flex-col space-y-2 pt-2 text-xs font-semibold">
+        <button onclick="app.onSuccessViewTicket()" class="w-full py-2.5 bg-brand-emerald hover:bg-emerald-600 text-white rounded-lg shadow-xs transition">
+          Ver Ficha de Seguimiento y Línea de Tiempo
+        </button>
+        <button onclick="app.onSuccessCreateAnother()" class="w-full py-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          Radicar Otra Incidencia
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: GUÍA DE CAMPUS & DIRECTORIO DE EMERGENCIAS              -->
+  <!-- ============================================================== -->
+  <div id="modalCampusGuide" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-xl w-full p-6 shadow-elevation-modal space-y-4 max-h-[85vh] overflow-y-auto text-xs">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center space-x-2.5">
+          <div class="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-brand-royalBlue">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-base text-slate-900 dark:text-white">Guía de Infraestructura Universitaria &amp; Protocolos</h3>
+            <p class="text-[11px] text-slate-400">Canales directos de reporte y actuación ante emergencias</p>
+          </div>
+        </div>
+        <button onclick="app.closeModal('modalCampusGuide')" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50">
+          <h4 class="font-bold text-red-800 dark:text-red-200 uppercase tracking-wider text-[11px]">Línea de Emergencia Inmediata (24/7)</h4>
+          <p class="mt-1 text-slate-700 dark:text-slate-300">Para conatos de incendio, electrocución o riesgo de derrumbe:</p>
+          <div class="mt-2 flex items-center space-x-3 font-mono font-bold text-sm text-red-600 dark:text-red-400">
+            <span>Central Campus: Ext. 2222</span>
+            <span>Línea Directa: (602) 321-2100</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1.5">
+          <h4 class="font-bold text-slate-800 dark:text-slate-200">Protocolo de Clasificación de Severidad PRAXIS</h4>
+          <ul class="space-y-1 text-slate-600 dark:text-slate-300 list-disc pl-4">
+            <li><strong>Crítica (SLA 4h):</strong> Afecta subestaciones, red troncal o integridad física.</li>
+            <li><strong>Alta (SLA 12h):</strong> Inhabilita un aula de clase completa o laboratorio docente.</li>
+            <li><strong>Media (SLA 48h):</strong> Fallas puntuales de mobiliario, luminarias individuales o sanitarios secundarios.</li>
+            <li><strong>Baja (SLA 96h):</strong> Mejoras cosméticas, pintura o señalética.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-right">
+        <button onclick="app.closeModal('modalCampusGuide')" class="px-4 py-1.5 bg-brand-navy dark:bg-brand-royalBlue text-white rounded-lg font-semibold">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== EXISTING MODALS PRESERVED FOR MANAGEMENT ==================== -->
+  
+  <!-- MODAL: GESTIÓN TRANSACCIONAL / EDICIÓN PARA ROLES R02-R07 -->
+  <div id="modalDetailIncident" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-3xl w-full p-6 shadow-elevation-modal transform transition-all max-h-[92vh] flex flex-col">
+      <div class="flex items-start justify-between pb-3.5 border-b border-slate-200 dark:border-slate-700 shrink-0">
+        <div>
+          <div class="flex items-center space-x-2.5">
+            <span id="detailCode" class="font-mono font-bold text-sm bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-brand-royalBlue border border-slate-200 dark:border-slate-700">#TKT-2026-000000</span>
+            <span id="detailSeverityBadge" class="text-xs"></span>
+            <span id="detailStatusBadge" class="text-xs px-2 py-0.5 rounded font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Estado</span>
+          </div>
+          <h2 id="detailTitle" class="text-lg font-display font-bold text-slate-900 dark:text-white mt-1.5">Título del Hallazgo</h2>
+          <p id="detailHierarchy" class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5">Sede &gt; Bloque &gt; Espacio</p>
+        </div>
+        <button onclick="app.closeModal('modalDetailIncident')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="py-4 space-y-4 overflow-y-auto flex-1 text-xs pr-1">
+        <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+          <h4 class="font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider text-[10px]">Descripción del Hallazgo</h4>
+          <p id="detailDescription" class="text-slate-700 dark:text-slate-300 font-sans leading-relaxed">Detalles de la falla...</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-brand-alabaster dark:bg-slate-800/40 rounded-lg border border-slate-200 dark:border-slate-700">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Mover de Estado (Transición RBAC)</label>
+            <select id="editStatusSelect" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-semibold focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+              <option value="E01_E03">E01/E03 - Triaje &amp; Revisión Inicial</option>
+              <option value="E05">E05 - Pendiente de Asignación</option>
+              <option value="E10">E10 - Programada / Cuadrilla Asignada</option>
+              <option value="E11">E11 - En Atención / Ejecución en Campo</option>
+              <option value="E12">E12 - Pendiente de Verificación de Calidad</option>
+              <option value="E15">E15 - Cerrada &amp; Conforme</option>
+              <option value="E16">E16 - No Procedente (Desestimada)</option>
+              <option value="E17">E17 - Cancelada</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Reasignar Técnico / Cuadrilla</label>
+            <select id="editTechnicianSelect" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-800 dark:text-slate-200 font-semibold focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+              <option value="">Sin Asignar</option>
+              <option value="Ing. Carlos Méndez">Ing. Carlos Méndez (Eléctrico)</option>
+              <option value="Tec. Jorge Ospina">Tec. Jorge Ospina (HVAC)</option>
+              <option value="Tec. Andrés Caicedo">Tec. Andrés Caicedo (Hidráulico)</option>
+              <option value="Ing. Diana Rivas">Ing. Diana Rivas (Telecomunicaciones)</option>
+              <option value="Maestro Luis Arana">Maestro Luis Arana (Estructural)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="border border-slate-200 dark:border-slate-700 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="font-semibold text-slate-600 dark:text-slate-300">Seguimiento de SLA Institucional</span>
+            <span id="detailSlaCountdown" class="font-mono font-bold text-brand-royalBlue">Restan 12 horas</span>
+          </div>
+          <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+            <div id="detailSlaBar" class="bg-brand-emerald h-2 transition-all duration-300" style="width: 45%;"></div>
+          </div>
+          <div class="flex justify-between items-center text-[10px] text-slate-400 font-mono mt-1">
+            <span id="detailCreatedDate">Radicado: 2026-10-28 08:30</span>
+            <span id="detailReporterName">Reportante: Laura Gómez</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-semibold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider text-[10px]">Bitácora Operativa y Trazabilidad de Notas (D10)</h4>
+          <div id="detailBitacoraList" class="space-y-2 mb-3 max-h-36 overflow-y-auto"></div>
+
+          <div class="flex gap-2">
+            <input type="text" id="newBitacoraNote" placeholder="Añadir nota técnica o reporte de intervención..." class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 text-slate-800 dark:text-slate-200 placeholder-slate-400 outline-hidden focus:ring-1 focus:ring-brand-royalBlue">
+            <button onclick="app.handleAddBitacoraNote()" class="px-3 py-1.5 bg-brand-navy dark:bg-brand-royalBlue hover:bg-slate-800 text-white rounded-lg font-semibold shrink-0">
+              + Registrar Nota
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between shrink-0">
+        <button onclick="app.handleDismissIncident()" class="text-red-500 hover:text-red-700 font-semibold text-xs flex items-center space-x-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          <span>Desestimar Incidencia</span>
+        </button>
+
+        <div class="flex space-x-2">
+          <button onclick="app.closeModal('modalDetailIncident')" class="px-4 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-100">
+            Cerrar
+          </button>
+          <button onclick="app.handleSaveDetailChanges()" class="px-4 py-1.5 bg-brand-royalBlue hover:bg-blue-600 text-white rounded-lg font-semibold shadow-xs">
+            Guardar Cambios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: OMNIBOX ⌘K -->
+  <div id="modalOmnibox" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-start justify-center pt-20 p-4" onclick="if(event.target === this) app.closeModal('modalOmnibox')">
+    <div class="bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl max-w-xl w-full p-4 shadow-elevation-modal transform transition-all">
+      <div class="relative">
+        <input type="text" id="omniboxModalInput" oninput="app.onOmniboxSearch(this.value)" placeholder="Buscar por #TKT, aula, técnico, categoría o palabras clave..." class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-brand-royalBlue outline-hidden font-medium">
+        <svg class="w-5 h-5 text-slate-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+
+      <div id="omniboxResults" class="mt-3 divide-y divide-slate-100 dark:divide-slate-800 max-h-80 overflow-y-auto text-xs"></div>
+      
+      <div class="mt-3 pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center text-[11px] text-slate-400">
+        <span>Presiona <kbd class="font-mono bg-slate-100 dark:bg-slate-800 px-1 rounded">ESC</kbd> para salir</span>
+        <span>Atajos: ⌘K (Buscar), N (Nueva incidencia)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+  <!-- ============================================================== -->
+  <!-- JAVASCRIPT APPLICATION CORE ENGINE                              -->
+  <!-- ============================================================== -->
+  <script>
+    /**
+     * PRAXIS - Infrastructure Management Platform
+     * Clean Architecture Engine & Dynamic State Machine (E01-E18 / R01-R07)
+     */
+
+    // Official 4-Level University Hierarchy (RN-003, HU-3.1)
+    const UNIVERSITY_HIERARCHY_4L = {
+      "Campus Meléndez": {
+        "Bloque B (Ciencias)": {
+          "Piso 1": ["Aula 105 Química", "Cuarto Técnico B-01", "Almacén Reactivos"],
+          "Piso 2": ["Lab 201 Física Cuántica", "Cubículos Docentes Física", "Sala de Óptica"],
+          "Piso 3": ["Lab 302 Redes", "Sala Servidores Secundarios"]
+        },
+        "Bloque A (Ingeniería)": {
+          "Piso 1": ["Aula Magna 1", "Baños Piso 1", "Hall Central"],
+          "Piso 2": ["Lab Mecánica Suelos 102", "Decanatura 204", "Sala Juntas"],
+          "Piso 3": ["Lab Hidráulica 301", "Aula Magistral 305"]
+        },
+        "Bloque D (Aulas Generales)": {
+          "Piso 1": ["Auditorio 102", "Cafetería Central", "Batería Sanitaria 1"],
+          "Piso 2": ["Batería Sanitaria Piso 2", "Aula 204", "Aula 205"],
+          "Piso 4": ["Sala Cómputo 401", "Laboratorio Virtual 402"]
+        },
+        "Bloque E (Biblioteca Central)": {
+          "Piso 1": ["Hemeroteca Principal", "Recepción y Préstamos"],
+          "Piso 2": ["Cubículos Estudio 12", "Sala Lectura Silenciosa"],
+          "Piso 3": ["Hemeroteca Piso 3", "Sala Servidores Central", "Terraza Sur"]
+        },
+        "Subestación Eléctrica Sur": {
+          "Nivel Suelo": ["Transformador Principal T-01", "Banco Baterías UPS", "Generador Diésel G-2"]
+        }
+      },
+      "Campus San Fernando": {
+        "Edificio Salud 100": {
+          "Piso 1": ["Recepción y Triaje Médico", "Ascensor Principal"],
+          "Piso 2": ["Lab Microbiología 104", "Aula de Trauma 201"],
+          "Sótano": ["Morgue Docente", "Cuarto Bombas"]
+        },
+        "Clínicas Odontológicas": {
+          "Piso 1": ["Sala Espera Pacientes", "Central de Esterilización"],
+          "Piso 2": ["Unidad Dental 3", "Rayos X Odontología"]
+        },
+        "Auditorio Farallones": {
+          "Planta Principal": ["Escenario Principal", "Cabina Luces & Sonido", "Climatización Central"]
+        }
+      },
+      "Sede Yumbo": {
+        "Pabellón Tecnológico": {
+          "Piso 1": ["Taller Mecatrónica T-1", "Tablero Potencia Norte"],
+          "Piso 2": ["Lab Automatización 202", "Aula Proyectos TI"]
+        },
+        "Edificio Administrativo": {
+          "Piso 1": ["Coordinación Académica", "Red Voz y Datos"],
+          "Piso 2": ["Sala Profesores", "Dirección de Sede"]
+        }
+      },
+      "Sede Palmira": {
+        "Bloque Agronomía": {
+          "Piso 1": ["Laboratorio Suelos Tropicales", "Cámara de Frío"],
+          "Campo Abierto": ["Invernadero Experimental 04", "Estación Agrometeorológica"]
+        },
+        "Centro de Cómputo": {
+          "Piso 1": ["Aula Virtual 1", "Racks Telecomunicaciones", "Oficina Soporte TI"]
+        }
+      }
+    };
+
+    // Initial Canonical Mock Data (Covers E01, E02, E03, E05, E10, E11, E12, E15, E16, E17)
+    const INITIAL_TICKETS = [
+      // Tickets belonging to Prof. Laura Gómez (R01 Solicitante)
+      {
+        id: "TKT-2026-000151",
+        title: "Falla intermitente en circuito de tomacorrientes de mesa 4",
+        category: "Eléctrica",
+        severity: "MEDIA",
+        sede: "Campus Meléndez",
+        bloque: "Bloque B (Ciencias)",
+        piso: "Piso 2",
+        aula: "Lab 201 Física Cuántica",
+        reporter: "Prof. Laura Gómez",
+        reporterRole: "R01",
+        technician: "",
+        status: "E02",
+        createdHoursAgo: 4.5,
+        slaHours: 48,
+        description: "Al conectar los osciloscopios en la mesa central número 4 se produce una caída de tensión y olor a recalentamiento en el zócalo.",
+        clarificationRequest: "Favor aclarar si al conectar los osciloscopios salta el breaker del tablero secundario B-02 o si hay chispas visibles, y adjuntar foto de la regleta si es posible.",
+        photos: [],
+        bitacora: [
+          { date: "2026-10-29 06:15", user: "Ing. Triaje (R02)", note: "Solicitud de Aclaración (RN-007): Favor indicar si salta el breaker del tablero o hay chispas visibles." },
+          { date: "2026-10-29 04:30", user: "Prof. Laura Gómez (R01)", note: "Radicación oficial generada en E01." }
+        ]
+      },
+      {
+        id: "TKT-2026-000152",
+        title: "Filtración en cielo raso de laboratorio tras lluvias intensas",
+        category: "Hidráulica",
+        severity: "ALTA",
+        sede: "Campus Meléndez",
+        bloque: "Bloque B (Ciencias)",
+        piso: "Piso 2",
+        aula: "Lab 201 Física Cuántica",
+        reporter: "Prof. Laura Gómez",
+        reporterRole: "R01",
+        technician: "",
+        status: "E01",
+        createdHoursAgo: 0.8,
+        slaHours: 12,
+        description: "Goteo sobre la zona de estantería de instrumentos ópticos de precisión. Requiere revisión de bajante de cubierta.",
+        photos: [],
+        bitacora: [
+          { date: "2026-10-29 07:15", user: "Prof. Laura Gómez (R01)", note: "Radicación oficial generada en E01 Registrada." }
+        ]
+      },
+      {
+        id: "TKT-2026-000146",
+        title: "Fuga de gas refrigerante R410A en compresor inverter",
+        category: "HVAC/Climatización",
+        severity: "ALTA",
+        sede: "Campus Meléndez",
+        bloque: "Bloque B (Ciencias)",
+        piso: "Piso 3",
+        aula: "Lab 302 Redes",
+        reporter: "Prof. Laura Gómez",
+        reporterRole: "R01",
+        technician: "Tec. Jorge Ospina",
+        status: "E11",
+        createdHoursAgo: 10.5,
+        slaHours: 12,
+        description: "La temperatura en el cuarto superó los 29°C. Se apagaron dos servidores de cálculo para prevenir avería por calor.",
+        photos: [],
+        bitacora: [
+          { date: "2026-10-29 07:00", user: "Tec. Jorge Ospina (R04)", note: "Inicio de intervención técnica en compresor exterior." },
+          { date: "2026-10-28 22:30", user: "Mesa Triaje (R02)", note: "Clasificado en E05 y asignado a HVAC." }
+        ]
+      },
+      {
+        id: "TKT-2026-000139",
+        title: "Restablecimiento de suministro de agua potable por bypass",
+        category: "Hidráulica",
+        severity: "CRITICA",
+        sede: "Campus Meléndez",
+        bloque: "Bloque D (Aulas Generales)",
+        piso: "Piso 1",
+        aula: "Cafetería Central",
+        reporter: "Prof. Laura Gómez",
+        reporterRole: "R01",
+        technician: "Tec. Andrés Caicedo",
+        status: "E15",
+        createdHoursAgo: 60.0,
+        slaHours: 4,
+        description: "Se instaló tramo de polietileno de alta densidad (HDPE) solucionando rotura por raíz de árbol.",
+        photos: [],
+        bitacora: [
+          { date: "2026-10-26 18:00", user: "Ing. Interventoría (R06)", note: "Cierre conforme E15 con acta firmada." }
+        ]
+      },
+
+      // Other tickets for Management Console
+      {
+        id: "TKT-2026-000142",
+        title: "Falla en transformador secundario por sobrecalentamiento",
+        category: "Eléctrica",
+        severity: "CRITICA",
+        sede: "Campus Meléndez",
+        bloque: "Subestación Eléctrica Sur",
+        piso: "Nivel Suelo",
+        aula: "Transformador Principal T-01",
+        reporter: "Ing. Marcos Peña (Infraestructura)",
+        reporterRole: "R03",
+        technician: "",
+        status: "E01_E03",
+        createdHoursAgo: 1.5,
+        slaHours: 4,
+        description: "Se dispararon las protecciones térmicas de la subestación. Posible sobretensión o fuga de aceite dieléctrico.",
+        photos: [],
+        bitacora: [
+          { date: "2026-10-29 07:10", user: "Sistema PRAXIS", note: "Ticket creado automáticamente por telemetría SCADA." }
+        ]
+      },
+      {
+        id: "TKT-2026-000143",
+        title: "Filtración en tubería principal de condensados de chiller",
+        category: "HVAC/Climatización",
+        severity: "ALTA",
+        sede: "Campus Meléndez",
+        bloque: "Bloque E (Biblioteca Central)",
+        piso: "Piso 3",
+        aula: "Hemeroteca Piso 3",
+        reporter: "Lic. María Bermúdez",
+        reporterRole: "R01",
+        technician: "",
+        status: "E01_E03",
+        createdHoursAgo: 2.2,
+        slaHours: 12,
+        description: "Goteo continuo sobre estantería de archivo histórico. Requiere contención inmediata.",
+        photos: [],
+        bitacora: [
+          { date: "2026-10-29 06:45", user: "Lic. María Bermúdez", note: "Se colocaron cubetas provisionales." }
+        ]
+      },
+      {
+        id: "TKT-2026-000144",
+        title: "Caída de enlace de fibra óptica inter-edificios",
+        category: "Redes",
+        severity: "ALTA",
+        sede: "Campus San Fernando",
+        bloque: "Edificio Salud 100",
+        piso: "Piso 2",
+        aula: "Aula de Trauma 201",
+        reporter: "Dr. Roberto Casas",
+        reporterRole: "R01",
+        technician: "",
+        status: "E01_E03",
+        createdHoursAgo: 3.5,
+        slaHours: 12,
+        description: "El switch perimetral no levanta el puerto SFP+ del enlace troncal.",
+        photos: [],
+        bitacora: [
+          { date: "2026-10-29 05:30", user: "Dr. Roberto Casas", note: "Reportado a mesa de ayuda." }
+        ]
+      },
+      {
+        id: "TKT-2026-000147",
+        title: "Rotura de válvula angular en batería de sanitarios",
+        category: "Hidráulica",
+        severity: "MEDIA",
+        sede: "Campus Meléndez",
+        bloque: "Bloque D (Aulas Generales)",
+        piso: "Piso 2",
+        aula: "Batería Sanitaria Piso 2",
+        reporter: "Servicios Generales",
+        reporterRole: "R01",
+        technician: "",
+        status: "E05",
+        createdHoursAgo: 14.0,
+        slaHours: 48,
+        description: "Se cerró la llave de paso parcial del piso. Baños masculinos inhabilitados temporalmente.",
+        photos: [],
+        bitacora: [
+          { date: "2026-10-28 19:00", user: "Mesa Triaje", note: "Pendiente asignar plomero de turno." }
+        ]
+      },
+      {
+        id: "TKT-2026-000149",
+        title: "Mantenimiento preventivo en banco de baterías UPS central",
+        category: "Eléctrica",
+        severity: "MEDIA",
+        sede: "Campus Meléndez",
+        bloque: "Subestación Eléctrica Sur",
+        piso: "Nivel Suelo",
+        aula: "Banco Baterías UPS",
+        reporter: "Ing. Marcos Peña",
+        reporterRole: "R03",
+        technician: "Ing. Carlos Méndez",
+        status: "E10",
+        createdHoursAgo: 16.0,
+        slaHours: 48,
+        description: "Reemplazo de 8 celdas de ácido-plomo que superaron vida útil de 4 años.",
+        photos: [],
+        bitacora: [
+          { date: "2026-10-28 17:00", user: "Ing. Carlos Méndez", note: "Materiales y kit de seguridad recibido." }
+        ]
+      }
+    ];
+
+    class PraxisApp {
+      constructor() {
+        this.storageKey = 'PRAXIS_TICKETS_DB_v4';
+        this.themeKey = 'PRAXIS_THEME_PREF';
+        this.columnsKey = 'PRAXIS_COLUMNS_VIS_v2';
+        this.columnWidthsKey = 'PRAXIS_COLUMNS_WIDTH_v2';
+        this.roleKey = 'PRAXIS_CURRENT_ROLE';
+
+        // Default to R01 (Solicitante / Reportante) for Etapa 1 delivery
+        this.currentRole = localStorage.getItem(this.roleKey) || 'R01';
+        this.r01ActiveTab = 'list'; // 'list' or 'new'
+        this.r01Filter = 'ALL'; // 'ALL', 'E02', 'IN_PROGRESS', 'CLOSED'
+        this.r01SearchQuery = '';
+        this.r01UploadedPhotos = [];
+        this.selectedTicket = null;
+        this.currentR01Ticket = null;
+        this.detectedDuplicateTicket = null;
+
+        // Management Console state
+        this.viewMode = 'kanban';
+        this.activeFilter = 'ALL';
+        this.searchQuery = '';
+        this.draggedTicketId = null;
+
+        // Formal Roles Catalog (Confluence D03/D09)
+        this.rolesDef = [
+          { code: 'R01', name: 'Solicitante / Reportante', shortName: 'Reportante', user: 'Prof. Laura Gómez', email: 'laura.gomez@univalle.edu.co', desc: 'Radicación jerárquica, aclaraciones y seguimiento', badgeClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' },
+          { code: 'R02', name: 'Gestor de Triaje', shortName: 'Gestor Triaje', user: 'Lic. Claudia Restrepo', email: 'claudia.restrepo@univalle.edu.co', desc: 'Consola triaje, descarte duplicados y aclaraciones', badgeClass: 'bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300' },
+          { code: 'R03', name: 'Coordinador Mantenimiento', shortName: 'Coordinador', user: 'Ing. Daniel Gómez', email: 'dgomez@univalle.edu.co', desc: 'Balance de carga WIP, despacho y reprogramación', badgeClass: 'bg-blue-100 text-brand-royalBlue dark:bg-blue-950/60 dark:text-blue-300' },
+          { code: 'R04', name: 'Técnico de Cuadrilla', shortName: 'Técnico Campo', user: 'Tec. Jorge Ospina', email: 'jorge.ospina@univalle.edu.co', desc: 'Terminal móvil, bitácora de obra y foto final', badgeClass: 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300' },
+          { code: 'R05', name: 'Autorizador de Recursos', shortName: 'Financiero', user: 'Dra. Patricia Silva', email: 'patricia.silva@univalle.edu.co', desc: 'Dictamen económico, cotizaciones y fondos', badgeClass: 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300' },
+          { code: 'R06', name: 'Verificador de Calidad', shortName: 'Calidad QA', user: 'Ing. Mateo Hurtado', email: 'mateo.hurtado@univalle.edu.co', desc: 'Inspección antes/después y cierre conforme', badgeClass: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300' },
+          { code: 'R07', name: 'Administrador Plataforma', shortName: 'Administrador', user: 'Admin Central', email: 'admin.praxis@univalle.edu.co', desc: 'Auditoría forense D10, topología y RBAC estricto', badgeClass: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-200' },
+        ];
+
+        // Column Definitions for dense table
+        this.columnsDef = [
+          { key: 'id', label: 'Radicado (#TKT)', minWidth: 120, defaultWidth: 140 },
+          { key: 'title', label: 'Asunto / Falla', minWidth: 180, defaultWidth: 260 },
+          { key: 'location', label: 'Ubicación Universitaria', minWidth: 180, defaultWidth: 280 },
+          { key: 'category', label: 'Categoría', minWidth: 100, defaultWidth: 130 },
+          { key: 'severity', label: 'Severidad', minWidth: 90, defaultWidth: 110 },
+          { key: 'technician', label: 'Técnico Asignado', minWidth: 120, defaultWidth: 160 },
+          { key: 'sla', label: 'SLA Restante', minWidth: 120, defaultWidth: 150 },
+          { key: 'status', label: 'Estado Ciclo de Vida', minWidth: 120, defaultWidth: 140 },
+          { key: 'actions', label: 'Acción', minWidth: 80, defaultWidth: 90, align: 'right' }
+        ];
+
+        this.loadColumnsConfig();
+        this.init();
+      }
+
+      init() {
+        this.loadTheme();
+        this.loadTickets();
+        this.updateRoleUI();
+        this.setupKeyboardShortcuts();
+        this.render();
+      }
+
+      onBrandClick() {
+        if (this.currentRole === 'R01') {
+          this.setR01Tab('list');
+        } else {
+          this.resetFilters();
+        }
+      }
+
+      // ==================== STORAGE ENGINE ====================
+      loadTickets() {
+        const stored = localStorage.getItem(this.storageKey);
+        if (stored) {
+          try {
+            this.tickets = JSON.parse(stored);
+          } catch (e) {
+            console.error("Error parseando tickets, restaurando mock.", e);
+            this.tickets = [...INITIAL_TICKETS];
+            this.saveTickets();
+          }
+        } else {
+          this.tickets = [...INITIAL_TICKETS];
+          this.saveTickets();
+        }
+      }
+
+      saveTickets() {
+        localStorage.setItem(this.storageKey, JSON.stringify(this.tickets));
+      }
+
+      // ==================== THEME MANAGEMENT ====================
+      loadTheme() {
+        const pref = localStorage.getItem(this.themeKey) || 'light';
+        if (pref === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.getElementById('sunIcon').classList.remove('hidden');
+          document.getElementById('moonIcon').classList.add('hidden');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.getElementById('sunIcon').classList.add('hidden');
+          document.getElementById('moonIcon').classList.remove('hidden');
+        }
+      }
+
+      toggleTheme() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem(this.themeKey, isDark ? 'dark' : 'light');
+        document.getElementById('sunIcon').classList.toggle('hidden', !isDark);
+        document.getElementById('moonIcon').classList.toggle('hidden', isDark);
+      }
+
+      // ==================== ROLE SWITCHING & RBAC ====================
+      toggleProfileMenu(e) {
+        if (e) e.stopPropagation();
+        const menu = document.getElementById('profileDropdownMenu');
+        if (menu) {
+          menu.classList.toggle('hidden');
+          if (!menu.classList.contains('hidden')) {
+            this.renderRolesList();
+          }
+        }
+      }
+
+      closeProfileMenu() {
+        const menu = document.getElementById('profileDropdownMenu');
+        if (menu) menu.classList.add('hidden');
+      }
+
+      renderRolesList() {
+        const cont = document.getElementById('rolesListContainer');
+        if (!cont) return;
+        cont.innerHTML = '';
+        this.rolesDef.forEach(role => {
+          const isActive = this.currentRole === role.code;
+          const btn = document.createElement('button');
+          btn.className = 'w-full text-left p-2 rounded-lg border transition text-xs flex items-center justify-between cursor-pointer ' + 
+            (isActive 
+              ? 'bg-blue-50 dark:bg-blue-950/40 border-brand-royalBlue text-slate-900 dark:text-white shadow-xs' 
+              : 'bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700');
+          btn.onclick = () => this.selectRole(role.code);
+          btn.innerHTML = `
+            <div class="flex items-center space-x-2 min-w-0">
+              <span class="font-mono font-bold text-[10px] px-1.5 py-0.5 rounded ${role.badgeClass}">${role.code}</span>
+              <div class="truncate">
+                <p class="font-semibold text-xs leading-tight truncate">${role.name}</p>
+                <p class="text-[10px] text-slate-400 truncate">${role.desc}</p>
+              </div>
+            </div>
+            ${isActive ? '<svg class="w-4 h-4 text-brand-royalBlue dark:text-sky-400 shrink-0 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>' : ''}
+          `;
+          cont.appendChild(btn);
+        });
+      }
+
+      selectRole(roleCode) {
+        this.currentRole = roleCode;
+        localStorage.setItem(this.roleKey, roleCode);
+        this.updateRoleUI();
+        this.closeProfileMenu();
+        this.render();
+
+        const role = this.rolesDef.find(r => r.code === roleCode);
+        this.showToast(`Rol activo: ${role ? role.code + ' · ' + role.name : roleCode}`, 'info');
+      }
+
+      updateRoleUI() {
+        const role = this.rolesDef.find(r => r.code === this.currentRole) || this.rolesDef[0];
+        
+        // Header profile display
+        document.getElementById('navUserName').innerText = role.user;
+        document.getElementById('navRoleBadge').innerText = `${role.shortName} · ${role.code}`;
+        document.getElementById('profileDropdownName').innerText = role.user;
+        document.getElementById('profileDropdownEmail').innerText = role.email;
+        document.getElementById('profileActiveRoleTag').innerText = `${role.code} · ${role.name}`;
+        
+        const initials = role.user.split(' ').filter(p => !p.includes('.')).map(w => w[0]).slice(0, 2).join('');
+        document.getElementById('navAvatarInitials').innerText = initials || 'PX';
+        document.getElementById('profileDropdownAvatar').innerText = initials || 'PX';
+
+        // Subheader user pill
+        document.getElementById('subHeaderUserText').innerText = `${role.user} · ${role.code}`;
+
+        // Toggle Sub-Header Tabs & Main Containers based on R01 vs Management
+        const r01SubTabs = document.getElementById('r01SubNavTabs');
+        const mgmtSubTabs = document.getElementById('mgmtSubNavTabs');
+        const r01Portal = document.getElementById('r01PortalContainer');
+        const mgmtPortal = document.getElementById('managementViewContainer');
+
+        if (this.currentRole === 'R01') {
+          r01SubTabs.classList.remove('hidden');
+          mgmtSubTabs.classList.add('hidden');
+          r01Portal.classList.remove('hidden');
+          mgmtPortal.classList.add('hidden');
+        } else {
+          r01SubTabs.classList.add('hidden');
+          mgmtSubTabs.classList.remove('hidden');
+          r01Portal.classList.add('hidden');
+          mgmtPortal.classList.remove('hidden');
+        }
+      }
+
+      // ==================== R01 PORTAL NAVIGATION & TABS ====================
+      setR01Tab(tab) {
+        this.r01ActiveTab = tab;
+        const btnList = document.getElementById('btnTabR01List');
+        const btnNew = document.getElementById('btnTabR01New');
+        const viewList = document.getElementById('r01ViewList');
+        const viewNew = document.getElementById('r01ViewNew');
+
+        if (tab === 'list') {
+          btnList.className = 'flex items-center space-x-2 px-3.5 py-1.5 rounded-lg transition bg-brand-navy dark:bg-brand-royalBlue text-white shadow-xs font-semibold';
+          btnNew.className = 'flex items-center space-x-2 px-3.5 py-1.5 rounded-lg transition bg-brand-emerald hover:bg-emerald-600 text-white shadow-xs font-semibold';
+          viewList.classList.remove('hidden');
+          viewNew.classList.add('hidden');
+          this.renderR01List();
+        } else {
+          btnList.className = 'flex items-center space-x-2 px-3.5 py-1.5 rounded-lg transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold';
+          btnNew.className = 'flex items-center space-x-2 px-3.5 py-1.5 rounded-lg transition bg-brand-emerald text-white ring-2 ring-emerald-400 font-bold shadow-xs';
+          viewList.classList.add('hidden');
+          viewNew.classList.remove('hidden');
+          this.resetR01Form();
+        }
+      }
+
+      setR01Filter(filter) {
+        this.r01Filter = filter;
+        ['ALL', 'E02', 'IN_PROGRESS', 'CLOSED'].forEach(f => {
+          const btn = document.getElementById(`r01Chip-${f}`);
+          if (btn) {
+            if (f === filter) {
+              btn.className = 'px-3 py-1 rounded-full font-semibold transition bg-brand-navy dark:bg-brand-royalBlue text-white shadow-xs';
+            } else {
+              btn.className = 'px-3 py-1 rounded-full font-semibold transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200';
+            }
+          }
+        });
+        this.renderR01List();
+      }
+
+      onR01SearchInput(query) {
+        this.r01SearchQuery = query.toLowerCase().trim();
+        this.renderR01List();
+      }
+
+      // ==================== R01 RADICACIÓN EN CASCADA 4 NIVELES (RN-003) ====================
+      resetR01Form() {
+        document.getElementById('formR01NewIncident').reset();
+        document.getElementById('r01Bloque').innerHTML = '<option value="">Seleccionar Bloque...</option>';
+        document.getElementById('r01Bloque').disabled = true;
+        document.getElementById('r01Piso').innerHTML = '<option value="">Seleccionar Piso...</option>';
+        document.getElementById('r01Piso').disabled = true;
+        document.getElementById('r01Aula').innerHTML = '<option value="">Seleccionar Aula...</option>';
+        document.getElementById('r01Aula').disabled = true;
+        
+        document.getElementById('r01DuplicateAlertPanel').classList.add('hidden');
+        document.getElementById('r01CharCounter').innerText = '0 / 500 caracteres';
+        document.getElementById('r01CharWarning').innerText = 'Mínimo 20 caracteres requeridos (faltan 20).';
+        document.getElementById('r01CharWarning').className = 'text-red-500 font-semibold';
+        
+        this.r01UploadedPhotos = [];
+        this.renderR01PhotoThumbnails();
+      }
+
+      onR01SedeChange() {
+        const sede = document.getElementById('r01Sede').value;
+        const bloqueSelect = document.getElementById('r01Bloque');
+        const pisoSelect = document.getElementById('r01Piso');
+        const aulaSelect = document.getElementById('r01Aula');
+
+        bloqueSelect.innerHTML = '<option value="">Seleccionar Bloque...</option>';
+        pisoSelect.innerHTML = '<option value="">Seleccionar Piso...</option>';
+        aulaSelect.innerHTML = '<option value="">Seleccionar Aula...</option>';
+        pisoSelect.disabled = true;
+        aulaSelect.disabled = true;
+
+        if (sede && UNIVERSITY_HIERARCHY_4L[sede]) {
+          bloqueSelect.disabled = false;
+          Object.keys(UNIVERSITY_HIERARCHY_4L[sede]).forEach(bloque => {
+            const opt = document.createElement('option');
+            opt.value = bloque;
+            opt.innerText = bloque;
+            bloqueSelect.appendChild(opt);
+          });
+        } else {
+          bloqueSelect.disabled = true;
+        }
+        this.checkR01Duplicates();
+      }
+
+      onR01BloqueChange() {
+        const sede = document.getElementById('r01Sede').value;
+        const bloque = document.getElementById('r01Bloque').value;
+        const pisoSelect = document.getElementById('r01Piso');
+        const aulaSelect = document.getElementById('r01Aula');
+
+        pisoSelect.innerHTML = '<option value="">Seleccionar Piso...</option>';
+        aulaSelect.innerHTML = '<option value="">Seleccionar Aula...</option>';
+        aulaSelect.disabled = true;
+
+        if (sede && bloque && UNIVERSITY_HIERARCHY_4L[sede][bloque]) {
+          pisoSelect.disabled = false;
+          Object.keys(UNIVERSITY_HIERARCHY_4L[sede][bloque]).forEach(piso => {
+            const opt = document.createElement('option');
+            opt.value = piso;
+            opt.innerText = piso;
+            pisoSelect.appendChild(opt);
+          });
+        } else {
+          pisoSelect.disabled = true;
+        }
+        this.checkR01Duplicates();
+      }
+
+      onR01PisoChange() {
+        const sede = document.getElementById('r01Sede').value;
+        const bloque = document.getElementById('r01Bloque').value;
+        const piso = document.getElementById('r01Piso').value;
+        const aulaSelect = document.getElementById('r01Aula');
+
+        aulaSelect.innerHTML = '<option value="">Seleccionar Aula...</option>';
+
+        if (sede && bloque && piso && UNIVERSITY_HIERARCHY_4L[sede][bloque][piso]) {
+          aulaSelect.disabled = false;
+          UNIVERSITY_HIERARCHY_4L[sede][bloque][piso].forEach(aula => {
+            const opt = document.createElement('option');
+            opt.value = aula;
+            opt.innerText = aula;
+            aulaSelect.appendChild(opt);
+          });
+        } else {
+          aulaSelect.disabled = true;
+        }
+        this.checkR01Duplicates();
+      }
+
+      // ==================== REACTIVE ANTI-DUPLICATES CHECK (RN-011) ====================
+      checkR01Duplicates() {
+        const sede = document.getElementById('r01Sede')?.value;
+        const bloque = document.getElementById('r01Bloque')?.value;
+        const aula = document.getElementById('r01Aula')?.value;
+        const cat = document.getElementById('r01Category')?.value;
+        const alertPanel = document.getElementById('r01DuplicateAlertPanel');
+
+        if (!sede || !bloque || !aula || !cat || !alertPanel) return;
+
+        // Search for active non-closed tickets in same aula and category
+        const match = this.tickets.find(t => 
+          !['E15', 'E16', 'E17'].includes(t.status) &&
+          t.sede === sede && 
+          t.bloque === bloque && 
+          t.aula === aula && 
+          t.category === cat
+        );
+
+        if (match) {
+          this.detectedDuplicateTicket = match;
+          document.getElementById('r01DupId').innerText = match.id;
+          document.getElementById('r01DupTitle').innerText = match.title;
+          document.getElementById('r01DupStatus').innerText = this.getStatusName(match.status);
+          alertPanel.classList.remove('hidden');
+        } else {
+          this.detectedDuplicateTicket = null;
+          alertPanel.classList.add('hidden');
+        }
+      }
+
+      dismissDuplicateWarning() {
+        const alertPanel = document.getElementById('r01DuplicateAlertPanel');
+        if (alertPanel) alertPanel.classList.add('hidden');
+        this.showToast('Continuando radicado independiente', 'info');
+      }
+
+      openDuplicatePreview() {
+        if (!this.detectedDuplicateTicket) return;
+        this.openR01TicketTimeline(this.detectedDuplicateTicket.id);
+      }
+
+      // ==================== DESCRIPTION & REACTIVE COUNTER (RN-004) ====================
+      onR01DescriptionInput(textarea) {
+        const len = textarea.value.length;
+        const counter = document.getElementById('r01CharCounter');
+        const warning = document.getElementById('r01CharWarning');
+        const submitBtn = document.getElementById('r01SubmitBtn');
+
+        counter.innerText = `${len} / 500 caracteres`;
+
+        if (len < 20) {
+          warning.innerText = `Mínimo 20 caracteres requeridos (faltan ${20 - len}).`;
+          warning.className = 'text-red-500 font-semibold';
+          submitBtn.disabled = true;
+          submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        } else if (len > 500) {
+          warning.innerText = `Límite excedido por ${len - 500} caracteres.`;
+          warning.className = 'text-red-500 font-semibold';
+          submitBtn.disabled = true;
+          submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+          warning.innerText = 'Longitud de descripción conforme.';
+          warning.className = 'text-emerald-600 dark:text-emerald-400 font-semibold';
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      }
+
+      onR01RiskChange() {
+        const isHigh = document.getElementById('r01HighRisk')?.checked;
+        const btnText = document.getElementById('r01SubmitBtnText');
+        if (isHigh) {
+          btnText.innerText = '⚠️ Radicar con RIESGO INMINENTE (SLA Crítico 4h)';
+          this.showToast('Bandera de riesgo inminente activada (SLA: 4 horas)', 'warning');
+        } else {
+          btnText.innerText = 'Radicar Incidencia Oficial (E01)';
+        }
+      }
+
+      // ==================== CLIENT-SIDE PHOTO COMPRESSION (RN-005) ====================
+      handleR01PhotoUpload(event) {
+        const files = Array.from(event.target.files);
+        if (!files.length) return;
+
+        if (this.r01UploadedPhotos.length + files.length > 3) {
+          this.showToast('Máximo 3 fotografías permitidas por reporte (RN-005)', 'warning');
+          return;
+        }
+
+        files.forEach(file => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+              // Canvas compression
+              const canvas = document.createElement('canvas');
+              let width = img.width;
+              let height = img.height;
+              const maxDim = 1200;
+
+              if (width > maxDim || height > maxDim) {
+                if (width > height) {
+                  height = Math.round((height * maxDim) / width);
+                  width = maxDim;
+                } else {
+                  width = Math.round((width * maxDim) / height);
+                  height = maxDim;
+                }
+              }
+
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+
+              const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+              const approxSizeKb = Math.round((compressedDataUrl.length * 3) / 4 / 1024);
+
+              this.r01UploadedPhotos.push({
+                name: file.name,
+                dataUrl: compressedDataUrl,
+                sizeKb: approxSizeKb
+              });
+
+              this.renderR01PhotoThumbnails();
+              this.showToast(`Foto procesada: ${file.name} (~${approxSizeKb} KB comprimido)`, 'success');
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+
+        event.target.value = '';
+      }
+
+      removeR01Photo(index) {
+        this.r01UploadedPhotos.splice(index, 1);
+        this.renderR01PhotoThumbnails();
+      }
+
+      renderR01PhotoThumbnails() {
+        const container = document.getElementById('r01PhotoThumbnails');
+        if (!container) return;
+        container.innerHTML = '';
+
+        this.r01UploadedPhotos.forEach((photo, idx) => {
+          const div = document.createElement('div');
+          div.className = 'relative group border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-white dark:bg-slate-800 p-1 flex items-center space-x-2';
+          div.innerHTML = `
+            <img src="${photo.dataUrl}" class="w-12 h-12 object-cover rounded shrink-0">
+            <div class="flex-1 min-w-0 pr-6">
+              <p class="text-[11px] font-semibold text-slate-800 dark:text-slate-200 truncate">${photo.name}</p>
+              <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-1 rounded">${photo.sizeKb} KB · Comprimida</span>
+            </div>
+            <button type="button" onclick="app.removeR01Photo(${idx})" class="absolute right-1 top-1 p-1 text-slate-400 hover:text-red-500 rounded">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // ==================== DEFENSIVE SUBMISSION (DOUBLE-SUBMIT PREVENTION) ====================
+      handleR01SubmitIncident(e) {
+        e.preventDefault();
+        const submitBtn = document.getElementById('r01SubmitBtn');
+        const descText = document.getElementById('r01Description').value.trim();
+
+        if (descText.length < 20 || descText.length > 500) {
+          this.showToast('La descripción debe contener entre 20 y 500 caracteres (RN-004)', 'warning');
+          return;
+        }
+
+        // Double submit prevention
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+          <span>Registrando en Ledger Inmutable D10...</span>
+        `;
+
+        setTimeout(() => {
+          const sede = document.getElementById('r01Sede').value;
+          const bloque = document.getElementById('r01Bloque').value;
+          const piso = document.getElementById('r01Piso').value;
+          const aula = document.getElementById('r01Aula').value;
+          const detailLoc = document.getElementById('r01LocationDetail').value.trim();
+          const category = document.getElementById('r01Category').value;
+          const title = document.getElementById('r01Title').value.trim();
+          const isHighRisk = document.getElementById('r01HighRisk').checked;
+          const severity = isHighRisk ? 'CRITICA' : 'MEDIA';
+          const slaHours = isHighRisk ? 4 : 48;
+
+          // Atomic #TKT code generator
+          const nextNum = 153 + this.tickets.length;
+          const newId = `TKT-2026-${String(nextNum).padStart(6, '0')}`;
+          const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
+          const newTicket = {
+            id: newId,
+            title: title,
+            category: category,
+            severity: severity,
+            sede: sede,
+            bloque: bloque,
+            piso: piso,
+            aula: aula,
+            locationDetail: detailLoc,
+            reporter: "Prof. Laura Gómez",
+            reporterRole: "R01",
+            technician: "",
+            status: "E01", // Canonical E01 Registrada
+            createdHoursAgo: 0.05,
+            slaHours: slaHours,
+            description: descText,
+            photos: [...this.r01UploadedPhotos],
+            bitacora: [
+              {
+                date: nowStr,
+                user: "Prof. Laura Gómez (R01)",
+                note: `Radicación inicial oficial creada en E01 Registrada. ${isHighRisk ? '⚠️ ALERTA RN-016: Marcado bajo bandera de Riesgo Inminente (SLA 4h).' : ''}`
+              }
+            ]
+          };
+
+          this.tickets.unshift(newTicket);
+          this.saveTickets();
+          this.currentR01Ticket = newTicket;
+
+          // Open Success Modal
+          document.getElementById('r01SuccessCode').innerText = newId;
+          document.getElementById('modalR01Success').classList.remove('hidden');
+
+          // Reset button state
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span>Radicar Incidencia Oficial (E01)</span>
+          `;
+
+          this.render();
+          this.showToast(`Incidencia ${newId} radicada exitosamente en E01 Registrada`, 'success');
+        }, 600);
+      }
+
+      onSuccessViewTicket() {
+        this.closeModal('modalR01Success');
+        this.setR01Tab('list');
+        if (this.currentR01Ticket) {
+          this.openR01TicketTimeline(this.currentR01Ticket.id);
+        }
+      }
+
+      onSuccessCreateAnother() {
+        this.closeModal('modalR01Success');
+        this.setR01Tab('new');
+      }
+
+      // ==================== R01 LIST RENDERING (HU-4.1) ====================
+      renderR01List() {
+        const grid = document.getElementById('r01CardsGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        // Filter tickets belonging to Laura Gómez (or R01 test set)
+        const myTickets = this.tickets.filter(t => t.reporter === 'Prof. Laura Gómez' || t.reporterRole === 'R01');
+
+        // Update counts
+        const countAll = myTickets.length;
+        const countE02 = myTickets.filter(t => t.status === 'E02').length;
+        const countActive = myTickets.filter(t => !['E15', 'E16', 'E17', 'E02'].includes(t.status)).length;
+        const countClosed = myTickets.filter(t => ['E15', 'E16', 'E17'].includes(t.status)).length;
+
+        document.getElementById('r01CountAll').innerText = countAll;
+        document.getElementById('r01CountE02').innerText = countE02;
+        document.getElementById('r01CountInProgress').innerText = countActive;
+        document.getElementById('r01CountClosed').innerText = countClosed;
+        document.getElementById('badgeR01Total').innerText = countAll;
+
+        const badgeE02Alert = document.getElementById('badgeR01E02Alert');
+        if (countE02 > 0) {
+          badgeE02Alert.classList.remove('hidden');
+          badgeE02Alert.innerText = `${countE02} Requerida${countE02 > 1 ? 's' : ''}`;
+        } else {
+          badgeE02Alert.classList.add('hidden');
+        }
+
+        // Apply tab filter & search
+        let filtered = myTickets.filter(t => {
+          if (this.r01Filter === 'E02' && t.status !== 'E02') return false;
+          if (this.r01Filter === 'IN_PROGRESS' && ['E15', 'E16', 'E17'].includes(t.status)) return false;
+          if (this.r01Filter === 'CLOSED' && !['E15', 'E16', 'E17'].includes(t.status)) return false;
+
+          if (this.r01SearchQuery) {
+            const corpus = `${t.id} ${t.title} ${t.sede} ${t.bloque} ${t.aula} ${t.category} ${t.description}`.toLowerCase();
+            if (!corpus.includes(this.r01SearchQuery)) return false;
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-16 text-center text-slate-400 dark:text-slate-500 text-xs">
+              <svg class="w-10 h-10 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <p class="font-semibold text-sm">No hay solicitudes en esta vista</p>
+              <p class="text-[11px] mt-1">Puedes radicar una nueva solicitud con el botón superior.</p>
+            </div>
+          `;
+          return;
+        }
+
+        filtered.forEach(t => {
+          const card = document.createElement('div');
+          const isE02 = t.status === 'E02';
+          const statusBadge = this.getCanonicalStatusBadge(t.status);
+          const sevBadge = this.getSeverityBadge(t.severity);
+
+          card.className = 'bg-white dark:bg-brand-navy rounded-xl p-4 border transition-all duration-200 shadow-elevation-1 hover:shadow-elevation-2 flex flex-col justify-between ' + 
+            (isE02 
+              ? 'border-amber-400 dark:border-amber-600 bg-amber-50/20 dark:bg-amber-950/20 ring-1 ring-amber-400' 
+              : 'border-brand-borderSubtle dark:border-brand-borderDark');
+
+          card.innerHTML = `
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono font-bold text-xs text-brand-royalBlue dark:text-sky-400">${t.id}</span>
+                ${statusBadge}
+              </div>
+
+              <h3 class="font-display font-bold text-sm text-slate-900 dark:text-white line-clamp-2 leading-snug mb-1.5 hover:text-brand-royalBlue cursor-pointer" onclick="app.openR01TicketTimeline('${t.id}')">
+                ${t.title}
+              </h3>
+
+              <div class="flex items-center space-x-1 text-[11px] font-mono text-slate-500 dark:text-slate-400 mb-2 truncate" title="${t.sede} > ${t.bloque} > ${t.piso || 'Nivel 1'} > ${t.aula}">
+                <svg class="w-3.5 h-3.5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                <span class="truncate">${t.sede.replace('Campus ', '')} &gt; ${t.bloque.split(' ')[0]} &gt; ${t.aula}</span>
+              </div>
+
+              <div class="flex items-center space-x-2 mb-3">
+                <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">${t.category}</span>
+                ${sevBadge}
+              </div>
+
+              ${isE02 ? `
+                <div class="p-2.5 rounded-lg bg-amber-100/80 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 mb-3 space-y-1.5">
+                  <div class="flex items-center space-x-1.5 text-amber-900 dark:text-amber-200 font-bold text-[11px]">
+                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+                    <span>Acción Requerida del Reportante (RN-007)</span>
+                  </div>
+                  <p class="text-[11px] text-amber-800 dark:text-amber-300 line-clamp-2 italic">
+                    "${t.clarificationRequest || 'Se requiere información adicional...'}"
+                  </p>
+                  <button onclick="app.openR01TicketTimeline('${t.id}')" class="w-full mt-1 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded font-bold text-xs shadow-xs transition flex items-center justify-center space-x-1">
+                    <span>⚠️ Responder Aclaración Ahora</span>
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+              <span class="text-[10px] text-slate-400 font-mono">Antigüedad: ${t.createdHoursAgo.toFixed(1)}h</span>
+              
+              <div class="flex items-center space-x-2">
+                ${['E01', 'E02', 'E03'].includes(t.status) ? `
+                  <button onclick="app.openR01CancelModal('${t.id}')" class="text-[11px] text-red-500 hover:underline">Cancelar</button>
+                ` : ''}
+                <button onclick="app.openR01TicketTimeline('${t.id}')" class="text-brand-royalBlue dark:text-sky-400 font-bold hover:underline flex items-center space-x-0.5">
+                  <span>Ver Detalle</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
+          `;
+
+          grid.appendChild(card);
+        });
+      }
+
+      // ==================== R01 TIMELINE & CLARIFICATION DRAWER (HU-4.2, HU-4.3) ====================
+      openR01TicketTimeline(ticketId) {
+        const ticket = this.tickets.find(t => t.id === ticketId);
+        if (!ticket) return;
+
+        this.currentR01Ticket = ticket;
+
+        document.getElementById('r01DetailCode').innerText = ticket.id;
+        document.getElementById('r01DetailTitle').innerText = ticket.title;
+        document.getElementById('r01DetailHierarchy').innerText = `${ticket.sede} > ${ticket.bloque} > ${ticket.piso || 'Nivel 1'} > ${ticket.aula} ${ticket.locationDetail ? '(' + ticket.locationDetail + ')' : ''}`;
+        document.getElementById('r01DetailDescription').innerText = ticket.description;
+        document.getElementById('r01DetailSeverityBadge').innerHTML = this.getSeverityBadge(ticket.severity);
+        document.getElementById('r01DetailStatusBadge').innerHTML = this.getCanonicalStatusBadge(ticket.status);
+
+        // Render photo gallery
+        const evidenceSection = document.getElementById('r01DetailEvidenceSection');
+        const gallery = document.getElementById('r01DetailEvidenceGallery');
+        gallery.innerHTML = '';
+
+        if (ticket.photos && ticket.photos.length > 0) {
+          evidenceSection.classList.remove('hidden');
+          ticket.photos.forEach(p => {
+            const img = document.createElement('img');
+            img.src = p.dataUrl;
+            img.title = p.name;
+            img.className = 'w-20 h-20 object-cover rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:scale-105 transition';
+            img.onclick = () => window.open(p.dataUrl, '_blank');
+            gallery.appendChild(img);
+          });
+        } else {
+          evidenceSection.classList.add('hidden');
+        }
+
+        // Render Clarification Box if E02
+        const clarBox = document.getElementById('r01ClarificationFormBox');
+        if (ticket.status === 'E02') {
+          clarBox.classList.remove('hidden');
+          document.getElementById('r01ClarificationPrompt').innerText = `"${ticket.clarificationRequest || 'Se requiere aclaración adicional por parte del gestor de triaje.'}"`;
+          document.getElementById('r01ClarificationReplyText').value = '';
+        } else {
+          clarBox.classList.add('hidden');
+        }
+
+        // Voluntary cancel action visibility
+        const cancelBox = document.getElementById('r01CancelActionBox');
+        if (['E01', 'E02', 'E03'].includes(ticket.status)) {
+          cancelBox.classList.remove('hidden');
+        } else {
+          cancelBox.classList.add('hidden');
+        }
+
+        // Render Vertical 18-State Timeline (HU-4.2)
+        this.renderVerticalTimeline(ticket);
+
+        document.getElementById('modalR01DetailTimeline').classList.remove('hidden');
+      }
+
+      renderVerticalTimeline(ticket) {
+        const container = document.getElementById('r01VerticalTimeline');
+        container.innerHTML = '';
+
+        ticket.bitacora.forEach(entry => {
+          const div = document.createElement('div');
+          div.className = 'relative flex items-start space-x-3 text-xs';
+          div.innerHTML = `
+            <div class="absolute -left-8 mt-0.5 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800 flex items-center justify-center text-white text-[9px] font-bold">
+              ✓
+            </div>
+            <div class="flex-1 bg-slate-50 dark:bg-slate-800/80 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
+              <div class="flex items-center justify-between font-mono text-[10px] text-slate-400 mb-0.5">
+                <span class="font-bold text-slate-700 dark:text-slate-200">${entry.user}</span>
+                <span>${entry.date}</span>
+              </div>
+              <p class="text-slate-800 dark:text-slate-200 leading-snug">${entry.note}</p>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // ==================== RESPUESTA DE ACLARACIÓN (E02 -> E03, RN-007, HU-4.3) ====================
+      submitR01Clarification() {
+        if (!this.currentR01Ticket) return;
+        const replyText = document.getElementById('r01ClarificationReplyText').value.trim();
+
+        if (replyText.length < 5) {
+          this.showToast('Por favor escribe una respuesta detallada a la aclaración solicitada.', 'warning');
+          return;
+        }
+
+        const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
+        // Atomic transition E02 -> E03
+        this.currentR01Ticket.status = 'E03';
+        this.currentR01Ticket.bitacora.unshift({
+          date: nowStr,
+          user: "Prof. Laura Gómez (R01)",
+          note: `Aclaración enviada por el solicitante (RN-007): "${replyText}". Estado transicionado a E03 En Revisión.`
+        });
+
+        this.saveTickets();
+        this.closeModal('modalR01DetailTimeline');
+        this.render();
+        this.showToast(`Aclaración registrada para ${this.currentR01Ticket.id}. Pasa a E03 En Revisión.`, 'success');
+      }
+
+      // ==================== CANCELACIÓN VOLUNTARIA (HU-4.4) ====================
+      openR01CancelModal(ticketId) {
+        const id = ticketId || (this.currentR01Ticket ? this.currentR01Ticket.id : null);
+        if (!id) return;
+        this.currentR01Ticket = this.tickets.find(t => t.id === id);
+        document.getElementById('r01CancelReason').value = '';
+        document.getElementById('modalR01CancelConfirm').classList.remove('hidden');
+      }
+
+      confirmR01CancelTicket() {
+        if (!this.currentR01Ticket) return;
+        const reason = document.getElementById('r01CancelReason').value.trim();
+
+        if (reason.length < 5) {
+          this.showToast('Debes indicar un motivo de cancelación justificado (HU-4.4)', 'warning');
+          return;
+        }
+
+        const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+        this.currentR01Ticket.status = 'E17';
+        this.currentR01Ticket.bitacora.unshift({
+          date: nowStr,
+          user: "Prof. Laura Gómez (R01)",
+          note: `Solicitud cancelada por el reportante (HU-4.4). Motivo justificado: "${reason}". Transiciona a E17 Cancelada.`
+        });
+
+        this.saveTickets();
+        this.closeModal('modalR01CancelConfirm');
+        this.closeModal('modalR01DetailTimeline');
+        this.render();
+        this.showToast(`Incidencia ${this.currentR01Ticket.id} cancelada (E17)`, 'warning');
+      }
+
+      // ==================== CANONICAL STATUS BADGES (18 STATES) ====================
+      getCanonicalStatusBadge(status) {
+        switch (status) {
+          case 'E01':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-950/70 dark:text-blue-300">E01 · Registrada</span>';
+          case 'E02':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 dark:bg-amber-950/80 dark:text-amber-300 animate-pulse ring-1 ring-amber-400">E02 · Aclaración Requerida</span>';
+          case 'E03':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 dark:bg-indigo-950/70 dark:text-indigo-300">E03 · En Revisión</span>';
+          case 'E04':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/70 dark:text-sky-300">E04 · En Clasificación</span>';
+          case 'E05':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-800 dark:bg-orange-950/70 dark:text-orange-300">E05 · Pendiente Asignación</span>';
+          case 'E10':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-100 text-cyan-800 dark:bg-cyan-950/70 dark:text-cyan-300">E10 · Programada</span>';
+          case 'E11':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-950/70 dark:text-blue-300">E11 · En Atención</span>';
+          case 'E12':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 dark:bg-purple-950/70 dark:text-purple-300">E12 · En Verificación</span>';
+          case 'E15':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300">E15 · Cerrada &amp; Conforme</span>';
+          case 'E16':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300">E16 · No Procedente</span>';
+          case 'E17':
+            return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-800 dark:bg-red-950/70 dark:text-red-300">E17 · Cancelada</span>';
+          default:
+            return `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700">${status}</span>`;
+        }
+      }
+
+      // ==================== MANAGEMENT CONSOLE ENGINE (R02 - R07) ====================
+      loadColumnsConfig() {
+        const vis = localStorage.getItem(this.columnsKey);
+        this.columnVisibility = vis ? JSON.parse(vis) : {};
+        this.columnsDef.forEach(col => {
+          if (this.columnVisibility[col.key] === undefined) {
+            this.columnVisibility[col.key] = true;
+          }
+        });
+
+        const widths = localStorage.getItem(this.columnWidthsKey);
+        this.columnWidths = widths ? JSON.parse(widths) : {};
+        this.columnsDef.forEach(col => {
+          if (!this.columnWidths[col.key]) {
+            this.columnWidths[col.key] = col.defaultWidth;
+          }
+        });
+      }
+
+      saveColumnsConfig() {
+        localStorage.setItem(this.columnsKey, JSON.stringify(this.columnVisibility));
+        localStorage.setItem(this.columnWidthsKey, JSON.stringify(this.columnWidths));
+      }
+
+      setViewMode(mode) {
+        this.viewMode = mode;
+        const kanbanCont = document.getElementById('kanbanViewContainer');
+        const tableCont = document.getElementById('tableViewContainer');
+        const btnK = document.getElementById('viewBtnKanban');
+        const btnT = document.getElementById('viewBtnTable');
+
+        if (mode === 'kanban') {
+          kanbanCont.classList.remove('hidden');
+          tableCont.classList.add('hidden');
+          btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
+          btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+        } else {
+          kanbanCont.classList.add('hidden');
+          tableCont.classList.remove('hidden');
+          tableCont.classList.add('flex');
+          btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
+          btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+        }
+        this.render();
+      }
+
+      render() {
+        if (this.currentRole === 'R01') {
+          this.renderR01List();
+        } else {
+          this.renderMetrics();
+          this.renderBoard();
+        }
+      }
+
+      renderMetrics() {
+        const activeTickets = this.tickets.filter(t => !['E15', 'E16', 'E17'].includes(t.status));
+        const triageCount = this.tickets.filter(t => ['E01_E03', 'E01', 'E02', 'E03', 'E05'].includes(t.status)).length;
+        const execCount = this.tickets.filter(t => t.status === 'E11').length;
+        
+        let slaBreached = 0;
+        let slaNearRisk = 0;
+        activeTickets.forEach(t => {
+          const s = this.getSlaStatus(t);
+          if (s.status === 'BREACHED') slaBreached++;
+          if (s.status === 'CRITICAL') slaNearRisk++;
+        });
+
+        const compliantCount = activeTickets.length - slaBreached;
+        const slaPercentage = activeTickets.length > 0 ? ((compliantCount / activeTickets.length) * 100).toFixed(1) : 100;
+
+        document.getElementById('kpiActiveCount').innerText = activeTickets.length;
+        document.getElementById('kpiTriageCount').innerText = triageCount;
+        document.getElementById('kpiExecutionCount').innerText = execCount;
+        document.getElementById('kpiSlaPercentage').innerText = `${slaPercentage}%`;
+        document.getElementById('kpiSlaBreachedCount').innerText = slaBreached > 0 ? `${slaBreached} vencidos` : (slaNearRisk > 0 ? `${slaNearRisk} en riesgo` : 'Todo en plazo');
+
+        // Update counts in chips
+        document.getElementById('count-all').innerText = this.tickets.filter(t => !['E16', 'E17'].includes(t.status)).length;
+        document.getElementById('count-critical').innerText = this.tickets.filter(t => t.severity === 'CRITICA' && !['E15', 'E16', 'E17'].includes(t.status)).length;
+        document.getElementById('count-high').innerText = this.tickets.filter(t => t.severity === 'ALTA' && !['E15', 'E16', 'E17'].includes(t.status)).length;
+        document.getElementById('count-unassigned').innerText = this.tickets.filter(t => t.technician === '' && !['E15', 'E16', 'E17'].includes(t.status)).length;
+        
+        let riskCounter = 0;
+        activeTickets.forEach(t => {
+          const s = this.getSlaStatus(t);
+          if (s.status === 'BREACHED' || s.status === 'CRITICAL') riskCounter++;
+        });
+        document.getElementById('count-sla-risk').innerText = riskCounter;
+      }
+
+      renderBoard() {
+        const filtered = this.getFilteredTickets();
+
+        if (this.viewMode === 'kanban') {
+          const columns = ['E01_E03', 'E05', 'E10', 'E11', 'E12', 'E15'];
+          
+          columns.forEach(col => {
+            const colCardsContainer = document.getElementById(`cards-${col}`);
+            const colCountBadge = document.getElementById(`colCount-${col}`);
+            const colTickets = filtered.filter(t => {
+              if (col === 'E01_E03') return ['E01_E03', 'E01', 'E02', 'E03'].includes(t.status);
+              return t.status === col;
+            });
+            
+            colCountBadge.innerText = colTickets.length;
+            colCardsContainer.innerHTML = '';
+
+            if (colTickets.length === 0) {
+              colCardsContainer.innerHTML = `
+                <div class="h-28 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-lg flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 text-xs text-center p-3 select-none">
+                  <svg class="w-6 h-6 mb-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                  <span>Sin órdenes en este estado</span>
+                </div>
+              `;
+            } else {
+              colTickets.forEach(t => {
+                colCardsContainer.appendChild(this.createCardElement(t));
+              });
+            }
+          });
+        } else {
+          this.renderTable(filtered);
+        }
+      }
+
+      createCardElement(ticket) {
+        const card = document.createElement('div');
+        const sla = this.getSlaStatus(ticket);
+        const severityBadge = this.getSeverityBadge(ticket.severity);
+        const categoryColor = this.getCategoryBadgeColor(ticket.category);
+
+        card.draggable = true;
+        card.id = `ticket-card-${ticket.id}`;
+        card.className = 'bg-white dark:bg-brand-navy rounded-lg p-3 border border-brand-borderSubtle dark:border-brand-borderDark shadow-elevation-1 hover:shadow-elevation-2 cursor-grab active:cursor-grabbing transition-all transform hover:-translate-y-0.5 group';
+        
+        card.ondragstart = (e) => this.onDragStart(e, ticket.id);
+        card.ondragend = (e) => this.onDragEnd(e);
+        card.onclick = () => this.openDetailModal(ticket.id);
+
+        const techInitials = ticket.technician ? ticket.technician.split(' ').filter(p => !p.includes('.')).map(w => w[0]).slice(0, 2).join('') : '?';
+        const techClass = ticket.technician ? 'bg-brand-royalBlue text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500';
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="font-mono font-bold text-xs text-brand-royalBlue dark:text-sky-400 group-hover:underline">${ticket.id}</span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full ${categoryColor}">
+              ${ticket.category}
+            </span>
+          </div>
+
+          <h4 class="font-display font-bold text-xs text-slate-900 dark:text-slate-100 line-clamp-2 leading-snug mb-2 group-hover:text-brand-royalBlue transition-colors">
+            ${ticket.title}
+          </h4>
+
+          <div class="flex items-center space-x-1 text-[11px] font-mono text-slate-500 dark:text-slate-400 mb-2 truncate">
+            <svg class="w-3.5 h-3.5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+            <span class="truncate">${ticket.sede.replace('Campus ', '')} > ${ticket.bloque.split(' ')[0]} > ${ticket.aula}</span>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px]">
+            <div class="flex items-center space-x-1.5">
+              ${severityBadge}
+            </div>
+            <span class="px-1.5 py-0.5 rounded font-mono text-[10px] ${sla.badgeClass}">
+              ${sla.text}
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between mt-2 pt-1.5 text-[10px] text-slate-400">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] ${techClass}">
+                ${techInitials}
+              </span>
+              <span class="text-slate-600 dark:text-slate-400 font-medium truncate max-w-[120px]">
+                ${ticket.technician ? ticket.technician.replace('Tec. ', '').replace('Ing. ', '') : 'Sin asignar'}
+              </span>
+            </div>
+            <span class="text-slate-400 flex items-center space-x-0.5" title="${ticket.bitacora.length} notas en bitácora">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+              <span>${ticket.bitacora.length}</span>
+            </span>
+          </div>
+        `;
+
+        return card;
+      }
+
+      renderTable(filtered) {
+        const thead = document.getElementById('ticketsTableHead');
+        const tbody = document.getElementById('ticketsTableBody');
+        const countBadge = document.getElementById('tableResultsCount');
+        const badgeTotal = document.getElementById('tableBadgeCount');
+
+        if (countBadge) countBadge.innerText = filtered.length;
+        if (badgeTotal) badgeTotal.innerText = `${filtered.length} órdenes`;
+
+        const visibleCols = this.columnsDef.filter(col => this.columnVisibility[col.key] !== false);
+        
+        thead.innerHTML = '';
+        const trHead = document.createElement('tr');
+
+        visibleCols.forEach(col => {
+          const th = document.createElement('th');
+          const width = this.columnWidths[col.key] || col.defaultWidth;
+          th.style.width = `${width}px`;
+          th.style.minWidth = `${col.minWidth}px`;
+          th.className = `py-3 px-3 relative font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider select-none ${col.align === 'right' ? 'text-right' : 'text-left'}`;
+          th.innerHTML = `
+            <span class="truncate block pr-2">${col.label}</span>
+            <div class="col-resizer" onmousedown="app.initResize(event, '${col.key}')" title="Arrastra para ajustar"></div>
+          `;
+          trHead.appendChild(th);
+        });
+        thead.appendChild(trHead);
+
+        tbody.innerHTML = '';
+        if (filtered.length === 0) {
+          const trEmpty = document.createElement('tr');
+          trEmpty.innerHTML = `<td colspan="${visibleCols.length}" class="py-12 text-center text-slate-400 italic">No se encontraron incidencias que coincidan.</td>`;
+          tbody.appendChild(trEmpty);
+          return;
+        }
+
+        filtered.forEach(t => {
+          const sla = this.getSlaStatus(t);
+          const severityDot = this.getSeverityBadge(t.severity);
+          const statusLabel = this.getStatusName(t.status);
+
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition';
+          tr.onclick = () => this.openDetailModal(t.id);
+
+          let rowHtml = '';
+          visibleCols.forEach(col => {
+            switch (col.key) {
+              case 'id':
+                rowHtml += `<td class="py-3 px-3 font-mono font-bold text-brand-royalBlue whitespace-nowrap">${t.id}</td>`;
+                break;
+              case 'title':
+                rowHtml += `<td class="py-3 px-3 font-semibold text-slate-800 dark:text-slate-100 truncate">${t.title}</td>`;
+                break;
+              case 'location':
+                rowHtml += `<td class="py-3 px-3 text-slate-600 dark:text-slate-300 font-mono text-[11px] truncate">${t.sede.replace('Campus ', '')} > ${t.bloque.split(' ')[0]} > ${t.aula}</td>`;
+                break;
+              case 'category':
+                rowHtml += `<td class="py-3 px-3 whitespace-nowrap"><span class="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">${t.category}</span></td>`;
+                break;
+              case 'severity':
+                rowHtml += `<td class="py-3 px-3 whitespace-nowrap">${severityDot}</td>`;
+                break;
+              case 'technician':
+                rowHtml += `<td class="py-3 px-3 whitespace-nowrap text-slate-700 dark:text-slate-300 truncate">${t.technician ? t.technician : '<span class="text-amber-500 font-medium">Sin asignar</span>'}</td>`;
+                break;
+              case 'sla':
+                rowHtml += `
+                  <td class="py-3 px-3 whitespace-nowrap">
+                    <div class="flex flex-col space-y-1 max-w-[130px]">
+                      <div class="flex items-center justify-between text-[11px] font-mono leading-none">
+                        <span class="px-1.5 py-0.5 rounded font-semibold text-[10px] ${sla.badgeClass}">
+                          ${sla.cleanText}
+                        </span>
+                        <span class="text-[9px] text-slate-400 font-mono">${sla.barPercent}%</span>
+                      </div>
+                      <div class="w-full bg-slate-200 dark:bg-slate-700/80 rounded-full h-1 overflow-hidden">
+                        <div class="${sla.barColor} h-1 rounded-full" style="width: ${sla.barPercent}%"></div>
+                      </div>
+                    </div>
+                  </td>`;
+                break;
+              case 'status':
+                rowHtml += `<td class="py-3 px-3 whitespace-nowrap"><span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">${statusLabel}</span></td>`;
+                break;
+              case 'actions':
+                rowHtml += `
+                  <td class="py-3 px-3 text-right whitespace-nowrap">
+                    <button onclick="event.stopPropagation(); app.openDetailModal('${t.id}')" class="text-xs text-brand-royalBlue hover:underline font-semibold">Gestionar</button>
+                  </td>`;
+                break;
+            }
+          });
+          tr.innerHTML = rowHtml;
+          tbody.appendChild(tr);
+        });
+      }
+
+      getSlaStatus(ticket) {
+        const remainingHours = ticket.slaHours - ticket.createdHoursAgo;
+        const isClosed = ['E15', 'E16', 'E17'].includes(ticket.status);
+
+        if (isClosed) {
+          return { status: 'CLOSED', text: 'Completado', cleanText: 'Completado', badgeClass: 'text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 font-semibold', barPercent: 100, barColor: 'bg-emerald-500' };
+        }
+        if (remainingHours <= 0) {
+          const overdue = Math.abs(remainingHours).toFixed(1);
+          return { status: 'BREACHED', text: `Vencido (-${overdue}h)`, cleanText: `Vencido (-${overdue}h)`, badgeClass: 'text-red-700 bg-red-50 dark:bg-red-950/50 dark:text-red-300 font-bold', barPercent: 100, barColor: 'bg-red-600' };
+        } else if (remainingHours <= 2) {
+          const mins = Math.round(remainingHours * 60);
+          return { status: 'CRITICAL', text: `Restan ${mins}m`, cleanText: `Restan ${mins}m`, badgeClass: 'text-amber-700 bg-amber-50 dark:bg-amber-950/50 dark:text-amber-300 font-bold', barPercent: Math.round(((ticket.slaHours - remainingHours) / ticket.slaHours) * 100), barColor: 'bg-amber-500' };
+        } else {
+          return { status: 'HEALTHY', text: `Restan ${remainingHours.toFixed(1)}h`, cleanText: `Restan ${remainingHours.toFixed(1)}h`, badgeClass: 'text-slate-600 bg-slate-100 dark:bg-slate-800 dark:text-slate-300 font-medium', barPercent: Math.round(((ticket.slaHours - remainingHours) / ticket.slaHours) * 100), barColor: 'bg-brand-royalBlue' };
+        }
+      }
+
+      getSeverityBadge(sev) {
+        switch (sev) {
+          case 'CRITICA': return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300">Crítica</span>';
+          case 'ALTA': return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">Alta</span>';
+          case 'MEDIA': return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-100 text-brand-royalBlue dark:bg-blue-950/60 dark:text-blue-300">Media</span>';
+          default: return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">Baja</span>';
+        }
+      }
+
+      getCategoryBadgeColor(cat) {
+        switch (cat) {
+          case 'Eléctrica': return 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300';
+          case 'HVAC/Climatización': return 'bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300';
+          case 'Hidráulica': return 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950/60 dark:text-cyan-300';
+          case 'Redes': return 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300';
+          default: return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300';
+        }
+      }
+
+      getStatusName(status) {
+        const names = {
+          'E01_E03': 'Triaje & Revisión',
+          'E01': 'E01 Registrada',
+          'E02': 'E02 Aclaración Requerida',
+          'E03': 'E03 En Revisión',
+          'E04': 'E04 En Clasificación',
+          'E05': 'E05 Por Asignar',
+          'E10': 'E10 Programada',
+          'E11': 'E11 En Atención',
+          'E12': 'E12 En Verificación',
+          'E15': 'E15 Cerrada & Conforme',
+          'E16': 'E16 No Procedente',
+          'E17': 'E17 Cancelada'
+        };
+        return names[status] || status;
+      }
+
+      // Drag & drop handlers
+      onDragStart(e, ticketId) {
+        this.draggedTicketId = ticketId;
+        e.dataTransfer.setData('text/plain', ticketId);
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => {
+          const card = document.getElementById(`ticket-card-${ticketId}`);
+          if (card) card.classList.add('drag-ghost');
+        }, 0);
+      }
+
+      onDragEnd() {
+        document.querySelectorAll('.drag-ghost').forEach(el => el.classList.remove('drag-ghost'));
+        document.querySelectorAll('.drag-over-col').forEach(el => el.classList.remove('drag-over-col'));
+      }
+
+      onDragOverCol(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        e.currentTarget.classList.add('drag-over-col');
+      }
+
+      onDragLeaveCol(e) {
+        e.currentTarget.classList.remove('drag-over-col');
+      }
+
+      onDropCol(e, targetStatus) {
+        e.preventDefault();
+        e.currentTarget.classList.remove('drag-over-col');
+        const ticketId = e.dataTransfer.getData('text/plain') || this.draggedTicketId;
+        if (!ticketId) return;
+
+        const ticket = this.tickets.find(t => t.id === ticketId);
+        if (ticket && ticket.status !== targetStatus) {
+          const oldStatus = ticket.status;
+          ticket.status = targetStatus;
+          const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+          ticket.bitacora.unshift({
+            date: nowStr,
+            user: "Orquestador Drag&Drop",
+            note: `Transición de estado de ${this.getStatusName(oldStatus)} a ${this.getStatusName(targetStatus)}.`
+          });
+          this.saveTickets();
+          this.render();
+        }
+      }
+
+      // Modal Detail Management
+      openDetailModal(ticketId) {
+        const ticket = this.tickets.find(t => t.id === ticketId);
+        if (!ticket) return;
+
+        this.selectedTicket = ticket;
+        const sla = this.getSlaStatus(ticket);
+
+        document.getElementById('detailCode').innerText = ticket.id;
+        document.getElementById('detailTitle').innerText = ticket.title;
+        document.getElementById('detailHierarchy').innerText = `${ticket.sede} > ${ticket.bloque} > ${ticket.aula}`;
+        document.getElementById('detailDescription').innerText = ticket.description;
+        document.getElementById('detailSeverityBadge').innerHTML = this.getSeverityBadge(ticket.severity);
+        document.getElementById('detailStatusBadge').innerText = this.getStatusName(ticket.status);
+        document.getElementById('editStatusSelect').value = ticket.status;
+        document.getElementById('editTechnicianSelect').value = ticket.technician;
+        document.getElementById('detailSlaCountdown').innerText = sla.text;
+        
+        const slaBar = document.getElementById('detailSlaBar');
+        slaBar.style.width = `${sla.barPercent}%`;
+        slaBar.className = `${sla.barColor} h-2 transition-all duration-300`;
+
+        document.getElementById('detailCreatedDate').innerText = `Antigüedad: ${ticket.createdHoursAgo.toFixed(1)} horas`;
+        document.getElementById('detailReporterName').innerText = `Reportante: ${ticket.reporter}`;
+
+        this.renderBitacoraList(ticket.bitacora);
+        document.getElementById('newBitacoraNote').value = '';
+        document.getElementById('modalDetailIncident').classList.remove('hidden');
+      }
+
+      renderBitacoraList(bitacora) {
+        const cont = document.getElementById('detailBitacoraList');
+        cont.innerHTML = '';
+        if (!bitacora || bitacora.length === 0) {
+          cont.innerHTML = '<p class="text-slate-400 italic">No hay notas registradas.</p>';
+          return;
+        }
+
+        bitacora.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'p-2 rounded bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 text-xs';
+          div.innerHTML = `
+            <div class="flex items-center justify-between font-mono text-[10px] text-slate-400 mb-0.5">
+              <span class="font-bold text-slate-600 dark:text-slate-300">${item.user}</span>
+              <span>${item.date}</span>
+            </div>
+            <p class="text-slate-700 dark:text-slate-200 leading-snug">${item.note}</p>
+          `;
+          cont.appendChild(div);
+        });
+      }
+
+      handleAddBitacoraNote() {
+        if (!this.selectedTicket) return;
+        const noteInput = document.getElementById('newBitacoraNote');
+        const text = noteInput.value.trim();
+        if (!text) return;
+
+        const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+        this.selectedTicket.bitacora.unshift({
+          date: nowStr,
+          user: "Mesa de Operaciones",
+          note: text
+        });
+
+        noteInput.value = '';
+        this.renderBitacoraList(this.selectedTicket.bitacora);
+        this.saveTickets();
+        this.showToast('Nota técnica agregada', 'info');
+      }
+
+      handleSaveDetailChanges() {
+        if (!this.selectedTicket) return;
+        const newStatus = document.getElementById('editStatusSelect').value;
+        const newTech = document.getElementById('editTechnicianSelect').value;
+        const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
+        let changes = [];
+        if (this.selectedTicket.status !== newStatus) {
+          changes.push(`Estado cambiado a ${this.getStatusName(newStatus)}`);
+          this.selectedTicket.status = newStatus;
+        }
+
+        if (this.selectedTicket.technician !== newTech) {
+          changes.push(`Técnico reasignado a: ${newTech || 'Sin asignar'}`);
+          this.selectedTicket.technician = newTech;
+          if (newTech && this.selectedTicket.status === 'E05') {
+            this.selectedTicket.status = 'E10';
+            changes.push(`Transición automática a E10 Programada`);
+          }
+        }
+
+        if (changes.length > 0) {
+          this.selectedTicket.bitacora.unshift({
+            date: nowStr,
+            user: "Gestión Transaccional",
+            note: changes.join('. ')
+          });
+        }
+
+        this.saveTickets();
+        this.closeModal('modalDetailIncident');
+        this.render();
+        this.showToast(`Cambios guardados en ${this.selectedTicket.id}`, 'success');
+      }
+
+      handleDismissIncident() {
+        if (!this.selectedTicket) return;
+        const id = this.selectedTicket.id;
+        this.selectedTicket.status = 'E16';
+        const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+        this.selectedTicket.bitacora.unshift({
+          date: nowStr,
+          user: "Interventoría / Orquestador",
+          note: "Incidencia desestimada administrativamente (E16 No procedente)."
+        });
+        this.saveTickets();
+        this.closeModal('modalDetailIncident');
+        this.render();
+        this.showToast(`Incidencia ${id} desestimada (E16)`, 'warning');
+      }
+
+      // Filters & Search
+      setQuickFilter(filter) {
+        this.activeFilter = filter;
+        document.querySelectorAll('.quick-chip').forEach(el => {
+          el.className = 'quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700';
+        });
+        const activeBtn = document.getElementById(`chip-${filter}`);
+        if (activeBtn) {
+          activeBtn.className = 'quick-chip px-2.5 py-1 rounded-full font-medium transition bg-brand-navy dark:bg-brand-royalBlue text-white shadow-xs';
+        }
+        this.render();
+      }
+
+      onSearchInput(query) {
+        this.searchQuery = query.toLowerCase().trim();
+        this.render();
+      }
+
+      resetFilters() {
+        this.activeFilter = 'ALL';
+        this.searchQuery = '';
+        document.getElementById('searchInput').value = '';
+        document.getElementById('filterSede').value = 'ALL';
+        document.getElementById('filterCategory').value = 'ALL';
+        this.setQuickFilter('ALL');
+      }
+
+      getFilteredTickets() {
+        const sedeFilter = document.getElementById('filterSede')?.value || 'ALL';
+        const catFilter = document.getElementById('filterCategory')?.value || 'ALL';
+
+        return this.tickets.filter(t => {
+          if (['E16', 'E17'].includes(t.status) && this.activeFilter !== 'DISMISSED') return false;
+          if (sedeFilter !== 'ALL' && t.sede !== sedeFilter) return false;
+          if (catFilter !== 'ALL' && t.category !== catFilter) return false;
+
+          if (this.activeFilter === 'CRITICAL' && t.severity !== 'CRITICA') return false;
+          if (this.activeFilter === 'HIGH' && t.severity !== 'ALTA') return false;
+          if (this.activeFilter === 'UNASSIGNED' && t.technician !== '') return false;
+          if (this.activeFilter === 'SLA_RISK') {
+            const sla = this.getSlaStatus(t);
+            if (sla.status !== 'BREACHED' && sla.status !== 'CRITICAL') return false;
+          }
+
+          if (this.searchQuery) {
+            const corpus = `${t.id} ${t.title} ${t.sede} ${t.bloque} ${t.aula} ${t.category} ${t.technician} ${t.reporter} ${t.description}`.toLowerCase();
+            if (!corpus.includes(this.searchQuery)) return false;
+          }
+
+          return true;
+        });
+      }
+
+      // Column Resize & Picker
+      initResize(e, colKey) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const th = e.currentTarget.parentElement;
+        const startX = e.pageX;
+        const startWidth = th.offsetWidth;
+        const colDef = this.columnsDef.find(c => c.key === colKey) || { minWidth: 80 };
+        const resizer = e.currentTarget;
+        resizer.classList.add('resizing');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+
+        const onMouseMove = (moveEvent) => {
+          const diff = moveEvent.pageX - startX;
+          const newWidth = Math.max(colDef.minWidth, startWidth + diff);
+          th.style.width = `${newWidth}px`;
+          this.columnWidths[colKey] = newWidth;
+        };
+
+        const onMouseUp = () => {
+          resizer.classList.remove('resizing');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+          window.removeEventListener('mousemove', onMouseMove);
+          window.removeEventListener('mouseup', onMouseUp);
+          this.saveColumnsConfig();
+        };
+
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+      }
+
+      toggleColumnPicker(e) {
+        if (e) e.stopPropagation();
+        const menu = document.getElementById('columnPickerMenu');
+        if (menu) {
+          const isHidden = menu.classList.contains('hidden');
+          if (isHidden) {
+            this.renderColumnPicker();
+            menu.classList.remove('hidden');
+          } else {
+            menu.classList.add('hidden');
+          }
+        }
+      }
+
+      renderColumnPicker() {
+        const container = document.getElementById('columnCheckboxesList');
+        if (!container) return;
+        container.innerHTML = '';
+
+        this.columnsDef.forEach(col => {
+          const isChecked = this.columnVisibility[col.key] !== false;
+          const label = document.createElement('label');
+          label.className = 'flex items-center space-x-2 px-1.5 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer text-slate-700 dark:text-slate-200 transition select-none';
+          label.innerHTML = `
+            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="app.toggleColumn('${col.key}')" class="rounded text-brand-royalBlue focus:ring-brand-royalBlue h-3.5 w-3.5">
+            <span class="text-xs font-medium">${col.label}</span>
+          `;
+          container.appendChild(label);
+        });
+      }
+
+      toggleColumn(key) {
+        this.columnVisibility[key] = !this.columnVisibility[key];
+        const visibleCount = Object.values(this.columnVisibility).filter(Boolean).length;
+        if (visibleCount === 0) {
+          this.columnVisibility[key] = true;
+          this.showToast('Debe permanecer visible al menos una columna', 'warning');
+          return;
+        }
+        this.saveColumnsConfig();
+        this.renderColumnPicker();
+        this.renderBoard();
+      }
+
+      resetColumnVisibility() {
+        this.columnsDef.forEach(col => this.columnVisibility[col.key] = true);
+        this.saveColumnsConfig();
+        this.renderColumnPicker();
+        this.renderBoard();
+        this.showToast('Visibilidad restablecida', 'info');
+      }
+
+      resetColumnWidths() {
+        this.columnsDef.forEach(col => this.columnWidths[col.key] = col.defaultWidth);
+        this.saveColumnsConfig();
+        this.renderBoard();
+        this.showToast('Anchos restablecidos', 'info');
+      }
+
+      // Keyboard Shortcuts & Omnibox
+      setupKeyboardShortcuts() {
+        window.addEventListener('keydown', (e) => {
+          if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            this.openOmniboxModal();
+          }
+          if (e.key === 'Escape') {
+            this.closeAllModals();
+          }
+          if (e.key.toLowerCase() === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+            e.preventDefault();
+            this.setR01Tab('new');
+          }
+        });
+
+        window.addEventListener('click', (e) => {
+          const menu = document.getElementById('columnPickerMenu');
+          const btn = document.getElementById('btnColumnPicker');
+          if (menu && !menu.classList.contains('hidden')) {
+            if (!menu.contains(e.target) && !btn?.contains(e.target)) menu.classList.add('hidden');
+          }
+
+          const profileMenu = document.getElementById('profileDropdownMenu');
+          const profileBtn = document.getElementById('btnProfileMenu');
+          if (profileMenu && !profileMenu.classList.contains('hidden')) {
+            if (!profileMenu.contains(e.target) && !profileBtn?.contains(e.target)) profileMenu.classList.add('hidden');
+          }
+        });
+      }
+
+      openOmniboxModal() {
+        const modal = document.getElementById('modalOmnibox');
+        modal.classList.remove('hidden');
+        const input = document.getElementById('omniboxModalInput');
+        input.value = '';
+        input.focus();
+        this.onOmniboxSearch('');
+      }
+
+      onOmniboxSearch(query) {
+        const q = query.toLowerCase().trim();
+        const resultsCont = document.getElementById('omniboxResults');
+        resultsCont.innerHTML = '';
+
+        const matches = this.tickets.filter(t => {
+          if (!q) return true;
+          const corpus = `${t.id} ${t.title} ${t.sede} ${t.bloque} ${t.aula} ${t.category} ${t.technician}`.toLowerCase();
+          return corpus.includes(q);
+        }).slice(0, 8);
+
+        if (matches.length === 0) {
+          resultsCont.innerHTML = '<p class="p-3 text-slate-400 italic text-center">No se encontraron incidencias.</p>';
+          return;
+        }
+
+        matches.forEach(t => {
+          const div = document.createElement('div');
+          div.className = 'p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-between rounded-lg transition';
+          div.onclick = () => {
+            this.closeModal('modalOmnibox');
+            if (this.currentRole === 'R01') {
+              this.openR01TicketTimeline(t.id);
+            } else {
+              this.openDetailModal(t.id);
+            }
+          };
+          div.innerHTML = `
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="font-mono font-bold text-brand-royalBlue">${t.id}</span>
+                <span class="font-semibold text-slate-800 dark:text-slate-100">${t.title}</span>
+              </div>
+              <p class="text-[11px] text-slate-400 font-mono">${t.sede} > ${t.aula} • ${t.category}</p>
+            </div>
+            <span class="text-[11px] font-semibold text-slate-500">${this.getStatusName(t.status)}</span>
+          `;
+          resultsCont.appendChild(div);
+        });
+      }
+
+      openCampusGuideModal() {
+        document.getElementById('modalCampusGuide').classList.remove('hidden');
+      }
+
+      exportToCSV() {
+        const headers = ["Radicado", "Asunto", "Sede", "Bloque", "Espacio", "Categoria", "Severidad", "Estado", "Tecnico_Asignado", "SLA_Horas", "Horas_Transcurridas", "Reportante"];
+        const rows = this.tickets.map(t => [
+          `"${t.id}"`,
+          `"${t.title.replace(/"/g, '""')}"`,
+          `"${t.sede}"`,
+          `"${t.bloque}"`,
+          `"${t.aula}"`,
+          `"${t.category}"`,
+          `"${t.severity}"`,
+          `"${this.getStatusName(t.status)}"`,
+          `"${t.technician || 'Sin Asignar'}"`,
+          t.slaHours,
+          t.createdHoursAgo,
+          `"${t.reporter}"`
+        ]);
+
+        const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `PRAXIS_Incidencias_Export_${new Date().toISOString().substring(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      // Toast Notifications
+      showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'pointer-events-auto flex items-center space-x-2.5 px-4 py-2.5 rounded-lg shadow-elevation-modal border text-xs font-semibold transform transition-all duration-300 translate-y-2 opacity-0';
+
+        let icon = '';
+        if (type === 'success') {
+          toast.className += ' bg-emerald-900/90 text-white border-emerald-700 backdrop-blur-md';
+          icon = '<svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>';
+        } else if (type === 'warning') {
+          toast.className += ' bg-amber-900/90 text-white border-amber-700 backdrop-blur-md';
+          icon = '<svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
+        } else {
+          toast.className += ' bg-slate-900/90 text-white border-slate-700 backdrop-blur-md';
+          icon = '<svg class="w-4 h-4 text-sky-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+        }
+
+        toast.innerHTML = `${icon}<span>${message}</span>`;
+        container.appendChild(toast);
+
+        setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
+        setTimeout(() => {
+          toast.classList.add('translate-y-2', 'opacity-0');
+          setTimeout(() => toast.remove(), 300);
+        }, 3200);
+      }
+
+      closeModal(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      }
+
+      closeAllModals() {
+        ['modalDetailIncident', 'modalOmnibox', 'modalR01DetailTimeline', 'modalR01CancelConfirm', 'modalR01Success', 'modalCampusGuide'].forEach(id => {
+          this.closeModal(id);
+        });
+        this.closeProfileMenu();
+      }
+    }
+
+    // Initialize application on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      window.app = new PraxisApp();
+    });
+  </script>
+</body>
+</html>

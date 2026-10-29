@@ -1,0 +1,36 @@
+# Dependencias y entorno local
+node_modules/
+.npm/
+.pnpm/
+dist/
+build/
+out/
+
+# Entornos y secretos
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs y editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Antigravity y cachés locales
+.system_generated/
+*.tmp
