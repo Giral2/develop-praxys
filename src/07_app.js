@@ -567,6 +567,9 @@
         this.r01Filter = 'ALL';
         this.uploadedPhotoDataUrl = null;
         this.r06ChecklistState = {}; // ticketId -> { p1: bool, p2: bool, p3: bool, p4: bool }
+        this.r03ActiveModule = 'dashboard';
+        this.r03TriajeFilter = 'all';
+        this.activeBimBlock = 'B';
 
         this.currentRole = localStorage.getItem(this.roleKey) || 'R03';
         this.rolesDef = [
@@ -2221,6 +2224,14 @@
         const queueCont = document.getElementById('r03QueueList');
         const countE05 = document.getElementById('r03CountE05');
         const countE13 = document.getElementById('r03CountE13');
+        const badgeTriaje = document.getElementById('r03BadgeTriaje');
+        const badgeDespacho = document.getElementById('r03BadgeDespacho');
+
+        const cTriaje = this.tickets.filter(t => ['E01', 'E02', 'E03', 'E04'].includes(t.status)).length;
+        const cDespacho = this.tickets.filter(t => ['E05', 'E13'].includes(t.status)).length;
+
+        if (badgeTriaje) badgeTriaje.innerText = cTriaje;
+        if (badgeDespacho) badgeDespacho.innerText = cDespacho;
 
         if (!wipBarCont || !queueCont) return;
 
@@ -2440,6 +2451,104 @@
         this.renderR03Workspace();
         this.render();
         this.showToast(`Requisición radicada exitosamente hacia ${this.getStatusName(reqType)}`, 'success');
+      }
+
+      // R03 Module Sub-Navbar Navigation
+      setR03Module(moduleId) {
+        this.r03ActiveModule = moduleId;
+        const modules = ['dashboard', 'triaje', 'despacho', 'inventario', 'telemetria', 'reportes'];
+        
+        modules.forEach(id => {
+          const tabBtn = document.getElementById(`r03Tab-${id}`);
+          const modEl = document.getElementById(`r03Module-${id}`);
+          const isActive = id === moduleId;
+
+          if (tabBtn) {
+            if (isActive) {
+              tabBtn.className = 'r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-brand-emerald text-brand-emerald dark:text-emerald-400 font-bold text-xs sm:text-sm transition group';
+            } else {
+              tabBtn.className = 'r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs sm:text-sm transition group';
+            }
+          }
+
+          if (modEl) {
+            if (isActive) {
+              modEl.classList.remove('hidden');
+            } else {
+              modEl.classList.add('hidden');
+            }
+          }
+        });
+
+        if (moduleId === 'despacho') {
+          this.renderR03Workspace();
+        }
+      }
+
+      filterR03TriajeCategory(category) {
+        this.r03TriajeFilter = category;
+        this.showToast(`Filtro de triaje aplicado: ${category.toUpperCase()}`, 'info');
+      }
+
+      openR02ItilModal(ticketId) {
+        this.openR02ItilMatrixModal(ticketId);
+      }
+
+      selectBimBlock(blockCode) {
+        this.activeBimBlock = blockCode;
+        ['A', 'B', 'C', 'D'].forEach(code => {
+          const btn = document.getElementById(`btnBim-${code}`);
+          if (btn) {
+            if (code === blockCode) {
+              btn.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-brand-royalBlue text-white';
+            } else {
+              btn.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200';
+            }
+          }
+        });
+
+        const titleEl = document.getElementById('bimBlockTitle');
+        const coordsEl = document.getElementById('bimBlockCoords');
+        
+        const blockMeta = {
+          'A': { name: 'Bloque A · Administración Central & Rectoría (4 Pisos)', coords: '4.6528° N, 74.0615° W' },
+          'B': { name: 'Bloque B · Edificio de Laboratorios de Ingeniería (5 Pisos)', coords: '4.6532° N, 74.0621° W' },
+          'C': { name: 'Bloque C · Aulas de Ciencias Humanas & Biblioteca (3 Pisos)', coords: '4.6540° N, 74.0630° W' },
+          'D': { name: 'Bloque D · Talleres de Arquitectura & Polideportivo (2 Pisos)', coords: '4.6545° N, 74.0638° W' }
+        };
+
+        const meta = blockMeta[blockCode] || blockMeta['B'];
+        if (titleEl) titleEl.innerText = meta.name;
+        if (coordsEl) coordsEl.innerText = `Coordenadas: ${meta.coords}`;
+        
+        this.showToast(`Gemelo Digital enfocado en ${meta.name}`, 'info');
+      }
+
+      exportAuditLogCSV() {
+        const headers = ["Timestamp", "Radicado", "Usuario_Responsable", "Nota_Transicion", "Hash_SHA256"];
+        const rows = [];
+        this.tickets.forEach(t => {
+          (t.bitacora || []).forEach(b => {
+            rows.push([
+              `"${b.date || ''}"`,
+              `"${t.id}"`,
+              `"${(b.user || '').replace(/"/g, '""')}"`,
+              `"${(b.note || '').replace(/"/g, '""')}"`,
+              `"${b.hash || 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}"`
+            ]);
+          });
+        });
+        const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `PRAXIS_Audit_Ledger_D10_${new Date().toISOString().substring(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        this.showToast('Ledger forense D10 exportado en CSV', 'success');
       }
 
       // ==================== WORKSPACE R04 (TÉCNICO DE CAMPO) ====================

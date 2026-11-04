@@ -733,43 +733,771 @@
 
       <!-- ==================== WORKSPACE R03: COORDINADOR DE MANTENIMIENTO ==================== -->
       <div id="workspace-R03" class="role-workspace flex-1 flex flex-col overflow-hidden hidden">
-        <!-- R03 Header with Metrics -->
-        <div class="flex items-center justify-between pb-3 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
-          <div>
+
+        <!-- ==================== R03 SUB-NAVBAR DE MÓDULOS (Estilo oficial de software) ==================== -->
+        <div class="bg-white dark:bg-brand-navy border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0 transition-colors shadow-xs -mx-6 -mt-3 px-6 mb-3">
+          <div class="flex items-center justify-between overflow-x-auto scrollbar-none">
+            <nav class="flex items-center space-x-1 sm:space-x-2 md:space-x-3 min-w-max" aria-label="Módulos de Coordinación">
+              
+              <!-- 1. Tablero Principal -->
+              <button id="r03Tab-dashboard" onclick="app.setR03Module('dashboard')" class="r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-brand-emerald text-brand-emerald dark:text-emerald-400 font-bold text-xs sm:text-sm transition group" title="Tablero Principal">
+                <svg class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                <span>Tablero Principal</span>
+              </button>
+
+              <!-- 2. Mesa de Triaje -->
+              <button id="r03Tab-triaje" onclick="app.setR03Module('triaje')" class="r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs sm:text-sm transition group" title="Mesa de Triaje">
+                <svg class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                <span>Mesa de Triaje</span>
+                <span id="r03BadgeTriaje" class="px-2 py-0.5 rounded-full text-[11px] font-mono font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/40">7</span>
+              </button>
+
+              <!-- 3. Despacho & Cuadrillas -->
+              <button id="r03Tab-despacho" onclick="app.setR03Module('despacho')" class="r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs sm:text-sm transition group" title="Despacho & Cuadrillas">
+                <svg class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                <span>Despacho & Cuadrillas</span>
+                <span id="r03BadgeDespacho" class="px-2 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900/40">5</span>
+              </button>
+
+              <!-- 4. Inventario & Activos -->
+              <button id="r03Tab-inventario" onclick="app.setR03Module('inventario')" class="r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs sm:text-sm transition group" title="Inventario & Activos">
+                <svg class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                <span>Inventario & Activos</span>
+              </button>
+
+              <!-- 5. Telemetría & BIM -->
+              <button id="r03Tab-telemetria" onclick="app.setR03Module('telemetria')" class="r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs sm:text-sm transition group" title="Telemetría & BIM">
+                <svg class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+                <span>Telemetría & BIM</span>
+              </button>
+
+              <!-- 6. Reportes -->
+              <button id="r03Tab-reportes" onclick="app.setR03Module('reportes')" class="r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs sm:text-sm transition group" title="Reportes">
+                <svg class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>Reportes</span>
+              </button>
+            </nav>
+
+            <!-- Status Indicator on the Right -->
+            <div class="hidden lg:flex items-center space-x-2 text-xs py-2 shrink-0">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-md font-mono text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+                Campus Operativo: <strong>98.2%</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== MÓDULO 1: TABLERO PRINCIPAL (DASHBOARD) ==================== -->
+        <div id="r03Module-dashboard" class="r03-module flex-1 flex flex-col overflow-y-auto space-y-4 pr-1">
+          <!-- Top Executive Banner -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-gradient-to-r from-slate-900 to-brand-navy rounded-xl text-white shadow-elevation-1">
+            <div class="flex items-center space-x-3.5">
+              <div class="w-10 h-10 rounded-xl bg-brand-royalBlue/30 border border-brand-royalBlue/50 flex items-center justify-center font-display font-bold text-lg text-sky-300">
+                R03
+              </div>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="text-sm sm:text-base font-display font-bold">Consola de Mando de Infraestructura · Campus Central</h3>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Operación Normal</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-0.5">Control de planta física, balanceo de cuadrillas, inventario de repuestos y telemetría de activos.</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2 shrink-0">
+              <button onclick="app.setR03Module('despacho')" class="px-3 py-1.5 rounded-lg bg-brand-emerald hover:bg-emerald-600 font-semibold text-xs transition shadow-sm flex items-center space-x-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Despachar Cuadrilla</span>
+              </button>
+              <button onclick="app.openR03RequisitionModal()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 font-semibold text-xs transition flex items-center space-x-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                <span>Requisición de Insumos</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 Executive KPI Cards -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="p-3.5 rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark bg-white dark:bg-brand-navy shadow-xs">
+              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span class="font-medium">Órdenes en Campus</span>
+                <span class="p-1 rounded bg-blue-50 dark:bg-blue-950/50 text-brand-royalBlue dark:text-sky-300 font-mono text-[10px]">Total 23</span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <span class="text-2xl font-bold font-display text-slate-900 dark:text-white">18</span>
+                <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">12 en ejecución</span>
+              </div>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 mt-2 overflow-hidden">
+                <div class="bg-brand-royalBlue h-1.5 rounded-full" style="width: 78%;"></div>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark bg-white dark:bg-brand-navy shadow-xs">
+              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span class="font-medium">MTTR Promedio</span>
+                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">↓ 18% semana</span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <span class="text-2xl font-bold font-display text-slate-900 dark:text-white">4.2<span class="text-sm font-sans font-normal text-slate-400 ml-1">horas</span></span>
+                <span class="text-xs text-slate-400 font-mono">Meta: &lt;6.0h</span>
+              </div>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 mt-2 overflow-hidden">
+                <div class="bg-brand-emerald h-1.5 rounded-full" style="width: 70%;"></div>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark bg-white dark:bg-brand-navy shadow-xs">
+              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span class="font-medium">Cumplimiento SLA</span>
+                <span class="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">94.8%</span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <span class="text-2xl font-bold font-display text-slate-900 dark:text-white">94.8%</span>
+                <span class="text-xs font-semibold text-amber-600 dark:text-amber-400">1 en riesgo</span>
+              </div>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 mt-2 overflow-hidden">
+                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 95%;"></div>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark bg-white dark:bg-brand-navy shadow-xs">
+              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span class="font-medium">Cuadrillas en Terreno</span>
+                <span class="text-[10px] font-mono text-slate-400">80% Carga</span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <span class="text-2xl font-bold font-display text-slate-900 dark:text-white">4 <span class="text-sm font-sans font-normal text-slate-400">/ 5</span></span>
+                <span class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">1 en taller</span>
+              </div>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 mt-2 overflow-hidden">
+                <div class="bg-indigo-500 h-1.5 rounded-full" style="width: 80%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Grid: Radar de Órdenes Críticas + Matriz de Salud de Bloques -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
+            
+            <!-- Columna Izquierda: Radar de Incidencias Críticas (7 cols) -->
+            <div class="lg:col-span-7 flex flex-col space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+                  <h4 class="text-xs font-bold font-display uppercase tracking-wider text-slate-900 dark:text-white">Intervenciones Prioritarias en Atención</h4>
+                </div>
+                <button onclick="app.setR03Module('triaje')" class="text-xs text-brand-royalBlue dark:text-sky-300 font-semibold hover:underline">Ver todas las órdenes &rarr;</button>
+              </div>
+
+              <!-- Cards list of prioritized incidents -->
+              <div class="space-y-2.5">
+                <!-- Incident 1 -->
+                <div class="p-3 rounded-xl border border-red-200 dark:border-red-900/60 bg-red-50/30 dark:bg-red-950/10 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div class="space-y-1">
+                    <div class="flex items-center space-x-2 flex-wrap">
+                      <span class="font-mono font-bold text-xs text-brand-royalBlue dark:text-sky-400">#TKT-2026-000143</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700 dark:bg-red-950/70 dark:text-red-300">CRÍTICA · 4h SLA</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-sky-300">Hidráulico</span>
+                    </div>
+                    <h5 class="text-xs font-bold text-slate-900 dark:text-white">Fuga en tubería matriz secundaria con riesgo de inundación</h5>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Campus Central &gt; Bloque B &gt; Piso 2 &gt; Lab 204</p>
+                  </div>
+                  <div class="flex sm:flex-col items-center sm:items-end justify-between gap-1 shrink-0 text-right">
+                    <div class="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">Técnico: Andrés Caicedo</div>
+                    <span class="text-[10px] font-mono text-slate-400">SLA restante: 1h 45m</span>
+                    <button onclick="app.openDetailModal('TKT-2026-000143')" class="px-2.5 py-1 rounded bg-brand-navy hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold transition">Gestionar</button>
+                  </div>
+                </div>
+
+                <!-- Incident 2 -->
+                <div class="p-3 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/10 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div class="space-y-1">
+                    <div class="flex items-center space-x-2 flex-wrap">
+                      <span class="font-mono font-bold text-xs text-brand-royalBlue dark:text-sky-400">#TKT-2026-000145</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-950/70 dark:text-amber-300">ALTA · 12h SLA</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300">Eléctrico</span>
+                    </div>
+                    <h5 class="text-xs font-bold text-slate-900 dark:text-white">Sobrecalentamiento en barra trifásica de tablero T-1</h5>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Campus Central &gt; Bloque C &gt; Piso 1 &gt; Taller Máquinas</p>
+                  </div>
+                  <div class="flex sm:flex-col items-center sm:items-end justify-between gap-1 shrink-0 text-right">
+                    <div class="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">Técnico: Carlos Méndez</div>
+                    <span class="text-[10px] font-mono text-slate-400">SLA restante: 5h 20m</span>
+                    <button onclick="app.openDetailModal('TKT-2026-000145')" class="px-2.5 py-1 rounded bg-brand-navy hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold transition">Gestionar</button>
+                  </div>
+                </div>
+
+                <!-- Incident 3 -->
+                <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div class="space-y-1">
+                    <div class="flex items-center space-x-2 flex-wrap">
+                      <span class="font-mono font-bold text-xs text-brand-royalBlue dark:text-sky-400">#TKT-2026-000148</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300">MEDIA · 48h SLA</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-100 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300">Cerrajería</span>
+                    </div>
+                    <h5 class="text-xs font-bold text-slate-900 dark:text-white">Falla en cerradura electromagnética de puerta principal</h5>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Campus Central &gt; Bloque D &gt; Piso 1 &gt; Biblioteca Central</p>
+                  </div>
+                  <div class="flex sm:flex-col items-center sm:items-end justify-between gap-1 shrink-0 text-right">
+                    <div class="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">Técnico: Diana Rivas</div>
+                    <span class="text-[10px] font-mono text-slate-400">SLA restante: 24h 00m</span>
+                    <button onclick="app.openDetailModal('TKT-2026-000148')" class="px-2.5 py-1 rounded bg-brand-navy hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold transition">Gestionar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Columna Derecha: Matriz de Salud de Bloques Universitarios (5 cols) -->
+            <div class="lg:col-span-5 flex flex-col space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-bold font-display uppercase tracking-wider text-slate-900 dark:text-white">Estado de Salud por Bloque (Campus ECCI)</h4>
+                <button onclick="app.setR03Module('telemetria')" class="text-xs text-brand-royalBlue dark:text-sky-300 font-semibold hover:underline">Ver Gemelo Digital &rarr;</button>
+              </div>
+
+              <div class="space-y-2 p-3 bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl shadow-xs">
+                <!-- Bloque A -->
+                <div class="p-2.5 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center justify-center font-display">
+                      BL-A
+                    </div>
+                    <div>
+                      <h5 class="text-xs font-bold text-slate-800 dark:text-slate-100">Bloque A · Aulas Magistrales</h5>
+                      <p class="text-[10px] text-slate-400">4 Pisos · 42 Aulas · 2 Novedades Menores</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300">98% Salud</span>
+                </div>
+
+                <!-- Bloque B -->
+                <div class="p-2.5 rounded-lg border border-amber-200 dark:border-amber-900/60 bg-amber-50/40 dark:bg-amber-950/20 flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 font-bold text-xs flex items-center justify-center font-display">
+                      BL-B
+                    </div>
+                    <div>
+                      <h5 class="text-xs font-bold text-slate-800 dark:text-slate-100">Bloque B · Laboratorios Especiales</h5>
+                      <p class="text-[10px] text-slate-400">5 Pisos · 28 Labs · 1 Novedad Crítica Activa</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300">86% Salud</span>
+                </div>
+
+                <!-- Bloque C -->
+                <div class="p-2.5 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-sky-300 font-bold text-xs flex items-center justify-center font-display">
+                      BL-C
+                    </div>
+                    <div>
+                      <h5 class="text-xs font-bold text-slate-800 dark:text-slate-100">Bloque C · Talleres y Máquinas</h5>
+                      <p class="text-[10px] text-slate-400">3 Pisos · 14 Talleres · Preventivo Eléctrico</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300">94% Salud</span>
+                </div>
+
+                <!-- Bloque D -->
+                <div class="p-2.5 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center font-display">
+                      BL-D
+                    </div>
+                    <div>
+                      <h5 class="text-xs font-bold text-slate-800 dark:text-slate-100">Bloque D · Biblioteca y Posgrados</h5>
+                      <p class="text-[10px] text-slate-400">3 Pisos · Climatización Estable</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300">100% Salud</span>
+                </div>
+
+                <!-- Bloque E -->
+                <div class="p-2.5 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center font-display">
+                      BL-E
+                    </div>
+                    <div>
+                      <h5 class="text-xs font-bold text-slate-800 dark:text-slate-100">Bloque E · Rectoría y Administración</h5>
+                      <p class="text-[10px] text-slate-400">2 Pisos · Instalaciones 100% Operativas</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300">100% Salud</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ==================== MÓDULO 2: MESA DE TRIAJE (SUPERVISIÓN) ==================== -->
+        <div id="r03Module-triaje" class="r03-module flex-1 flex flex-col overflow-y-auto space-y-3.5 pr-1 hidden">
+          <div class="flex items-center justify-between pb-2 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300">Mesa de Triaje · E01 a E04</span>
+                <h3 class="text-sm font-display font-bold text-slate-900 dark:text-white">Supervisión y Validación de Reportes Iniciales</h3>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Verifica la procedencia de las novedades reportadas por la comunidad universitaria antes de su programación.</p>
+            </div>
             <div class="flex items-center space-x-2">
-              <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-blue-100 dark:bg-blue-950/60 text-brand-royalBlue dark:text-sky-300">R03 · Despacho y Cuadrillas</span>
-              <h2 class="text-base font-display font-bold text-slate-900 dark:text-white">Bandeja de Planificación y Asignación de Cuadrillas</h2>
+              <span class="text-xs font-mono text-slate-400">Filtrar por especialidad:</span>
+              <button onclick="app.filterR03TriajeCategory('all')" class="px-2 py-1 rounded bg-brand-royalBlue text-white text-[11px] font-semibold">Todas</button>
+              <button onclick="app.filterR03TriajeCategory('Hidráulico')" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px]">Hidráulico</button>
+              <button onclick="app.filterR03TriajeCategory('Eléctrico')" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px]">Eléctrico</button>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Balancea órdenes de trabajo respetando WIP Limits por especialidad técnica (RN-024) y gestiona requisiciones.</p>
           </div>
-          <!-- Stats badges -->
-          <div class="flex items-center space-x-2 text-xs">
-            <div class="px-3 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50">
-              <span class="text-slate-400 font-medium">Por Asignar (E05):</span>
-              <span id="r03CountE05" class="font-mono font-bold text-amber-700 dark:text-amber-300 ml-1">0</span>
+
+          <!-- Cards de Novedades en Triaje -->
+          <div class="space-y-3" id="r03TriajeCardsList">
+            <!-- Triaje Card 1 -->
+            <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy shadow-xs space-y-2.5">
+              <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center space-x-2">
+                  <span class="font-mono font-bold text-brand-royalBlue dark:text-sky-400">#TKT-2026-000142</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-sky-300">Hidráulico</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300">MEDIA · 48h SLA</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">E03 · En Revisión de Triaje</span>
+                </div>
+                <span class="font-mono text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">SLA Triaje: 2h 15m restantes</span>
+              </div>
+              <div class="text-xs">
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Goteo persistente en llave de lavamanos baño de docentes</h4>
+                <p class="text-slate-500 dark:text-slate-400 mt-0.5">Ubicación: Campus Central &gt; Bloque A &gt; Piso 3 &gt; Baño 301 · Reportó: Prof. Laura Gómez (hace 1.8h)</p>
+              </div>
+              <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+                <div class="flex items-center space-x-1.5 text-slate-400">
+                  <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  <span>Evidencia fotográfica adjunta (<span class="font-mono">84 KB</span>)</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button onclick="app.openR02ClarificationModal('TKT-2026-000142')" class="px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition font-medium">Pedir Aclaración (➔ E02)</button>
+                  <button onclick="app.openR02ItilModal('TKT-2026-000142')" class="px-2.5 py-1 rounded bg-brand-royalBlue hover:bg-blue-600 text-white font-semibold transition">Matriz ITIL & Prioridad</button>
+                  <button onclick="app.openR03AssignCrewModal('TKT-2026-000142')" class="px-2.5 py-1 rounded bg-brand-emerald hover:bg-emerald-600 text-white font-semibold transition">Aprobar y Despachar (➔ E05)</button>
+                </div>
+              </div>
             </div>
-            <div class="px-3 py-1 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50">
-              <span class="text-slate-400 font-medium">Retrabajo (E13):</span>
-              <span id="r03CountE13" class="font-mono font-bold text-red-700 dark:text-red-300 ml-1">0</span>
+
+            <!-- Triaje Card 2 -->
+            <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy shadow-xs space-y-2.5">
+              <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center space-x-2">
+                  <span class="font-mono font-bold text-brand-royalBlue dark:text-sky-400">#TKT-2026-000151</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-700 dark:bg-teal-950/60 dark:text-teal-300">HVAC</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300">BAJA · 96h SLA</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">E02 · Aclaración Solicitada</span>
+                </div>
+                <span class="font-mono text-[11px] text-amber-600 dark:text-amber-400 font-semibold">Esperando respuesta del solicitante (plazo 5 días)</span>
+              </div>
+              <div class="text-xs">
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Vibración y zumbido constante en extractor de ventilación mecánica</h4>
+                <p class="text-slate-500 dark:text-slate-400 mt-0.5">Ubicación: Campus Central &gt; Bloque B &gt; Piso 4 &gt; Aula 402 · Reportó: Ing. Carlos Ortiz</p>
+                <div class="mt-1 p-2 rounded bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-[11px] text-amber-800 dark:text-amber-300">
+                  <strong>Motivo de aclaración enviado:</strong> "Favor especificar si el ruido aumenta al encender las luminarias o si se observa emisión de humo."
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+                <span class="text-slate-400">SLA congelado hasta respuesta del reportante (RN-008)</span>
+                <button onclick="app.openDetailModal('TKT-2026-000151')" class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold transition">Inspeccionar Expediente</button>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Cuadrillas Load Balancing Bar (WIP Limits) -->
-        <div class="mt-3 p-3 bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl shadow-xs shrink-0">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold font-display text-slate-800 dark:text-slate-200 uppercase tracking-wider">Balanceo de Carga de Cuadrillas (WIP Limits RN-024)</span>
-            <span class="text-[11px] font-mono text-slate-400">Capacidad máxima: 3-4 órdenes activas por técnico</span>
+        <!-- ==================== MÓDULO 3: DESPACHO & CUADRILLAS (CORE R03) ==================== -->
+        <div id="r03Module-despacho" class="r03-module flex-1 flex flex-col overflow-hidden hidden">
+          <!-- R03 Header with Metrics -->
+          <div class="flex items-center justify-between pb-2 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-blue-100 dark:bg-blue-950/60 text-brand-royalBlue dark:text-sky-300">R03 · Despacho y Cuadrillas</span>
+                <h3 class="text-sm font-display font-bold text-slate-900 dark:text-white">Bandeja de Planificación y Asignación de Cuadrillas</h3>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Balancea órdenes de trabajo respetando WIP Limits por especialidad técnica (RN-024) y gestiona requisiciones.</p>
+            </div>
+            <!-- Stats badges -->
+            <div class="flex items-center space-x-2 text-xs">
+              <div class="px-3 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50">
+                <span class="text-slate-400 font-medium">Por Asignar (E05):</span>
+                <span id="r03CountE05" class="font-mono font-bold text-amber-700 dark:text-amber-300 ml-1">0</span>
+              </div>
+              <div class="px-3 py-1 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50">
+                <span class="text-slate-400 font-medium">Retrabajo (E13):</span>
+                <span id="r03CountE13" class="font-mono font-bold text-red-700 dark:text-red-300 ml-1">0</span>
+              </div>
+            </div>
           </div>
-          <div id="r03TechniciansWipBar" class="grid grid-cols-2 md:grid-cols-5 gap-2.5">
-            <!-- Populated dynamically with technician cards and WIP bars -->
+
+          <!-- Cuadrillas Load Balancing Bar (WIP Limits) -->
+          <div class="mt-2.5 p-3 bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl shadow-xs shrink-0">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold font-display text-slate-800 dark:text-slate-200 uppercase tracking-wider">Balanceo de Carga de Cuadrillas (WIP Limits RN-024)</span>
+              <span class="text-[11px] font-mono text-slate-400">Capacidad máxima: 3-4 órdenes activas por técnico</span>
+            </div>
+            <div id="r03TechniciansWipBar" class="grid grid-cols-2 md:grid-cols-5 gap-2.5">
+              <!-- Populated dynamically with technician cards and WIP bars -->
+            </div>
+          </div>
+
+          <!-- R03 Actionable Queue -->
+          <div class="flex-1 overflow-y-auto pt-2.5 space-y-3 pr-1 pb-4" id="r03QueueList">
+            <!-- Populated dynamically -->
           </div>
         </div>
 
-        <!-- R03 Actionable Queue -->
-        <div class="flex-1 overflow-y-auto pt-3 space-y-3 pr-1 pb-4" id="r03QueueList">
-          <!-- Populated dynamically -->
+        <!-- ==================== MÓDULO 4: INVENTARIO & ACTIVOS ==================== -->
+        <div id="r03Module-inventario" class="r03-module flex-1 flex flex-col overflow-y-auto space-y-3.5 pr-1 hidden">
+          <!-- Header and Stats -->
+          <div class="flex items-center justify-between pb-2 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300">Almacén Central & Activos</span>
+                <h3 class="text-sm font-display font-bold text-slate-900 dark:text-white">Inventario de Repuestos Críticos y Maquinaria de Campus</h3>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Monitoreo de disponibilidad de materiales (E09) y requisiciones presupuestales autorizadas (E08).</p>
+            </div>
+            <button onclick="app.openR03RequisitionModal()" class="px-3 py-1.5 rounded-lg bg-brand-emerald hover:bg-emerald-600 text-white font-semibold text-xs transition shadow-xs flex items-center space-x-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>+ Nueva Requisición (➔ E08)</span>
+            </button>
+          </div>
+
+          <!-- Metric cards for inventory -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy shadow-xs">
+              <span class="text-slate-400 text-xs font-medium">Ítems Catalogados</span>
+              <div class="text-xl font-bold font-display text-slate-900 dark:text-white mt-1">1,420 <span class="text-xs font-sans font-normal text-slate-400">unidades</span></div>
+              <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">94% Cobertura stock</span>
+            </div>
+            <div class="p-3 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/20 dark:bg-amber-950/10 shadow-xs">
+              <span class="text-slate-400 text-xs font-medium">Repuestos en Stock Crítico</span>
+              <div class="text-xl font-bold font-display text-amber-600 dark:text-amber-400 mt-1">8 <span class="text-xs font-sans font-normal text-slate-400">ítems</span></div>
+              <span class="text-[10px] text-amber-700 dark:text-amber-300 font-semibold">Requiere reorden inmediata</span>
+            </div>
+            <div class="p-3 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/10 shadow-xs">
+              <span class="text-slate-400 text-xs font-medium">Requisiciones en Curso (E08/E09)</span>
+              <div class="text-xl font-bold font-display text-brand-royalBlue dark:text-sky-300 mt-1">4 <span class="text-xs font-sans font-normal text-slate-400">órdenes</span></div>
+              <span class="text-[10px] text-brand-royalBlue dark:text-sky-400 font-semibold">2 autorizadas, 2 en almacén</span>
+            </div>
+            <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy shadow-xs">
+              <span class="text-slate-400 text-xs font-medium">Activos Mayores Registrados</span>
+              <div class="text-xl font-bold font-display text-slate-900 dark:text-white mt-1">64 <span class="text-xs font-sans font-normal text-slate-400">equipos</span></div>
+              <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">Planes preventivos al día</span>
+            </div>
+          </div>
+
+          <!-- Tabla de Stock de Repuestos Críticos -->
+          <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl shadow-xs overflow-hidden">
+            <div class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border-b border-brand-borderSubtle dark:border-brand-borderDark flex items-center justify-between">
+              <h4 class="text-xs font-bold font-display uppercase tracking-wider text-slate-800 dark:text-slate-200">Repuestos Críticos para Mantenimiento de Campus</h4>
+              <span class="text-[11px] font-mono text-slate-400">Bodega Central · Estantes A a D</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-100/60 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-800">
+                  <tr>
+                    <th class="px-4 py-2.5">Código SKU</th>
+                    <th class="px-4 py-2.5">Descripción del Material</th>
+                    <th class="px-4 py-2.5">Especialidad</th>
+                    <th class="px-4 py-2.5">Stock Disponible</th>
+                    <th class="px-4 py-2.5">Nivel de Stock</th>
+                    <th class="px-4 py-2.5">Ubicación Almacén</th>
+                    <th class="px-4 py-2.5 text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-200">
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <td class="px-4 py-2.5 font-mono font-bold text-brand-royalBlue dark:text-sky-300">TUB-PVC-02</td>
+                    <td class="px-4 py-2.5 font-medium">Tubo Presión PVC RDE-21 1 Pulgada x 6m</td>
+                    <td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-sky-300 font-semibold">Hidráulico</span></td>
+                    <td class="px-4 py-2.5 font-mono font-bold">42 <span class="text-[10px] text-slate-400">/ 50 mín</span></td>
+                    <td class="px-4 py-2.5">
+                      <div class="w-24 bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 84%;"></div>
+                      </div>
+                    </td>
+                    <td class="px-4 py-2.5 font-mono text-slate-400">Estante B-04</td>
+                    <td class="px-4 py-2.5 text-right">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">Óptimo</span>
+                    </td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <td class="px-4 py-2.5 font-mono font-bold text-brand-royalBlue dark:text-sky-300">TER-SCH-32</td>
+                    <td class="px-4 py-2.5 font-medium">Interruptor Termomagnético Trifásico 32A Schneider</td>
+                    <td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 font-semibold">Eléctrico</span></td>
+                    <td class="px-4 py-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">3 <span class="text-[10px] text-slate-400">/ 10 mín</span></td>
+                    <td class="px-4 py-2.5">
+                      <div class="w-24 bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-amber-500 h-1.5 rounded-full" style="width: 30%;"></div>
+                      </div>
+                    </td>
+                    <td class="px-4 py-2.5 font-mono text-slate-400">Estante E-02</td>
+                    <td class="px-4 py-2.5 text-right">
+                      <button onclick="app.openR03RequisitionModal()" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-950/60 dark:text-amber-300 transition">Pedir Reposición</button>
+                    </td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <td class="px-4 py-2.5 font-mono font-bold text-brand-royalBlue dark:text-sky-300">FLT-HEP-01</td>
+                    <td class="px-4 py-2.5 font-medium">Filtro de Aire HEPA H14 para Cabina Biológica Lab 204</td>
+                    <td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-teal-50 text-teal-700 dark:bg-teal-950/60 dark:text-teal-300 font-semibold">HVAC</span></td>
+                    <td class="px-4 py-2.5 font-mono font-bold text-red-600 dark:text-red-400">1 <span class="text-[10px] text-slate-400">/ 4 mín</span></td>
+                    <td class="px-4 py-2.5">
+                      <div class="w-24 bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-red-500 h-1.5 rounded-full" style="width: 25%;"></div>
+                      </div>
+                    </td>
+                    <td class="px-4 py-2.5 font-mono text-slate-400">Estante C-01</td>
+                    <td class="px-4 py-2.5 text-right">
+                      <button onclick="app.openR03RequisitionModal()" class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-950/60 dark:text-red-300 transition">Requisición Urgente</button>
+                    </td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <td class="px-4 py-2.5 font-mono font-bold text-brand-royalBlue dark:text-sky-300">LED-PAN-40</td>
+                    <td class="px-4 py-2.5 font-medium">Panel Luminaria LED 60x60cm 40W 6500K Embebido</td>
+                    <td class="px-4 py-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 font-semibold">Eléctrico</span></td>
+                    <td class="px-4 py-2.5 font-mono font-bold">28 <span class="text-[10px] text-slate-400">/ 30 mín</span></td>
+                    <td class="px-4 py-2.5">
+                      <div class="w-24 bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 93%;"></div>
+                      </div>
+                    </td>
+                    <td class="px-4 py-2.5 font-mono text-slate-400">Estante A-01</td>
+                    <td class="px-4 py-2.5 text-right">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">Óptimo</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
+
+        <!-- ==================== MÓDULO 5: TELEMETRÍA & BIM ==================== -->
+        <div id="r03Module-telemetria" class="r03-module flex-1 flex flex-col overflow-y-auto space-y-3.5 pr-1 hidden">
+          <!-- Live IoT Sensor Header -->
+          <div class="flex items-center justify-between p-3 bg-slate-900 text-white rounded-xl shadow-xs">
+            <div class="flex items-center space-x-3">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              </span>
+              <div>
+                <h4 class="text-xs font-bold font-display">Red de Telemetría IoT en Tiempo Real · Campus ECCI</h4>
+                <p class="text-[11px] text-slate-400">142 Sensores LoRaWAN/Modbus activos · Gateway Central Bloque C · Frecuencia: 5 segundos</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-mono text-emerald-400 font-semibold hidden sm:inline">Latencia: 24 ms · 0 Nodos Caídos</span>
+          </div>
+
+          <!-- 4 Live Gauge Cards -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="p-3.5 rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark bg-white dark:bg-brand-navy shadow-xs">
+              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span>Presión Matriz Hidráulica</span>
+                <span class="font-mono text-[10px] text-emerald-500 font-bold">TH-B2</span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <span class="text-2xl font-bold font-display text-slate-900 dark:text-white">48.2 <span class="text-xs font-normal text-slate-400">PSI</span></span>
+                <span class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Normal (45-55)</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">Bloque B · Línea matriz piso 2</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark bg-white dark:bg-brand-navy shadow-xs">
+              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span>Carga Subestación Eléctrica</span>
+                <span class="font-mono text-[10px] text-emerald-500 font-bold">SE-01</span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <span class="text-2xl font-bold font-display text-slate-900 dark:text-white">342 <span class="text-xs font-normal text-slate-400">kW</span></span>
+                <span class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">FP: 0.95 (72%)</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">Bloque C · Transformador 500kVA</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark bg-white dark:bg-brand-navy shadow-xs">
+              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span>Temperatura Data Center</span>
+                <span class="font-mono text-[10px] text-emerald-500 font-bold">CL-DC</span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <span class="text-2xl font-bold font-display text-slate-900 dark:text-white">19.4 <span class="text-xs font-normal text-slate-400">°C</span></span>
+                <span class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Humedad 44%</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">Bloque C · Servidores Centrales</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark bg-white dark:bg-brand-navy shadow-xs">
+              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span>Nivel Cisterna Agua Potable</span>
+                <span class="font-mono text-[10px] text-emerald-500 font-bold">CIST-01</span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <span class="text-2xl font-bold font-display text-slate-900 dark:text-white">88% <span class="text-xs font-normal text-slate-400">(44k L)</span></span>
+                <span class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Autonomía 3.8d</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">Patio Norte · Bombeo Triplex</div>
+            </div>
+          </div>
+
+          <!-- BIM / Gemelo Digital Campus Explorer Mockup -->
+          <div class="p-4 rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark bg-white dark:bg-brand-navy shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="text-xs font-bold font-display uppercase tracking-wider text-slate-900 dark:text-white">Gemelo Digital & Modelado BIM de Campus Universitario</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Haz clic en un bloque para inspeccionar instalaciones electromecánicas y órdenes en curso.</p>
+              </div>
+              <div class="flex items-center space-x-1">
+                <button onclick="app.selectBimBlock('A')" id="btnBim-A" class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Bloque A</button>
+                <button onclick="app.selectBimBlock('B')" id="btnBim-B" class="px-2.5 py-1 rounded-md text-xs font-bold bg-brand-royalBlue text-white">Bloque B</button>
+                <button onclick="app.selectBimBlock('C')" id="btnBim-C" class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Bloque C</button>
+                <button onclick="app.selectBimBlock('D')" id="btnBim-D" class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Bloque D</button>
+              </div>
+            </div>
+
+            <!-- Interactive Block Visualization Box -->
+            <div id="bimBlockViewer" class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 space-y-3">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                <div class="flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                  <span id="bimBlockTitle" class="text-xs font-bold text-slate-900 dark:text-white font-display">Bloque B · Edificio de Laboratorios de Ingeniería (5 Pisos)</span>
+                </div>
+                <span id="bimBlockCoords" class="text-xs font-mono text-slate-400">Coordenadas: 4.6532° N, 74.0621° W</span>
+              </div>
+              <div id="bimFloorsGrid" class="grid grid-cols-1 md:grid-cols-5 gap-2 text-xs">
+                <div class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy">
+                  <span class="font-bold text-slate-400 block font-mono">PISO 5</span>
+                  <p class="font-semibold text-slate-700 dark:text-slate-200 mt-1">Lab Robótica & IA</p>
+                  <span class="text-[10px] text-emerald-500 font-bold">100% Normal</span>
+                </div>
+                <div class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy">
+                  <span class="font-bold text-slate-400 block font-mono">PISO 4</span>
+                  <p class="font-semibold text-slate-700 dark:text-slate-200 mt-1">Aulas de Simulación</p>
+                  <span class="text-[10px] text-amber-500 font-bold">Avería Menor (E02)</span>
+                </div>
+                <div class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy">
+                  <span class="font-bold text-slate-400 block font-mono">PISO 3</span>
+                  <p class="font-semibold text-slate-700 dark:text-slate-200 mt-1">Lab Telecomunicaciones</p>
+                  <span class="text-[10px] text-emerald-500 font-bold">100% Normal</span>
+                </div>
+                <div class="p-2.5 rounded-lg border-2 border-red-400 dark:border-red-800 bg-red-50/50 dark:bg-red-950/20">
+                  <span class="font-bold text-red-600 block font-mono">PISO 2 · CRÍTICO</span>
+                  <p class="font-bold text-slate-900 dark:text-white mt-1">Lab 204 Biología</p>
+                  <span class="text-[10px] text-red-600 dark:text-red-400 font-bold">Fuga Tubería (#TKT-143)</span>
+                </div>
+                <div class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy">
+                  <span class="font-bold text-slate-400 block font-mono">PISO 1</span>
+                  <p class="font-semibold text-slate-700 dark:text-slate-200 mt-1">Sala de Maquinaria</p>
+                  <span class="text-[10px] text-emerald-500 font-bold">100% Normal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== MÓDULO 6: REPORTES & AUDITORÍA FORENSE D10 ==================== -->
+        <div id="r03Module-reportes" class="r03-module flex-1 flex flex-col overflow-y-auto space-y-3.5 pr-1 hidden">
+          <!-- Header and Export -->
+          <div class="flex items-center justify-between pb-2 border-b border-brand-borderSubtle dark:border-brand-borderDark shrink-0">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-blue-100 dark:bg-blue-950/60 text-brand-royalBlue dark:text-sky-300">Inteligencia Operativa & D10</span>
+                <h3 class="text-sm font-display font-bold text-slate-900 dark:text-white">Métricas de Rendimiento y Ledger Criptográfico Inmutable</h3>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Reportes de cumplimiento bajo estándar ISO/IEC/IEEE 29148 y trazabilidad append-only de decisiones.</p>
+            </div>
+            <button onclick="app.exportAuditLogCSV()" class="px-3 py-1.5 rounded-lg bg-brand-navy dark:bg-slate-800 hover:bg-slate-800 text-white font-semibold text-xs transition shadow-xs flex items-center space-x-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <span>Exportar Ledger CSV</span>
+            </button>
+          </div>
+
+          <!-- 4 KPIs Report -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy shadow-xs">
+              <span class="text-slate-400 text-xs">MTTR General</span>
+              <div class="text-xl font-bold font-display text-slate-900 dark:text-white mt-1">4.2 Horas</div>
+              <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">Meta &lt;6.0h superada</span>
+            </div>
+            <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy shadow-xs">
+              <span class="text-slate-400 text-xs">Calidad 1ra Entrega</span>
+              <div class="text-xl font-bold font-display text-slate-900 dark:text-white mt-1">92.4%</div>
+              <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">Solo 2 retrabajos (E13)</span>
+            </div>
+            <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy shadow-xs">
+              <span class="text-slate-400 text-xs">Cumplimiento SLA</span>
+              <div class="text-xl font-bold font-display text-slate-900 dark:text-white mt-1">94.8%</div>
+              <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">22 conformes en plazo</span>
+            </div>
+            <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-brand-navy shadow-xs">
+              <span class="text-slate-400 text-xs">Gasto Insumos del Mes</span>
+              <div class="text-xl font-bold font-display text-slate-900 dark:text-white mt-1 font-mono">$14.8M</div>
+              <span class="text-[10px] text-slate-400 font-mono">Presupuesto COP</span>
+            </div>
+          </div>
+
+          <!-- D10 Ledger Table Mockup -->
+          <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl shadow-xs overflow-hidden">
+            <div class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border-b border-brand-borderSubtle dark:border-brand-borderDark flex items-center justify-between">
+              <h4 class="text-xs font-bold font-display uppercase tracking-wider text-slate-800 dark:text-slate-200">Registro Forense Inmutable de Transacciones (D10 Append-Only)</h4>
+              <span class="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">100% Criptográficamente Verificado</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-100/60 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-800">
+                  <tr>
+                    <th class="px-3.5 py-2">Fecha / Hora UTC</th>
+                    <th class="px-3.5 py-2">Ticket #TKT</th>
+                    <th class="px-3.5 py-2">Evento Operativo</th>
+                    <th class="px-3.5 py-2">Actor Institucional</th>
+                    <th class="px-3.5 py-2">Hash SHA-256</th>
+                    <th class="px-3.5 py-2">Detalle Técnico / Causal</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px] text-slate-700 dark:text-slate-300">
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <td class="px-3.5 py-2 text-slate-400">2026-10-29 17:15</td>
+                    <td class="px-3.5 py-2 font-bold text-brand-royalBlue dark:text-sky-300">#TKT-2026-000143</td>
+                    <td class="px-3.5 py-2"><span class="px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-sky-300 font-semibold text-[10px]">ASIGNACION_CUADRILLA</span></td>
+                    <td class="px-3.5 py-2 text-slate-800 dark:text-slate-100">Ing. Daniel Gómez (R03)</td>
+                    <td class="px-3.5 py-2 text-slate-400 text-[10px]">a7f9c21b...</td>
+                    <td class="px-3.5 py-2 font-sans text-xs">Despachado a Andrés Caicedo (Hidráulico). Turno Tarde.</td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <td class="px-3.5 py-2 text-slate-400">2026-10-29 16:30</td>
+                    <td class="px-3.5 py-2 font-bold text-brand-royalBlue dark:text-sky-300">#TKT-2026-000143</td>
+                    <td class="px-3.5 py-2"><span class="px-1.5 py-0.5 rounded bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 font-semibold text-[10px]">EVALUACION_RIESGO</span></td>
+                    <td class="px-3.5 py-2 text-slate-800 dark:text-slate-100">Lic. Roberto Silva (R02)</td>
+                    <td class="px-3.5 py-2 text-slate-400 text-[10px]">4c82e091...</td>
+                    <td class="px-3.5 py-2 font-sans text-xs">Escalado a CRÍTICA por riesgo inminente de daño a equipos de cómputo.</td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <td class="px-3.5 py-2 text-slate-400">2026-10-29 15:45</td>
+                    <td class="px-3.5 py-2 font-bold text-brand-royalBlue dark:text-sky-300">#TKT-2026-000155</td>
+                    <td class="px-3.5 py-2"><span class="px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 font-semibold text-[10px]">AUTORIZACION_COMPRA</span></td>
+                    <td class="px-3.5 py-2 text-slate-800 dark:text-slate-100">Dra. Elena Ramos (R05)</td>
+                    <td class="px-3.5 py-2 text-slate-400 text-[10px]">9b13d548...</td>
+                    <td class="px-3.5 py-2 font-sans text-xs">Aval presupuestal aprobado por $1,850,000 COP para repuesto de bomba.</td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <td class="px-3.5 py-2 text-slate-400">2026-10-29 14:10</td>
+                    <td class="px-3.5 py-2 font-bold text-brand-royalBlue dark:text-sky-300">#TKT-2026-000140</td>
+                    <td class="px-3.5 py-2"><span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 font-semibold text-[10px]">DICTAMEN_CONFORMIDAD</span></td>
+                    <td class="px-3.5 py-2 text-slate-800 dark:text-slate-100">Arq. Sofia Mendoza (R06)</td>
+                    <td class="px-3.5 py-2 text-slate-400 text-[10px]">3f55a120...</td>
+                    <td class="px-3.5 py-2 font-sans text-xs">Inspección técnica satisfactoria. Prueba de estanqueidad conforme.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- ==================== WORKSPACE R04: TÉCNICO DE CAMPO ==================== -->
@@ -2309,6 +3037,9 @@
         this.r01Filter = 'ALL';
         this.uploadedPhotoDataUrl = null;
         this.r06ChecklistState = {}; // ticketId -> { p1: bool, p2: bool, p3: bool, p4: bool }
+        this.r03ActiveModule = 'dashboard';
+        this.r03TriajeFilter = 'all';
+        this.activeBimBlock = 'B';
 
         this.currentRole = localStorage.getItem(this.roleKey) || 'R03';
         this.rolesDef = [
@@ -3963,6 +4694,14 @@
         const queueCont = document.getElementById('r03QueueList');
         const countE05 = document.getElementById('r03CountE05');
         const countE13 = document.getElementById('r03CountE13');
+        const badgeTriaje = document.getElementById('r03BadgeTriaje');
+        const badgeDespacho = document.getElementById('r03BadgeDespacho');
+
+        const cTriaje = this.tickets.filter(t => ['E01', 'E02', 'E03', 'E04'].includes(t.status)).length;
+        const cDespacho = this.tickets.filter(t => ['E05', 'E13'].includes(t.status)).length;
+
+        if (badgeTriaje) badgeTriaje.innerText = cTriaje;
+        if (badgeDespacho) badgeDespacho.innerText = cDespacho;
 
         if (!wipBarCont || !queueCont) return;
 
@@ -4182,6 +4921,104 @@
         this.renderR03Workspace();
         this.render();
         this.showToast(`Requisición radicada exitosamente hacia ${this.getStatusName(reqType)}`, 'success');
+      }
+
+      // R03 Module Sub-Navbar Navigation
+      setR03Module(moduleId) {
+        this.r03ActiveModule = moduleId;
+        const modules = ['dashboard', 'triaje', 'despacho', 'inventario', 'telemetria', 'reportes'];
+        
+        modules.forEach(id => {
+          const tabBtn = document.getElementById(`r03Tab-${id}`);
+          const modEl = document.getElementById(`r03Module-${id}`);
+          const isActive = id === moduleId;
+
+          if (tabBtn) {
+            if (isActive) {
+              tabBtn.className = 'r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-brand-emerald text-brand-emerald dark:text-emerald-400 font-bold text-xs sm:text-sm transition group';
+            } else {
+              tabBtn.className = 'r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs sm:text-sm transition group';
+            }
+          }
+
+          if (modEl) {
+            if (isActive) {
+              modEl.classList.remove('hidden');
+            } else {
+              modEl.classList.add('hidden');
+            }
+          }
+        });
+
+        if (moduleId === 'despacho') {
+          this.renderR03Workspace();
+        }
+      }
+
+      filterR03TriajeCategory(category) {
+        this.r03TriajeFilter = category;
+        this.showToast(`Filtro de triaje aplicado: ${category.toUpperCase()}`, 'info');
+      }
+
+      openR02ItilModal(ticketId) {
+        this.openR02ItilMatrixModal(ticketId);
+      }
+
+      selectBimBlock(blockCode) {
+        this.activeBimBlock = blockCode;
+        ['A', 'B', 'C', 'D'].forEach(code => {
+          const btn = document.getElementById(`btnBim-${code}`);
+          if (btn) {
+            if (code === blockCode) {
+              btn.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-brand-royalBlue text-white';
+            } else {
+              btn.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200';
+            }
+          }
+        });
+
+        const titleEl = document.getElementById('bimBlockTitle');
+        const coordsEl = document.getElementById('bimBlockCoords');
+        
+        const blockMeta = {
+          'A': { name: 'Bloque A · Administración Central & Rectoría (4 Pisos)', coords: '4.6528° N, 74.0615° W' },
+          'B': { name: 'Bloque B · Edificio de Laboratorios de Ingeniería (5 Pisos)', coords: '4.6532° N, 74.0621° W' },
+          'C': { name: 'Bloque C · Aulas de Ciencias Humanas & Biblioteca (3 Pisos)', coords: '4.6540° N, 74.0630° W' },
+          'D': { name: 'Bloque D · Talleres de Arquitectura & Polideportivo (2 Pisos)', coords: '4.6545° N, 74.0638° W' }
+        };
+
+        const meta = blockMeta[blockCode] || blockMeta['B'];
+        if (titleEl) titleEl.innerText = meta.name;
+        if (coordsEl) coordsEl.innerText = `Coordenadas: ${meta.coords}`;
+        
+        this.showToast(`Gemelo Digital enfocado en ${meta.name}`, 'info');
+      }
+
+      exportAuditLogCSV() {
+        const headers = ["Timestamp", "Radicado", "Usuario_Responsable", "Nota_Transicion", "Hash_SHA256"];
+        const rows = [];
+        this.tickets.forEach(t => {
+          (t.bitacora || []).forEach(b => {
+            rows.push([
+              `"${b.date || ''}"`,
+              `"${t.id}"`,
+              `"${(b.user || '').replace(/"/g, '""')}"`,
+              `"${(b.note || '').replace(/"/g, '""')}"`,
+              `"${b.hash || 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}"`
+            ]);
+          });
+        });
+        const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `PRAXIS_Audit_Ledger_D10_${new Date().toISOString().substring(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        this.showToast('Ledger forense D10 exportado en CSV', 'success');
       }
 
       // ==================== WORKSPACE R04 (TÉCNICO DE CAMPO) ====================
