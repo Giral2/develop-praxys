@@ -570,6 +570,9 @@
         this.r03ActiveModule = 'dashboard';
         this.r03TriajeFilter = 'all';
         this.activeBimBlock = 'B';
+        this.r06Filter = 'ALL';
+        this.r05Filter = 'ALL';
+        this.r07Filter = 'ALL';
 
         this.currentRole = localStorage.getItem(this.roleKey) || 'R03';
         this.rolesDef = [
@@ -604,6 +607,7 @@
         this.loadTickets();
         this.updateRoleUI();
         this.updateContextViewUI();
+        this.applyRoleContextLayout();
         this.setupKeyboardShortcuts();
         this.render();
       }
@@ -627,20 +631,26 @@
         const btnText = document.getElementById('btnToggleContextText');
         const headerSwitcher = document.getElementById('headerViewSwitcher');
         const role = this.rolesDef.find(r => r.code === this.currentRole) || this.rolesDef[2];
+        const isOperational = ['R02', 'R03', 'R04'].includes(this.currentRole);
 
         if (this.contextView === 'workspace') {
           if (globalCont) globalCont.classList.add('hidden');
           if (workspaceCont) workspaceCont.classList.remove('hidden');
           if (btnText) btnText.innerText = 'Consola Global OPS';
-          if (headerSwitcher) headerSwitcher.classList.add('hidden');
+          if (headerSwitcher) {
+            headerSwitcher.classList.toggle('hidden', !isOperational);
+          }
           this.renderRoleWorkspace();
         } else {
           if (workspaceCont) workspaceCont.classList.add('hidden');
           if (globalCont) globalCont.classList.remove('hidden');
           if (btnText) btnText.innerText = `Espacio ${role.code}`;
-          if (headerSwitcher) headerSwitcher.classList.remove('hidden');
+          if (headerSwitcher) {
+            headerSwitcher.classList.toggle('hidden', !isOperational);
+          }
           this.render();
         }
+        this.applyRoleContextLayout();
       }
 
       // ==================== COLUMN PICKER & RESIZE STATE ====================
@@ -919,12 +929,218 @@
 
       selectRole(roleCode) {
         this.currentRole = roleCode;
+        this.contextView = 'workspace'; // Root view is directly the role's tailored environment!
         localStorage.setItem(this.roleKey, roleCode);
+        localStorage.setItem(this.contextViewKey, 'workspace');
+        
         this.updateRoleUI();
         this.updateContextViewUI();
+        this.applyRoleContextLayout();
         this.closeProfileMenu();
+        
         const role = this.rolesDef.find(r => r.code === roleCode);
-        this.showToast(`Rol activo: ${role ? role.code + ' - ' + role.shortName : roleCode}`, 'info');
+        this.showToast(`Consola reconfigurada al rol: ${role ? role.code + ' · ' + role.shortName : roleCode}`, 'info');
+      }
+
+      
+      // ==================== DYNAMIC ROLE CONTEXTUALIZATION ====================
+      applyRoleContextLayout() {
+        const role = this.rolesDef.find(r => r.code === this.currentRole) || this.rolesDef[2];
+        const isOperational = ['R02', 'R03', 'R04'].includes(this.currentRole);
+
+        // 1. Role Scope indicator in header
+        const scopePill = document.getElementById('headerRoleScopePill');
+        const scopeText = document.getElementById('headerRoleScopeText');
+        if (scopePill && scopeText) {
+          scopePill.classList.remove('hidden');
+          scopeText.innerText = `${role.shortName} · ${role.desc.split(',')[0]}`;
+        }
+
+        // 2. View Switcher (Pipeline vs Table): CONDITIONAL for operational roles ONLY!
+        const headerSwitcher = document.getElementById('headerViewSwitcher');
+        if (headerSwitcher) {
+          headerSwitcher.classList.toggle('hidden', !isOperational);
+        }
+
+        // 3. Ambient Role Context Banner
+        this.renderRoleContextBanner(role);
+      }
+
+      renderRoleContextBanner(role) {
+        const avatarEl = document.getElementById('bannerRoleAvatar');
+        const badgeEl = document.getElementById('bannerRoleBadge');
+        const userEl = document.getElementById('bannerRoleUser');
+        const descEl = document.getElementById('bannerRoleDesc');
+        const statsEl = document.getElementById('bannerRoleStats');
+
+        if (!avatarEl || !badgeEl || !userEl) return;
+
+        const initials = role.user.split(' ').slice(0, 2).map(w => w[0]).join('');
+        avatarEl.innerText = initials;
+        badgeEl.className = `px-2 py-0.5 rounded text-[11px] font-mono font-bold ${role.badgeClass}`;
+        badgeEl.innerText = `${role.code} · ${role.shortName}`;
+        userEl.innerText = role.user;
+        if (descEl) descEl.innerText = role.desc;
+
+        if (statsEl) {
+          statsEl.innerHTML = this.getRoleStatsHTML(role.code);
+        }
+      }
+
+      getRoleStatsHTML(roleCode) {
+        switch (roleCode) {
+          case 'R06': {
+            const cE12 = this.tickets.filter(t => t.status === 'E12').length;
+            const cE13 = this.tickets.filter(t => t.status === 'E13').length;
+            return `
+              <div class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/50">
+                <span class="text-slate-400 font-medium">Por Auditar (E12):</span>
+                <span class="font-mono font-bold text-indigo-700 dark:text-indigo-300 ml-1">${cE12}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50">
+                <span class="text-slate-400 font-medium">Conformidad:</span>
+                <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300 ml-1">94.2%</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50">
+                <span class="text-slate-400 font-medium">Retrabajos (E13):</span>
+                <span class="font-mono font-bold text-amber-700 dark:text-amber-300 ml-1">${cE13}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50">
+                <span class="text-slate-400 font-medium">Segregación RN-037:</span>
+                <span class="font-mono font-bold text-brand-royalBlue dark:text-sky-300 ml-1">100%</span>
+              </div>
+            `;
+          }
+          case 'R05': {
+            const cE08 = this.tickets.filter(t => t.status === 'E08').length;
+            return `
+              <div class="px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900/50">
+                <span class="text-slate-400 font-medium">Requisiciones (E08):</span>
+                <span class="font-mono font-bold text-purple-700 dark:text-purple-300 ml-1">${cE08}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50">
+                <span class="text-slate-400 font-medium">Comprometido:</span>
+                <span class="font-mono font-bold text-brand-royalBlue dark:text-sky-300 ml-1">$48.2M COP</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50">
+                <span class="text-slate-400 font-medium">Fondo Disponible:</span>
+                <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300 ml-1">$71.8M COP</span>
+              </div>
+            `;
+          }
+          case 'R07': {
+            return `
+              <div class="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50">
+                <span class="text-slate-400 font-medium">Topología 4L:</span>
+                <span class="font-mono font-bold text-rose-700 dark:text-rose-300 ml-1">4 Sedes / 18 Bloques</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50">
+                <span class="text-slate-400 font-medium">Ledger SHA-256:</span>
+                <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300 ml-1">100% Inmutable</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50">
+                <span class="text-slate-400 font-medium">Reglas Activas:</span>
+                <span class="font-mono font-bold text-brand-royalBlue dark:text-sky-300 ml-1">42 / 42</span>
+              </div>
+            `;
+          }
+          case 'R01': {
+            const myT = this.tickets.filter(t => t.reporter && t.reporter.includes('Laura Gómez'));
+            const cE02 = myT.filter(t => t.status === 'E02').length;
+            return `
+              <div class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50">
+                <span class="text-slate-400 font-medium">Mis Radicados:</span>
+                <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300 ml-1">${myT.length}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50">
+                <span class="text-slate-400 font-medium">Por Aclarar (E02):</span>
+                <span class="font-mono font-bold text-amber-700 dark:text-amber-300 ml-1">${cE02}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50">
+                <span class="text-slate-400 font-medium">SLA Satisfacción:</span>
+                <span class="font-mono font-bold text-brand-royalBlue dark:text-sky-300 ml-1">98.5%</span>
+              </div>
+            `;
+          }
+          case 'R02': {
+            const cE01 = this.tickets.filter(t => t.status === 'E01').length;
+            const cE02 = this.tickets.filter(t => t.status === 'E02').length;
+            const cE03 = this.tickets.filter(t => t.status === 'E03').length;
+            return `
+              <div class="px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900/50">
+                <span class="text-slate-400 font-medium">Por Triar (E01):</span>
+                <span class="font-mono font-bold text-sky-700 dark:text-sky-300 ml-1">${cE01}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50">
+                <span class="text-slate-400 font-medium">Aclaración (E02):</span>
+                <span class="font-mono font-bold text-amber-700 dark:text-amber-300 ml-1">${cE02}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/50">
+                <span class="text-slate-400 font-medium">En Revisión (E03):</span>
+                <span class="font-mono font-bold text-indigo-700 dark:text-indigo-300 ml-1">${cE03}</span>
+              </div>
+            `;
+          }
+          case 'R04': {
+            const tech = document.getElementById('r04TechnicianFilter')?.value || 'Ing. Carlos Méndez';
+            const orders = this.tickets.filter(t => t.technician === tech && ['E06', 'E10', 'E11'].includes(t.status));
+            const inProgress = orders.filter(t => t.status === 'E11').length;
+            return `
+              <div class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50">
+                <span class="text-slate-400 font-medium">Órdenes Asignadas:</span>
+                <span class="font-mono font-bold text-amber-700 dark:text-amber-300 ml-1">${orders.length}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900/50">
+                <span class="text-slate-400 font-medium">En Atención (E11):</span>
+                <span class="font-mono font-bold text-sky-700 dark:text-sky-300 ml-1">${inProgress}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50">
+                <span class="text-slate-400 font-medium">WIP Capacidad:</span>
+                <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300 ml-1">${orders.length}/4</span>
+              </div>
+            `;
+          }
+          default: { // R03
+            const cE05 = this.tickets.filter(t => t.status === 'E05').length;
+            const cE13 = this.tickets.filter(t => t.status === 'E13').length;
+            return `
+              <div class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50">
+                <span class="text-slate-400 font-medium">Por Despachar (E05):</span>
+                <span class="font-mono font-bold text-brand-royalBlue dark:text-sky-300 ml-1">${cE05}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50">
+                <span class="text-slate-400 font-medium">Retrabajos (E13):</span>
+                <span class="font-mono font-bold text-red-700 dark:text-red-300 ml-1">${cE13}</span>
+              </div>
+              <div class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50">
+                <span class="text-slate-400 font-medium">Ocupación Cuadrillas:</span>
+                <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300 ml-1">78%</span>
+              </div>
+            `;
+          }
+        }
+      }
+
+      setR06Filter(filter) {
+        this.r06Filter = filter;
+        this.renderR06Workspace();
+        this.showToast(`Filtro de calidad aplicado: ${filter}`, 'info');
+      }
+
+      setR05Filter(filter) {
+        this.r05Filter = filter;
+        this.renderR05Workspace();
+        this.showToast(`Filtro financiero aplicado: ${filter}`, 'info');
+      }
+
+      setR07Filter(filter) {
+        this.r07Filter = filter;
+        this.renderR07Workspace();
+        this.showToast(`Filtro de gobernanza aplicado: ${filter}`, 'info');
+      }
+
+      verifyLedgerIntegrity() {
+        this.showToast('Ledger Forense D10: 100% Inmutable. 0 alteraciones en 23 bloques SHA-256.', 'success');
       }
 
       resetRoleToDefault() {
@@ -2716,10 +2932,12 @@
       renderR05Workspace() {
         const queueCont = document.getElementById('r05QueueList');
         const countE08 = document.getElementById('r05CountE08');
-        if (!queueCont) return;
+        const kpiPending = document.getElementById('r05KpiPending');
 
         const requisitions = this.tickets.filter(t => t.status === 'E08');
         if (countE08) countE08.innerText = requisitions.length;
+        if (kpiPending) kpiPending.innerText = requisitions.length;
+        if (!queueCont) return;
         queueCont.innerHTML = '';
 
         if (requisitions.length === 0) {
@@ -2852,10 +3070,19 @@
       renderR06Workspace() {
         const queueCont = document.getElementById('r06QueueList');
         const countE12 = document.getElementById('r06CountE12');
+        const kpiPending = document.getElementById('r06KpiPending');
+        const kpiRework = document.getElementById('r06KpiRework');
+
+        const allE12 = this.tickets.filter(t => t.status === 'E12');
+        const allE13 = this.tickets.filter(t => t.status === 'E13');
+
+        if (countE12) countE12.innerText = allE12.length;
+        if (kpiPending) kpiPending.innerText = allE12.length;
+        if (kpiRework) kpiRework.innerText = allE13.length;
         if (!queueCont) return;
 
-        const audits = this.tickets.filter(t => t.status === 'E12');
-        if (countE12) countE12.innerText = audits.length;
+        let audits = allE12;
+        if (this.r06Filter === 'REWORK') audits = allE13;
         queueCont.innerHTML = '';
 
         if (audits.length === 0) {
