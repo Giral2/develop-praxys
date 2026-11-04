@@ -832,20 +832,36 @@
         const tableCont = document.getElementById('tableViewContainer');
         const btnK = document.getElementById('viewBtnKanban');
         const btnT = document.getElementById('viewBtnTable');
+        const btnPip = document.getElementById('r03BtnPipeline');
+        const btnTab = document.getElementById('r03BtnTable');
 
         if (mode === 'kanban') {
-          kanbanCont.classList.remove('hidden');
-          tableCont.classList.add('hidden');
-          btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
-          btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+          if (kanbanCont) kanbanCont.classList.remove('hidden');
+          if (tableCont) tableCont.classList.add('hidden');
+          if (btnK) btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
+          if (btnT) btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+          if (btnPip) {
+            btnPip.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition bg-slate-800 text-sky-400 font-bold border border-sky-500/30 shadow-xs';
+          }
+          if (btnTab) {
+            btnTab.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent';
+          }
         } else {
-          kanbanCont.classList.add('hidden');
-          tableCont.classList.remove('hidden');
-          tableCont.classList.add('flex');
-          btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
-          btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+          if (kanbanCont) kanbanCont.classList.add('hidden');
+          if (tableCont) {
+            tableCont.classList.remove('hidden');
+            tableCont.classList.add('flex');
+          }
+          if (btnT) btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
+          if (btnK) btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+          if (btnTab) {
+            btnTab.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition bg-slate-800 text-sky-400 font-bold border border-sky-500/30 shadow-xs';
+          }
+          if (btnPip) {
+            btnPip.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent';
+          }
         }
-        this.render();
+        this.renderBoard();
       }
 
       // ==================== KEYBOARD ACCELERATORS ====================
@@ -2672,6 +2688,8 @@
       // R03 Module Sub-Navbar Navigation
       setR03Module(moduleId) {
         this.r03ActiveModule = moduleId;
+        this.r03ActiveView = null; // Clear view mode when on standard tabs
+        
         const modules = ['dashboard', 'triaje', 'despacho', 'inventario', 'telemetria', 'reportes'];
         
         modules.forEach(id => {
@@ -2696,9 +2714,52 @@
           }
         });
 
+        // Hide operations module
+        const opsEl = document.getElementById('r03Module-operations');
+        if (opsEl) opsEl.classList.add('hidden');
+
+        // Reset Pipeline and Table buttons in sub-navbar
+        const btnPip = document.getElementById('r03BtnPipeline');
+        const btnTab = document.getElementById('r03BtnTable');
+        if (btnPip) {
+          btnPip.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent';
+        }
+        if (btnTab) {
+          btnTab.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent';
+        }
+
         if (moduleId === 'despacho') {
           this.renderR03Workspace();
         }
+      }
+
+      setR03ViewMode(viewMode) {
+        this.r03ActiveView = viewMode;
+        this.r03ActiveModule = 'operations';
+        const internalMode = viewMode === 'pipeline' ? 'kanban' : 'table';
+
+        // 1. Unset active styling on the 6 standard module tabs
+        const modules = ['dashboard', 'triaje', 'despacho', 'inventario', 'telemetria', 'reportes'];
+        modules.forEach(id => {
+          const tabBtn = document.getElementById(`r03Tab-${id}`);
+          const modEl = document.getElementById(`r03Module-${id}`);
+          if (tabBtn) {
+            tabBtn.className = 'r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs sm:text-sm transition group';
+          }
+          if (modEl) {
+            modEl.classList.add('hidden');
+          }
+        });
+
+        // 2. Show operations container inside workspace-R03
+        const opsEl = document.getElementById('r03Module-operations');
+        if (opsEl) {
+          opsEl.classList.remove('hidden');
+        }
+
+        // 3. Set view mode and render
+        this.setViewMode(internalMode);
+        this.showToast(`Coordinador: Vista ${viewMode === 'pipeline' ? 'Pipeline Kanban' : 'Tabla Operativa'}`, 'info');
       }
 
       filterR03TriajeCategory(category) {

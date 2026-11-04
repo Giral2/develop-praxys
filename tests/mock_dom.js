@@ -21,6 +21,9 @@ function createMockElement(id = '', tag = 'div') {
     options: [],
     selectedIndex: 0,
     parentElement: null,
+    get children() {
+      return children;
+    },
     
     get className() {
       return Array.from(classes).join(' ');
@@ -55,6 +58,9 @@ function createMockElement(id = '', tag = 'div') {
     set innerHTML(val) {
       _innerHTML = String(val);
       _innerText = String(val).replace(/<[^>]+>/g, '');
+      if (val === '') {
+        children.length = 0;
+      }
     },
     get value() {
       return _value;
@@ -75,6 +81,11 @@ function createMockElement(id = '', tag = 'div') {
     setAttribute(k, v) { attributes[k] = String(v); },
     getAttribute(k) { return attributes[k] !== undefined ? attributes[k] : null; },
     removeAttribute(k) { delete attributes[k]; },
+    remove() {
+      if (this.parentElement && typeof this.parentElement.removeChild === 'function') {
+        this.parentElement.removeChild(this);
+      }
+    },
     addEventListener() {},
     removeEventListener() {},
     dispatchEvent() {},

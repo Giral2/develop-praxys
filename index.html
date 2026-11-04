@@ -167,7 +167,7 @@
         </button>
 
         <!-- View Mode Switcher: Pipeline vs Tabla (Conditional: Only for Operational Roles R02, R03, R04) -->
-        <div id="headerViewSwitcher" class="bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg flex items-center border border-slate-200 dark:border-slate-700 text-xs font-semibold transition-all duration-300">
+        <div id="headerViewSwitcher" class="hidden bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg flex items-center border border-slate-200 dark:border-slate-700 text-xs font-semibold transition-all duration-300">
           <button id="viewBtnKanban" onclick="app.setViewMode('kanban')" class="flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white" title="Vista Pipeline Kanban de 6 Fases">
             <svg class="w-3.5 h-3.5 text-brand-royalBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
             <span>Pipeline</span>
@@ -272,7 +272,7 @@
   <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
   <main class="flex-1 flex flex-col max-w-[1720px] w-full mx-auto px-6 py-3 overflow-hidden">
     <!-- ==================== CONTAINER 1: CONSOLA OPERATIVA GLOBAL ==================== -->
-    <section id="globalConsoleContainer" class="flex-1 flex flex-col overflow-hidden">
+    <section id="globalConsoleContainer" class="flex-1 flex flex-col overflow-hidden hidden">
       
       <!-- KPI Metrics Top Panel (4 Minimalist Cards with 4px left accent) -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-3.5 shrink-0">
@@ -333,202 +333,13 @@
 
       </div>
 
-      <!-- Operational Filter & Search Toolbar -->
-      <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-lg p-2.5 mb-3.5 shadow-elevation-1 shrink-0 flex flex-wrap items-center justify-between gap-2.5 transition-colors">
-        
-        <!-- Filter Chips: All, Critical, High, SLA < 2h, Unassigned -->
-        <div class="flex items-center flex-wrap gap-1.5 text-xs">
-          <span class="text-slate-400 font-medium mr-1 text-[11px] uppercase tracking-wider">Filtros:</span>
-          <button onclick="app.setQuickFilter('ALL')" id="chip-ALL" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-brand-navy dark:bg-brand-royalBlue text-white shadow-xs">
-            Todas (<span id="count-all">20</span>)
-          </button>
-          <button onclick="app.setQuickFilter('CRITICAL')" id="chip-CRITICAL" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
-            Críticas (<span id="count-critical">4</span>)
-          </button>
-          <button onclick="app.setQuickFilter('HIGH')" id="chip-HIGH" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
-            Altas (<span id="count-high">6</span>)
-          </button>
-          <button onclick="app.setQuickFilter('SLA_RISK')" id="chip-SLA_RISK" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-950/50">
-            SLA &lt; 2h (<span id="count-sla-risk">2</span>)
-          </button>
-          <button onclick="app.setQuickFilter('UNASSIGNED')" id="chip-UNASSIGNED" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
-            Sin Asignar (<span id="count-unassigned">5</span>)
-          </button>
+      <!-- Fallback Global Info -->
+      <div class="p-8 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-slate-400 text-xs">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         </div>
-
-        <!-- Select Cascading / Sede Filter + Category Filter + Search Box -->
-        <div class="flex items-center space-x-2 text-xs">
-          <!-- Campus Selector -->
-          <select id="filterSede" onchange="app.renderBoard()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-700 dark:text-slate-200 font-medium focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
-            <option value="ALL">Todas las Sedes</option>
-            <option value="Campus Meléndez">Campus Meléndez</option>
-            <option value="Campus San Fernando">Campus San Fernando</option>
-            <option value="Sede Yumbo">Sede Yumbo</option>
-            <option value="Sede Palmira">Sede Palmira</option>
-          </select>
-
-          <!-- Category Selector -->
-          <select id="filterCategory" onchange="app.renderBoard()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-700 dark:text-slate-200 font-medium focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
-            <option value="ALL">Todas las Categorías</option>
-            <option value="Eléctrica">Eléctrica</option>
-            <option value="HVAC/Climatización">HVAC/Climatización</option>
-            <option value="Hidráulica">Hidráulica</option>
-            <option value="Redes">Redes</option>
-            <option value="Estructural">Estructural</option>
-          </select>
-
-          <!-- Predictive Search Input -->
-          <div class="relative w-48 sm:w-60">
-            <input type="text" id="searchInput" oninput="app.onSearchInput(this.value)" placeholder="Buscar #TKT, aula, técnico..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-8 pr-2.5 py-1.5 text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:ring-1 focus:ring-brand-royalBlue outline-hidden font-medium">
-            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          </div>
-
-          <!-- Reset Button -->
-          <button onclick="app.resetFilters()" title="Restablecer filtros" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-          </button>
-        </div>
-
-      </div>
-
-      <!-- ==================== VIEW 1: KANBAN WORKFLOW PIPELINE ==================== -->
-      <div id="kanbanViewContainer" class="flex-1 flex gap-3 overflow-x-auto pb-2 select-none">
-        
-        <!-- Column 1: Triaje & Revisión Inicial (E01-E04) -->
-        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E01_E03')">
-          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
-            <div class="flex items-center space-x-1.5">
-              <span class="w-2 h-2 rounded-full bg-sky-500"></span>
-              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Triaje & Revisión</span>
-            </div>
-            <span id="colCount-E01_E03" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
-          </div>
-          <div id="cards-E01_E03" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
-        </div>
-
-        <!-- Column 2: Pendiente de Asignación (E05-E07) -->
-        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E05')">
-          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
-            <div class="flex items-center space-x-1.5">
-              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Por Asignar</span>
-            </div>
-            <span id="colCount-E05" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
-          </div>
-          <div id="cards-E05" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
-        </div>
-
-        <!-- Column 3: Programada / Cuadrilla Asignada (E08-E10) -->
-        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E10')">
-          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
-            <div class="flex items-center space-x-1.5">
-              <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Programada & Recursos</span>
-            </div>
-            <span id="colCount-E10" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
-          </div>
-          <div id="cards-E10" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
-        </div>
-
-        <!-- Column 4: Ejecución en Campo (E11, E13) -->
-        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E11')">
-          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
-            <div class="flex items-center space-x-1.5">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Ejecución en Campo</span>
-            </div>
-            <span id="colCount-E11" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
-          </div>
-          <div id="cards-E11" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
-        </div>
-
-        <!-- Column 5: Verificación de Calidad (E12, E14) -->
-        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E12')">
-          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
-            <div class="flex items-center space-x-1.5">
-              <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Control de Calidad</span>
-            </div>
-            <span id="colCount-E12" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
-          </div>
-          <div id="cards-E12" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
-        </div>
-
-        <!-- Column 6: Cerrada & Conforme (E15) -->
-        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E15')">
-          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
-            <div class="flex items-center space-x-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Cerrada & Conforme</span>
-            </div>
-            <span id="colCount-E15" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
-          </div>
-          <div id="cards-E15" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
-        </div>
-
-      </div>
-
-      <!-- ==================== VIEW 2: DENSE ALTERNATIVE TABLE VIEW ==================== -->
-      <div id="tableViewContainer" class="flex-1 bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl overflow-hidden hidden flex-col shadow-elevation-1">
-        
-        <!-- Table View Utility Bar: Column Picker & Width Reset -->
-        <div class="px-4 py-2 border-b border-brand-borderSubtle dark:border-brand-borderDark flex items-center justify-between bg-slate-50/80 dark:bg-slate-800/50 text-xs shrink-0 select-none">
-          <div class="flex items-center space-x-2">
-            <span class="font-display font-bold text-slate-800 dark:text-slate-100">Registro Operativo de Incidencias</span>
-            <span id="tableBadgeCount" class="font-mono text-[11px] bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-700 dark:text-slate-300 font-semibold">20 órdenes</span>
-          </div>
-
-          <div class="flex items-center space-x-2">
-            <!-- Relocated Export CSV Button -->
-            <button onclick="app.exportToCSV()" title="Exportar incidencias a archivo CSV compatible con Excel" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition font-medium text-xs shadow-xs">
-              <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              <span>Exportar CSV</span>
-            </button>
-
-            <!-- Column Picker Dropdown -->
-            <div class="relative">
-              <button id="btnColumnPicker" onclick="app.toggleColumnPicker(event)" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition font-medium text-xs shadow-xs">
-                <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                <span>Columnas</span>
-                <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-              </button>
-
-              <!-- Floating Panel -->
-              <div id="columnPickerMenu" class="absolute right-0 top-full mt-1.5 w-64 bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl shadow-elevation-modal p-3 z-40 hidden select-none">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                  <span>Columnas Visibles</span>
-                  <button onclick="app.resetColumnVisibility()" class="text-brand-royalBlue hover:underline lowercase font-normal">Todas</button>
-                </div>
-                <div id="columnCheckboxesList" class="py-2 space-y-1.5 max-h-56 overflow-y-auto">
-                  <!-- Populated dynamically -->
-                </div>
-                <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[10px] text-slate-400 font-mono">
-                  <span>Arrastra bordes para redimensionar</span>
-                  <button onclick="app.resetColumnWidths()" class="hover:text-brand-royalBlue">Restablecer anchos</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Scrollable Table -->
-        <div class="flex-1 overflow-auto">
-          <table class="w-full text-left text-xs border-collapse">
-            <thead id="ticketsTableHead" class="bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border-b border-brand-borderSubtle dark:border-brand-borderDark sticky top-0 z-10 backdrop-blur-xs font-mono text-[11px]">
-              <!-- Dynamic Headers with resize handles -->
-            </thead>
-            <tbody id="ticketsTableBody" class="divide-y divide-slate-200/60 dark:divide-slate-800 text-slate-700 dark:text-slate-200 font-sans">
-              <!-- Dynamic Rows -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Table Footer -->
-        <div class="px-4 py-2 bg-slate-50 dark:bg-slate-800/40 border-t border-brand-borderSubtle dark:border-brand-borderDark flex items-center justify-between text-[11px] text-slate-500 shrink-0">
-          <div>Mostrando <span id="tableResultsCount" class="font-bold font-mono">0</span> incidencias filtradas</div>
-          <div class="text-[10px] font-mono">Haz clic en cualquier fila para inspección y bitácora</div>
-        </div>
-
+        <p class="font-display font-bold text-slate-700 dark:text-slate-200 text-sm">Consola Global de Supervisión</p>
+        <p class="mt-1 max-w-md mx-auto text-slate-500 dark:text-slate-400">Las vistas operativas de Pipeline y Tabla se encuentran integradas directamente en el espacio de trabajo del Coordinador (R03).</p>
       </div>
 
     </section>
@@ -820,11 +631,23 @@
               </button>
             </nav>
 
-            <!-- Status Indicator on the Right -->
-            <div class="hidden lg:flex items-center space-x-2 text-xs py-2 shrink-0">
-              <span class="inline-flex items-center px-2.5 py-1 rounded-md font-mono text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <!-- Segmented View Switcher: Pipeline vs Tabla (Integrated into Coordinator Navbar) -->
+            <div class="flex items-center space-x-2 py-1.5 shrink-0 pl-2">
+              <div id="r03ViewSwitcher" class="bg-slate-900/90 dark:bg-slate-950 p-1 rounded-xl flex items-center border border-slate-700/80 shadow-inner text-xs">
+                <button id="r03BtnPipeline" onclick="app.setR03ViewMode('pipeline')" class="flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent" title="Vista Pipeline Kanban de 6 Fases">
+                  <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="5" width="4" height="14" rx="1.5" stroke-width="2"/><rect x="10" y="5" width="4" height="14" rx="1.5" stroke-width="2"/><rect x="16" y="5" width="4" height="14" rx="1.5" stroke-width="2"/></svg>
+                  <span class="text-slate-300 text-xs font-medium">Pipeline</span>
+                </button>
+                <button id="r03BtnTable" onclick="app.setR03ViewMode('table')" class="flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent" title="Vista Tabla Operativa Compacta">
+                  <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="14" rx="2" stroke-width="2"/><line x1="3" y1="10" x2="21" y2="10" stroke-width="2"/><line x1="3" y1="14" x2="21" y2="14" stroke-width="2"/><line x1="9" y1="10" x2="9" y2="19" stroke-width="2"/></svg>
+                  <span class="text-slate-300 text-xs font-medium">Tabla</span>
+                </button>
+              </div>
+
+              <!-- Campus Operativo status indicator -->
+              <span class="hidden xl:inline-flex items-center px-2.5 py-1 rounded-md font-mono text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
-                Campus Operativo: <strong>98.2%</strong>
+                98.2%
               </span>
             </div>
           </div>
@@ -1538,6 +1361,209 @@
               </table>
             </div>
           </div>
+        </div>
+
+        <!-- ==================== MÓDULO 7: OPERACIONES (PIPELINE & TABLA INTEGRADOS) ==================== -->
+        <div id="r03Module-operations" class="r03-module flex-1 flex flex-col overflow-hidden hidden space-y-2">
+          <!-- Operational Filter & Search Toolbar -->
+      <div class="bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-lg p-2.5 mb-3.5 shadow-elevation-1 shrink-0 flex flex-wrap items-center justify-between gap-2.5 transition-colors">
+        
+        <!-- Filter Chips: All, Critical, High, SLA < 2h, Unassigned -->
+        <div class="flex items-center flex-wrap gap-1.5 text-xs">
+          <span class="text-slate-400 font-medium mr-1 text-[11px] uppercase tracking-wider">Filtros:</span>
+          <button onclick="app.setQuickFilter('ALL')" id="chip-ALL" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-brand-navy dark:bg-brand-royalBlue text-white shadow-xs">
+            Todas (<span id="count-all">20</span>)
+          </button>
+          <button onclick="app.setQuickFilter('CRITICAL')" id="chip-CRITICAL" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+            Críticas (<span id="count-critical">4</span>)
+          </button>
+          <button onclick="app.setQuickFilter('HIGH')" id="chip-HIGH" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+            Altas (<span id="count-high">6</span>)
+          </button>
+          <button onclick="app.setQuickFilter('SLA_RISK')" id="chip-SLA_RISK" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-950/50">
+            SLA &lt; 2h (<span id="count-sla-risk">2</span>)
+          </button>
+          <button onclick="app.setQuickFilter('UNASSIGNED')" id="chip-UNASSIGNED" class="quick-chip px-2.5 py-1 rounded-full font-medium transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+            Sin Asignar (<span id="count-unassigned">5</span>)
+          </button>
+        </div>
+
+        <!-- Select Cascading / Sede Filter + Category Filter + Search Box -->
+        <div class="flex items-center space-x-2 text-xs">
+          <!-- Campus Selector -->
+          <select id="filterSede" onchange="app.renderBoard()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-700 dark:text-slate-200 font-medium focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+            <option value="ALL">Todas las Sedes</option>
+            <option value="Campus Meléndez">Campus Meléndez</option>
+            <option value="Campus San Fernando">Campus San Fernando</option>
+            <option value="Sede Yumbo">Sede Yumbo</option>
+            <option value="Sede Palmira">Sede Palmira</option>
+          </select>
+
+          <!-- Category Selector -->
+          <select id="filterCategory" onchange="app.renderBoard()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-700 dark:text-slate-200 font-medium focus:ring-1 focus:ring-brand-royalBlue outline-hidden">
+            <option value="ALL">Todas las Categorías</option>
+            <option value="Eléctrica">Eléctrica</option>
+            <option value="HVAC/Climatización">HVAC/Climatización</option>
+            <option value="Hidráulica">Hidráulica</option>
+            <option value="Redes">Redes</option>
+            <option value="Estructural">Estructural</option>
+          </select>
+
+          <!-- Predictive Search Input -->
+          <div class="relative w-48 sm:w-60">
+            <input type="text" id="searchInput" oninput="app.onSearchInput(this.value)" placeholder="Buscar #TKT, aula, técnico..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-8 pr-2.5 py-1.5 text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:ring-1 focus:ring-brand-royalBlue outline-hidden font-medium">
+            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+
+          <!-- Reset Button -->
+          <button onclick="app.resetFilters()" title="Restablecer filtros" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ==================== VIEW 1: KANBAN WORKFLOW PIPELINE ==================== -->
+      <div id="kanbanViewContainer" class="flex-1 flex gap-3 overflow-x-auto pb-2 select-none">
+        
+        <!-- Column 1: Triaje & Revisión Inicial (E01-E04) -->
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E01_E03')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Triaje & Revisión</span>
+            </div>
+            <span id="colCount-E01_E03" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E01_E03" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <!-- Column 2: Pendiente de Asignación (E05-E07) -->
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E05')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Por Asignar</span>
+            </div>
+            <span id="colCount-E05" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E05" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <!-- Column 3: Programada / Cuadrilla Asignada (E08-E10) -->
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E10')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Programada & Recursos</span>
+            </div>
+            <span id="colCount-E10" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E10" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <!-- Column 4: Ejecución en Campo (E11, E13) -->
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E11')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Ejecución en Campo</span>
+            </div>
+            <span id="colCount-E11" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E11" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <!-- Column 5: Verificación de Calidad (E12, E14) -->
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E12')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Control de Calidad</span>
+            </div>
+            <span id="colCount-E12" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E12" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+        <!-- Column 6: Cerrada & Conforme (E15) -->
+        <div class="flex-1 min-w-[270px] max-w-[320px] bg-slate-100/70 dark:bg-brand-darkCard rounded-xl border border-brand-borderSubtle dark:border-brand-borderDark flex flex-col transition-colors" ondragover="app.onDragOverCol(event)" ondragleave="app.onDragLeaveCol(event)" ondrop="app.onDropCol(event, 'E15')">
+          <div class="px-3.5 py-2.5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span class="text-xs font-display font-bold text-slate-700 dark:text-slate-200">Cerrada & Conforme</span>
+            </div>
+            <span id="colCount-E15" class="text-xs font-mono font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">0</span>
+          </div>
+          <div id="cards-E15" class="p-2 space-y-2.5 overflow-y-auto flex-1 kanban-col-scroll"></div>
+        </div>
+
+      </div>
+
+      <!-- ==================== VIEW 2: DENSE ALTERNATIVE TABLE VIEW ==================== -->
+      <div id="tableViewContainer" class="flex-1 bg-white dark:bg-brand-navy border border-brand-borderSubtle dark:border-brand-borderDark rounded-xl overflow-hidden hidden flex-col shadow-elevation-1">
+        
+        <!-- Table View Utility Bar: Column Picker & Width Reset -->
+        <div class="px-4 py-2 border-b border-brand-borderSubtle dark:border-brand-borderDark flex items-center justify-between bg-slate-50/80 dark:bg-slate-800/50 text-xs shrink-0 select-none">
+          <div class="flex items-center space-x-2">
+            <span class="font-display font-bold text-slate-800 dark:text-slate-100">Registro Operativo de Incidencias</span>
+            <span id="tableBadgeCount" class="font-mono text-[11px] bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-700 dark:text-slate-300 font-semibold">20 órdenes</span>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <!-- Relocated Export CSV Button -->
+            <button onclick="app.exportToCSV()" title="Exportar incidencias a archivo CSV compatible con Excel" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition font-medium text-xs shadow-xs">
+              <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>Exportar CSV</span>
+            </button>
+
+            <!-- Column Picker Dropdown -->
+            <div class="relative">
+              <button id="btnColumnPicker" onclick="app.toggleColumnPicker(event)" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition font-medium text-xs shadow-xs">
+                <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span>Columnas</span>
+                <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+
+              <!-- Floating Panel -->
+              <div id="columnPickerMenu" class="absolute right-0 top-full mt-1.5 w-64 bg-white dark:bg-brand-navy border border-slate-200 dark:border-slate-700 rounded-xl shadow-elevation-modal p-3 z-40 hidden select-none">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                  <span>Columnas Visibles</span>
+                  <button onclick="app.resetColumnVisibility()" class="text-brand-royalBlue hover:underline lowercase font-normal">Todas</button>
+                </div>
+                <div id="columnCheckboxesList" class="py-2 space-y-1.5 max-h-56 overflow-y-auto">
+                  <!-- Populated dynamically -->
+                </div>
+                <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[10px] text-slate-400 font-mono">
+                  <span>Arrastra bordes para redimensionar</span>
+                  <button onclick="app.resetColumnWidths()" class="hover:text-brand-royalBlue">Restablecer anchos</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scrollable Table -->
+        <div class="flex-1 overflow-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead id="ticketsTableHead" class="bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border-b border-brand-borderSubtle dark:border-brand-borderDark sticky top-0 z-10 backdrop-blur-xs font-mono text-[11px]">
+              <!-- Dynamic Headers with resize handles -->
+            </thead>
+            <tbody id="ticketsTableBody" class="divide-y divide-slate-200/60 dark:divide-slate-800 text-slate-700 dark:text-slate-200 font-sans">
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Footer -->
+        <div class="px-4 py-2 bg-slate-50 dark:bg-slate-800/40 border-t border-brand-borderSubtle dark:border-brand-borderDark flex items-center justify-between text-[11px] text-slate-500 shrink-0">
+          <div>Mostrando <span id="tableResultsCount" class="font-bold font-mono">0</span> incidencias filtradas</div>
+          <div class="text-[10px] font-mono">Haz clic en cualquier fila para inspección y bitácora</div>
+        </div>
+
+      </div>
+
+    
         </div>
 
       </div>
@@ -3493,20 +3519,36 @@
         const tableCont = document.getElementById('tableViewContainer');
         const btnK = document.getElementById('viewBtnKanban');
         const btnT = document.getElementById('viewBtnTable');
+        const btnPip = document.getElementById('r03BtnPipeline');
+        const btnTab = document.getElementById('r03BtnTable');
 
         if (mode === 'kanban') {
-          kanbanCont.classList.remove('hidden');
-          tableCont.classList.add('hidden');
-          btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
-          btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+          if (kanbanCont) kanbanCont.classList.remove('hidden');
+          if (tableCont) tableCont.classList.add('hidden');
+          if (btnK) btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
+          if (btnT) btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+          if (btnPip) {
+            btnPip.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition bg-slate-800 text-sky-400 font-bold border border-sky-500/30 shadow-xs';
+          }
+          if (btnTab) {
+            btnTab.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent';
+          }
         } else {
-          kanbanCont.classList.add('hidden');
-          tableCont.classList.remove('hidden');
-          tableCont.classList.add('flex');
-          btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
-          btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+          if (kanbanCont) kanbanCont.classList.add('hidden');
+          if (tableCont) {
+            tableCont.classList.remove('hidden');
+            tableCont.classList.add('flex');
+          }
+          if (btnT) btnT.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition shadow-xs bg-white dark:bg-brand-navy text-brand-navy dark:text-white font-semibold';
+          if (btnK) btnK.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-md transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-semibold';
+          if (btnTab) {
+            btnTab.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition bg-slate-800 text-sky-400 font-bold border border-sky-500/30 shadow-xs';
+          }
+          if (btnPip) {
+            btnPip.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent';
+          }
         }
-        this.render();
+        this.renderBoard();
       }
 
       // ==================== KEYBOARD ACCELERATORS ====================
@@ -5333,6 +5375,8 @@
       // R03 Module Sub-Navbar Navigation
       setR03Module(moduleId) {
         this.r03ActiveModule = moduleId;
+        this.r03ActiveView = null; // Clear view mode when on standard tabs
+        
         const modules = ['dashboard', 'triaje', 'despacho', 'inventario', 'telemetria', 'reportes'];
         
         modules.forEach(id => {
@@ -5357,9 +5401,52 @@
           }
         });
 
+        // Hide operations module
+        const opsEl = document.getElementById('r03Module-operations');
+        if (opsEl) opsEl.classList.add('hidden');
+
+        // Reset Pipeline and Table buttons in sub-navbar
+        const btnPip = document.getElementById('r03BtnPipeline');
+        const btnTab = document.getElementById('r03BtnTable');
+        if (btnPip) {
+          btnPip.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent';
+        }
+        if (btnTab) {
+          btnTab.className = 'flex items-center space-x-1.5 px-3 py-1 rounded-lg transition text-slate-400 hover:text-white font-medium hover:bg-slate-800/60 border border-transparent';
+        }
+
         if (moduleId === 'despacho') {
           this.renderR03Workspace();
         }
+      }
+
+      setR03ViewMode(viewMode) {
+        this.r03ActiveView = viewMode;
+        this.r03ActiveModule = 'operations';
+        const internalMode = viewMode === 'pipeline' ? 'kanban' : 'table';
+
+        // 1. Unset active styling on the 6 standard module tabs
+        const modules = ['dashboard', 'triaje', 'despacho', 'inventario', 'telemetria', 'reportes'];
+        modules.forEach(id => {
+          const tabBtn = document.getElementById(`r03Tab-${id}`);
+          const modEl = document.getElementById(`r03Module-${id}`);
+          if (tabBtn) {
+            tabBtn.className = 'r03-nav-tab flex items-center space-x-2 py-3 px-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-xs sm:text-sm transition group';
+          }
+          if (modEl) {
+            modEl.classList.add('hidden');
+          }
+        });
+
+        // 2. Show operations container inside workspace-R03
+        const opsEl = document.getElementById('r03Module-operations');
+        if (opsEl) {
+          opsEl.classList.remove('hidden');
+        }
+
+        // 3. Set view mode and render
+        this.setViewMode(internalMode);
+        this.showToast(`Coordinador: Vista ${viewMode === 'pipeline' ? 'Pipeline Kanban' : 'Tabla Operativa'}`, 'info');
       }
 
       filterR03TriajeCategory(category) {
